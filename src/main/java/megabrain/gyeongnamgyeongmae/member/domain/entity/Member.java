@@ -1,9 +1,13 @@
 package megabrain.gyeongnamgyeongmae.member.domain.entity;
 
 import javax.persistence.*;
+import lombok.*;
+import lombok.NoArgsConstructor;
 
+@Getter
 @Entity
 @Table(name = "members")
+@NoArgsConstructor(access = AccessLevel.PROTECTED)
 public class Member {
   @Id
   @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -24,4 +28,12 @@ public class Member {
 
   @Embedded
   private Address address;
+
+  @Builder
+  public Member(String email, String password, String nickname) {
+    this.email = email;
+    this.password = password;
+    this.nickname = nickname;
+  }
+
 }
