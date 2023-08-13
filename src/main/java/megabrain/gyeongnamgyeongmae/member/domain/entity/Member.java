@@ -26,8 +26,7 @@ public class Member {
   @Column(name = "introduce")
   private String introduce;
 
-  @Embedded
-  private Address address;
+  @Embedded private Address address;
 
   @Builder
   public Member(String email, String password, String nickname) {
@@ -35,5 +34,4 @@ public class Member {
     this.password = password;
     this.nickname = nickname;
   }
-
 }

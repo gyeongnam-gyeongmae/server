@@ -16,11 +16,12 @@ public class MemberCreateRequest {
 
   private String nickname;
 
-  public static Member toEntity(MemberCreateRequest memberCreateRequest, PasswordEncoder passwordEncoder) {
+  public static Member toEntity(
+      MemberCreateRequest memberCreateRequest, PasswordEncoder passwordEncoder) {
     return Member.builder()
         .email(memberCreateRequest.email)
         .nickname(memberCreateRequest.nickname)
-        .password(passwordEncoder.encode(memberCreateRequest.password)).build();
+        .password(passwordEncoder.encode(memberCreateRequest.password))
+        .build();
   }
 }
-

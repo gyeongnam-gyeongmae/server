@@ -9,9 +9,10 @@ import org.springframework.web.bind.annotation.RestController;
 @RestController
 @RequestMapping("api/members")
 public class MemberController {
-  
+
   @PostMapping("register")
   public ResponseEntity<HttpStatus> registerMember() {
+
     return ResponseEntity.status(HttpStatus.OK).build();
   }
 }
