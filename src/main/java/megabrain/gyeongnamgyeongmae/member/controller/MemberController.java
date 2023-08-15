@@ -33,6 +33,6 @@ public class MemberController {
     Member member = MemberCreateRequest.toEntity(memberCreateRequest, passwordEncoder);
     memberService.createMember(member);
 
-    return ResponseEntity.status(HttpStatus.OK).build();
+    return ResponseEntity.status(HttpStatus.CREATED).build();
   }
 }
