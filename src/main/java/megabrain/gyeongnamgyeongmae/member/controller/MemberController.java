@@ -1,5 +1,6 @@
 package megabrain.gyeongnamgyeongmae.member.controller;
 
+import javax.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import megabrain.gyeongnamgyeongmae.member.domain.entity.Member;
 import megabrain.gyeongnamgyeongmae.member.dto.MemberCreateRequest;
@@ -22,7 +23,7 @@ public class MemberController {
 
   @PostMapping("/register")
   public ResponseEntity<HttpStatus> registerMember(
-      @RequestBody MemberCreateRequest memberCreateRequest) {
+      @RequestBody @Valid MemberCreateRequest memberCreateRequest) {
 
     boolean isDuplicated = this.memberService.isDuplicatedEmail(memberCreateRequest.getEmail());
     if (isDuplicated) {
