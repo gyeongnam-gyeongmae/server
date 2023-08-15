@@ -3,12 +3,13 @@ package megabrain.gyeongnamgyeongmae.member.domain.entity;
 import javax.persistence.*;
 import lombok.*;
 import lombok.NoArgsConstructor;
+import megabrain.gyeongnamgyeongmae.commons.BaseTimeEntity;
 
 @Getter
 @Entity
 @Table(name = "members")
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
-public class Member {
+public class Member extends BaseTimeEntity {
   @Id
   @GeneratedValue(strategy = GenerationType.IDENTITY)
   @Column(name = "member_id")
