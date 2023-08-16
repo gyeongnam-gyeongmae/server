@@ -4,7 +4,9 @@ import megabrain.gyeongnamgyeongmae.member.domain.entity.Member;
 
 public interface MemberService {
 
-  public boolean isDuplicatedEmail(String email);
+  boolean isDuplicatedEmail(String email);
 
-  public void createMember(Member member);
+  void createMember(Member member);
+
+  Member findMemberById(Long Id);
 }

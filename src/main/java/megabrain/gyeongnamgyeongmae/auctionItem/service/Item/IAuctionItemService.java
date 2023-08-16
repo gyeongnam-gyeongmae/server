@@ -4,5 +4,7 @@ import megabrain.gyeongnamgyeongmae.auctionItem.domain.entity.AuctionItem;
 
 public interface IAuctionItemService {
 
-  public void createAuctionItem(AuctionItem auctionItem);
+  void createAuctionItem(AuctionItem auctionItem);
+
+  AuctionItem findAuctionItemById(Long id);
 }
