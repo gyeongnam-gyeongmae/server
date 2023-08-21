@@ -28,4 +28,10 @@ public class AuctionItemService implements IAuctionItemService {
   public AuctionItem findAuctionItemById(Long id) {
     return auctionItemRepository.findById(id).orElseThrow(RuntimeException::new);
   }
+
+  @Override
+  public void updateAuctionItemViewCount(AuctionItem auctionItem) {
+    auctionItem.setView_count(auctionItem.getView_count() + 1);
+    auctionItemRepository.save(auctionItem);
+  }
 }
