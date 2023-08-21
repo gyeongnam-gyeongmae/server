@@ -27,7 +27,8 @@ public class AuctionItemController {
   public ResponseEntity<HttpStatus> createAuctionItem(
       @RequestBody @Valid CreateAuctionItemRequest createAuctionItemRequest) {
     Member memberEntity = memberService.findMemberById(createAuctionItemRequest.getMember());
-    Category categoryEntity = categoryService.findCategoryByName(createAuctionItemRequest.getCategory());
+    Category categoryEntity =
+        categoryService.findCategoryByName(createAuctionItemRequest.getCategory());
 
     AuctionItem auctionItem = createAuctionItemRequest.toEntity();
     auctionItem.setMember(memberEntity);
@@ -40,6 +41,6 @@ public class AuctionItemController {
   public ResponseEntity<AuctionItemResponse> findAuctionItemById(@PathVariable Long id) {
     AuctionItem auctionItem = auctionItemService.findAuctionItemById(id);
     auctionItemService.updateAuctionItemViewCount(auctionItem);
-    return ResponseEntity.ok(AuctionItemResponse.of(auctionItemService.findAuctionItemById(id)));
+    return ResponseEntity.ok(AuctionItemResponse.of(auctionItem));
   }
 }
