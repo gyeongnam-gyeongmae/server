@@ -5,6 +5,7 @@ import lombok.AccessLevel;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
+import megabrain.gyeongnamgyeongmae.Category.domain.entity.Category;
 
 @Getter
 @NoArgsConstructor(access = AccessLevel.PRIVATE)
@@ -15,5 +16,9 @@ public class CreateCategoryRequest {
   @Builder
   public CreateCategoryRequest(String name) {
     this.name = name;
+  }
+
+  public Category toEntity() {
+    return Category.builder().name(this.name).build();
   }
 }

@@ -3,7 +3,7 @@ package megabrain.gyeongnamgyeongmae.Category.controller;
 import javax.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import megabrain.gyeongnamgyeongmae.Category.dto.CreateCategoryRequest;
-import megabrain.gyeongnamgyeongmae.Category.service.ICategoryService;
+import megabrain.gyeongnamgyeongmae.Category.service.CategoryService;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -15,12 +15,12 @@ import org.springframework.web.bind.annotation.RestController;
 @RequiredArgsConstructor
 @RequestMapping("api/category")
 public class CategoryController {
-  private final ICategoryService categoryService;
+  private final CategoryService categoryService;
 
   @PostMapping()
   public ResponseEntity<HttpStatus> createCategory(
       @RequestBody @Valid CreateCategoryRequest createCategoryRequest) {
-    categoryService.createCategory(createCategoryRequest);
-    return null;
+    categoryService.createCategory(createCategoryRequest.getName());
+    return ResponseEntity.status(HttpStatus.CREATED).build();
   }
 }
