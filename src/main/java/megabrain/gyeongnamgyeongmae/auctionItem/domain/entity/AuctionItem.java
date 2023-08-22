@@ -1,11 +1,8 @@
 package megabrain.gyeongnamgyeongmae.auctionItem.domain.entity;
 
 import java.time.LocalDateTime;
-import java.util.ArrayList;
-import java.util.List;
 import javax.persistence.*;
 import lombok.*;
-import megabrain.gyeongnamgyeongmae.AuctionOffer.domain.entity.AuctionOffers;
 import megabrain.gyeongnamgyeongmae.Category.domain.entity.Category;
 import megabrain.gyeongnamgyeongmae.commons.BaseTimeEntity;
 import megabrain.gyeongnamgyeongmae.member.domain.entity.Member;
@@ -29,18 +26,14 @@ public class AuctionItem extends BaseTimeEntity {
   @Column(name = "name")
   private String name;
 
-  @Column(name = "highest_price") // 가격
+  @Column(name = "highest_price")
   private int price;
 
   @Embedded private Content content;
 
-  @OneToOne(fetch = FetchType.EAGER) // 즉시로딩
+  @OneToOne(fetch = FetchType.EAGER)
   @JoinColumn(name = "category_id")
   private Category category;
-
-  @OneToMany(fetch = FetchType.LAZY)
-  @JoinColumn(name = "id")
-  private List<AuctionOffers> transactions = new ArrayList<>();
 
   @Column(name = "close_at")
   protected LocalDateTime closedTime;
@@ -63,5 +56,27 @@ public class AuctionItem extends BaseTimeEntity {
     this.price = price;
     this.content = content;
     this.closedTime = closedTime;
+  }
+
+  @Builder
+  public AuctionItem(
+      Long id,
+      String name,
+      int price,
+      Content content,
+      LocalDateTime closedTime,
+      Category category,
+      Member member,
+      LocalDateTime createdAt,
+      LocalDateTime updatedAt) {
+    this.id = id;
+    this.name = name;
+    this.price = price;
+    this.content = content;
+    this.closedTime = closedTime;
+    this.category = category;
+    this.member = member;
+    this.createdAt = createdAt;
+    this.updatedAt = updatedAt;
   }
 }
