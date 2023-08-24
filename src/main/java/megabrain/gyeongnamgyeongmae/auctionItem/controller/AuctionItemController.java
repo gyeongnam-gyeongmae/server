@@ -2,6 +2,7 @@ package megabrain.gyeongnamgyeongmae.auctionItem.controller;
 
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
+import javax.transaction.Transactional;
 import javax.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import megabrain.gyeongnamgyeongmae.Category.domain.entity.Category;
@@ -29,6 +30,7 @@ public class AuctionItemController {
   @Operation(summary = "Post AuctionItem", description = "경매품 올리기")
   @ResponseStatus(HttpStatus.CREATED)
   @PostMapping()
+  @Transactional
   public ResponseEntity<HttpStatus> createAuctionItem(
       @RequestBody @Valid CreateAuctionItemRequest createAuctionItemRequest) {
     Member memberEntity = memberService.findMemberById(createAuctionItemRequest.getMember());
