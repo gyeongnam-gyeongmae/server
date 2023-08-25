@@ -10,5 +10,5 @@ public interface IAuctionItemService {
 
   void updateAuctionItemViewCount(AuctionItem auctionItem);
 
-  //  void updateAuctionItem(AuctionItem auctionItem, Long id);
+  void updateAuctionItem(AuctionItem auctionItem);
 }

@@ -10,6 +10,7 @@ import megabrain.gyeongnamgyeongmae.Category.service.CategoryService;
 import megabrain.gyeongnamgyeongmae.auctionItem.domain.entity.AuctionItem;
 import megabrain.gyeongnamgyeongmae.auctionItem.dto.AuctionItemResponse;
 import megabrain.gyeongnamgyeongmae.auctionItem.dto.CreateAuctionItemRequest;
+import megabrain.gyeongnamgyeongmae.auctionItem.dto.UpDateAuctionItemRequest;
 import megabrain.gyeongnamgyeongmae.auctionItem.service.Item.AuctionItemService;
 import megabrain.gyeongnamgyeongmae.member.domain.entity.Member;
 import megabrain.gyeongnamgyeongmae.member.service.MemberService;
@@ -50,5 +51,20 @@ public class AuctionItemController {
     AuctionItem auctionItem = auctionItemService.findAuctionItemById(id);
     auctionItemService.updateAuctionItemViewCount(auctionItem);
     return ResponseEntity.ok(AuctionItemResponse.of(auctionItem));
+  }
+
+  @Operation(summary = "Update AuctionItem", description = "경매품 수정하기")
+  @PutMapping("{id}")
+  @Transactional
+  public ResponseEntity<HttpStatus> updateAuctionItemById(
+      @PathVariable Long id,
+      @RequestBody @Valid UpDateAuctionItemRequest upDateAuctionItemRequest) {
+    Category categoryEntity =
+        categoryService.findCategoryByName(upDateAuctionItemRequest.getCategory());
+    AuctionItem auctionItem = auctionItemService.findAuctionItemById(id);
+    auctionItem.updateAuctionItem(upDateAuctionItemRequest);
+    auctionItem.setCategory(categoryEntity);
+    auctionItemService.updateAuctionItem(auctionItem);
+    return ResponseEntity.status(HttpStatus.OK).build();
   }
 }

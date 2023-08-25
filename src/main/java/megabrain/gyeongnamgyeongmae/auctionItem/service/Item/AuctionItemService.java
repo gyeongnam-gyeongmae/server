@@ -34,4 +34,9 @@ public class AuctionItemService implements IAuctionItemService {
     auctionItem.setView_count(auctionItem.getView_count() + 1);
     auctionItemRepository.save(auctionItem);
   }
+
+  @Override
+  public void updateAuctionItem(AuctionItem auctionItem) {
+    auctionItemRepository.save(auctionItem);
+  }
 }
