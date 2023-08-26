@@ -47,6 +47,7 @@ public class AuctionItemController {
 
   @Operation(summary = "Show AuctionItem", description = "경매품 상세보기")
   @GetMapping("{id}")
+  @Transactional
   public ResponseEntity<AuctionItemResponse> findAuctionItemById(@PathVariable Long id) {
     AuctionItem auctionItem = auctionItemService.findAuctionItemById(id);
     auctionItemService.updateAuctionItemViewCount(auctionItem);
