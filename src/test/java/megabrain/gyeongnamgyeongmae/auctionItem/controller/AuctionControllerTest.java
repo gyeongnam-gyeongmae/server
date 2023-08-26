@@ -2,8 +2,11 @@ package megabrain.gyeongnamgyeongmae.auctionItem.controller;
 
 import static megabrain.gyeongnamgyeongmae.fixture.AuctionItemFixture.*;
 import static org.hamcrest.Matchers.startsWith;
-import static org.mockito.Mockito.when;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.mockito.ArgumentCaptor.forClass;
+import static org.mockito.Mockito.*;
 import static org.springframework.restdocs.mockmvc.MockMvcRestDocumentation.documentationConfiguration;
+import static org.springframework.restdocs.mockmvc.RestDocumentationRequestBuilders.put;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
@@ -13,13 +16,16 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import megabrain.gyeongnamgyeongmae.Category.service.CategoryService;
+import megabrain.gyeongnamgyeongmae.auctionItem.domain.entity.AuctionItem;
 import megabrain.gyeongnamgyeongmae.auctionItem.dto.AuctionItemResponse;
+import megabrain.gyeongnamgyeongmae.auctionItem.dto.UpDateAuctionItemRequest;
 import megabrain.gyeongnamgyeongmae.auctionItem.service.Item.AuctionItemService;
 import megabrain.gyeongnamgyeongmae.member.service.MemberService;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
+import org.mockito.ArgumentCaptor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
@@ -101,5 +107,38 @@ public class AuctionControllerTest {
         .andExpect(jsonPath("$.content").value(expectedResponse.getContent()))
         .andExpect(jsonPath("$.likeCount").value(expectedResponse.getLikeCount()))
         .andExpect(jsonPath("$.viewCount").value(expectedResponse.getViewCount()));
+  }
+
+  @Test
+  @DisplayName("경매상품 수정 성공 케이스")
+  void upDateAuctionItem() throws Exception {
+
+    Long auctionItemId = 1L;
+    when(auctionItemService.findAuctionItemById(auctionItemId)).thenReturn(AUCTION_ITEM);
+    when(categoryService.findCategoryByName("mouse")).thenReturn(UPDATE_CATEGORY);
+
+    UpDateAuctionItemRequest upDateAuctionItemRequest = UPDATE_AUCTION_ITEM;
+
+    mockMvc
+        .perform(
+            put("/api/auctions/{auctionItemId}", auctionItemId)
+                .contentType(MediaType.APPLICATION_JSON)
+                .content(toJsonString(upDateAuctionItemRequest)))
+        .andDo(print())
+        .andExpect(status().isOk());
+
+    ArgumentCaptor<AuctionItem> captor = forClass(AuctionItem.class);
+
+    verify(auctionItemService, times(1)).updateAuctionItem(captor.capture());
+
+    AuctionItem capturedAuctionItem = captor.getValue();
+
+    assertEquals("마우스 팝니다", capturedAuctionItem.getName());
+    assertEquals("mouse", capturedAuctionItem.getCategory().getName());
+    assertEquals(1000, capturedAuctionItem.getPrice());
+    assertEquals("update content", capturedAuctionItem.getContent().getContent());
+    assertEquals("USED", capturedAuctionItem.getContent().getStatus().toString());
+    assertEquals("2066-12-31T12:00", capturedAuctionItem.getClosedTime().toString());
+    assertEquals("CLOSED", capturedAuctionItem.getStatus().toString());
   }
 }
