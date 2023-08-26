@@ -1,5 +1,6 @@
 package megabrain.gyeongnamgyeongmae.auctionItem.service.Item;
 
+import java.time.LocalDateTime;
 import lombok.RequiredArgsConstructor;
 import megabrain.gyeongnamgyeongmae.Category.domain.repository.CategoryRepository;
 import megabrain.gyeongnamgyeongmae.Category.service.CategoryService;
@@ -38,5 +39,13 @@ public class AuctionItemService implements IAuctionItemService {
   @Override
   public void updateAuctionItem(AuctionItem auctionItem) {
     auctionItemRepository.save(auctionItem);
+  }
+
+  @Override
+  public void checkClosedTime(LocalDateTime closedTime) {
+    LocalDateTime now = LocalDateTime.now();
+    if (closedTime.isBefore(now.plusHours(24))) {
+      throw new RuntimeException("경매 종료 시간은 현재 시간보다 24시간 이후여야 합니다.");
+    }
   }
 }

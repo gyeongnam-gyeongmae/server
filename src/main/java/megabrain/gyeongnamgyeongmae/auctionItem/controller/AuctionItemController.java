@@ -34,6 +34,7 @@ public class AuctionItemController {
   @Transactional
   public ResponseEntity<HttpStatus> createAuctionItem(
       @RequestBody @Valid CreateAuctionItemRequest createAuctionItemRequest) {
+    auctionItemService.checkClosedTime(createAuctionItemRequest.getClosedTime());
     Member memberEntity = memberService.findMemberById(createAuctionItemRequest.getMember());
     Category categoryEntity =
         categoryService.findCategoryByName(createAuctionItemRequest.getCategory());
@@ -60,6 +61,7 @@ public class AuctionItemController {
   public ResponseEntity<HttpStatus> updateAuctionItemById(
       @PathVariable Long id,
       @RequestBody @Valid UpDateAuctionItemRequest upDateAuctionItemRequest) {
+    auctionItemService.checkClosedTime(upDateAuctionItemRequest.getClosedTime());
     Category categoryEntity =
         categoryService.findCategoryByName(upDateAuctionItemRequest.getCategory());
     AuctionItem auctionItem = auctionItemService.findAuctionItemById(id);
