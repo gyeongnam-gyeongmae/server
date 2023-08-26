@@ -10,9 +10,12 @@ import megabrain.gyeongnamgyeongmae.auctionItem.domain.entity.Content;
 
 @Builder
 @Getter
+@Setter
 @NoArgsConstructor(access = AccessLevel.PRIVATE)
 @AllArgsConstructor
 public class UpDateAuctionItemRequest {
+
+  @NotNull private Long id;
 
   @NotEmpty private String name;
 
