@@ -8,7 +8,7 @@ import lombok.RequiredArgsConstructor;
 import megabrain.gyeongnamgyeongmae.Category.service.CategoryService;
 import megabrain.gyeongnamgyeongmae.auctionItem.dto.AuctionItemResponse;
 import megabrain.gyeongnamgyeongmae.auctionItem.dto.CreateAuctionItemRequest;
-import megabrain.gyeongnamgyeongmae.auctionItem.dto.UpDateAuctionItemRequest;
+import megabrain.gyeongnamgyeongmae.auctionItem.dto.UpdateAuctionItemRequest;
 import megabrain.gyeongnamgyeongmae.auctionItem.service.Item.AuctionItemService;
 import megabrain.gyeongnamgyeongmae.member.service.MemberService;
 import org.springframework.http.HttpStatus;
@@ -45,7 +45,7 @@ public class AuctionItemController {
   @PutMapping()
   @Transactional
   public ResponseEntity<HttpStatus> updateAuctionItemById(
-      @RequestBody @Valid UpDateAuctionItemRequest upDateAuctionItemRequest) {
+      @RequestBody @Valid UpdateAuctionItemRequest upDateAuctionItemRequest) {
     auctionItemService.updateAuctionItem(upDateAuctionItemRequest);
     return ResponseEntity.status(HttpStatus.OK).build();
   }
