@@ -19,6 +19,7 @@ public class AuctionItemFixture {
 
   public static UpDateAuctionItemRequest UPDATE_AUCTION_ITEM =
       new UpDateAuctionItemRequest(
+            1L,
           "마우스 팝니다",
           1000,
           "mouse",
