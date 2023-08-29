@@ -4,7 +4,7 @@ import java.time.LocalDateTime;
 import megabrain.gyeongnamgyeongmae.auctionItem.domain.entity.AuctionItem;
 import megabrain.gyeongnamgyeongmae.auctionItem.dto.AuctionItemResponse;
 import megabrain.gyeongnamgyeongmae.auctionItem.dto.CreateAuctionItemRequest;
-import megabrain.gyeongnamgyeongmae.auctionItem.dto.UpDateAuctionItemRequest;
+import megabrain.gyeongnamgyeongmae.auctionItem.dto.UpdateAuctionItemRequest;
 
 public interface IAuctionItemService {
 
@@ -14,7 +14,7 @@ public interface IAuctionItemService {
 
   void updateAuctionItemViewCount(AuctionItem auctionItem);
 
-  void updateAuctionItem(UpDateAuctionItemRequest upDateAuctionItemRequest);
+  void updateAuctionItem(UpdateAuctionItemRequest upDateAuctionItemRequest);
 
   void checkClosedTime(LocalDateTime closedTime);
 }

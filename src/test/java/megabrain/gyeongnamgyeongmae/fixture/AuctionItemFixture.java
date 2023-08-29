@@ -7,7 +7,7 @@ import megabrain.gyeongnamgyeongmae.auctionItem.domain.entity.AuctionItemStatus;
 import megabrain.gyeongnamgyeongmae.auctionItem.domain.entity.AuctionStatus;
 import megabrain.gyeongnamgyeongmae.auctionItem.domain.entity.Content;
 import megabrain.gyeongnamgyeongmae.auctionItem.dto.CreateAuctionItemRequest;
-import megabrain.gyeongnamgyeongmae.auctionItem.dto.UpDateAuctionItemRequest;
+import megabrain.gyeongnamgyeongmae.auctionItem.dto.UpdateAuctionItemRequest;
 import megabrain.gyeongnamgyeongmae.member.domain.entity.Member;
 
 public class AuctionItemFixture {
@@ -17,9 +17,9 @@ public class AuctionItemFixture {
 
   public static final Member member = new Member("test1@gmail.com", "!Test123", "test1");
 
-  public static UpDateAuctionItemRequest UPDATE_AUCTION_ITEM =
-      new UpDateAuctionItemRequest(
-            1L,
+  public static UpdateAuctionItemRequest UPDATE_AUCTION_ITEM =
+      new UpdateAuctionItemRequest(
+          1L,
           "마우스 팝니다",
           1000,
           "mouse",

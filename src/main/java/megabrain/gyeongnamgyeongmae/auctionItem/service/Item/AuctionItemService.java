@@ -9,7 +9,7 @@ import megabrain.gyeongnamgyeongmae.auctionItem.domain.entity.AuctionItem;
 import megabrain.gyeongnamgyeongmae.auctionItem.domain.repostiory.AuctionItemRepository;
 import megabrain.gyeongnamgyeongmae.auctionItem.dto.AuctionItemResponse;
 import megabrain.gyeongnamgyeongmae.auctionItem.dto.CreateAuctionItemRequest;
-import megabrain.gyeongnamgyeongmae.auctionItem.dto.UpDateAuctionItemRequest;
+import megabrain.gyeongnamgyeongmae.auctionItem.dto.UpdateAuctionItemRequest;
 import megabrain.gyeongnamgyeongmae.member.domain.entity.Member;
 import megabrain.gyeongnamgyeongmae.member.domain.repository.MemberRepository;
 import megabrain.gyeongnamgyeongmae.member.service.MemberService;
@@ -55,7 +55,7 @@ public class AuctionItemService implements IAuctionItemService {
 
   @Override
   @Transactional
-  public void updateAuctionItem(UpDateAuctionItemRequest upDateAuctionItemRequest) {
+  public void updateAuctionItem(UpdateAuctionItemRequest upDateAuctionItemRequest) {
     checkClosedTime(upDateAuctionItemRequest.getClosedTime());
     Category categoryEntity =
         categoryService.findCategoryByName(upDateAuctionItemRequest.getCategory());
