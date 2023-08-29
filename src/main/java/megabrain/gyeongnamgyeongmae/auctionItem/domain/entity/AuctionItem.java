@@ -4,6 +4,7 @@ import java.time.LocalDateTime;
 import javax.persistence.*;
 import lombok.*;
 import megabrain.gyeongnamgyeongmae.Category.domain.entity.Category;
+import megabrain.gyeongnamgyeongmae.auctionItem.dto.UpdateAuctionItemRequest;
 import megabrain.gyeongnamgyeongmae.commons.BaseTimeEntity;
 import megabrain.gyeongnamgyeongmae.member.domain.entity.Member;
 
@@ -78,5 +79,13 @@ public class AuctionItem extends BaseTimeEntity {
     this.member = member;
     this.createdAt = createdAt;
     this.updatedAt = updatedAt;
+  }
+
+  public void updateAuctionItem(UpdateAuctionItemRequest upDateAuctionItemRequest) {
+    this.name = upDateAuctionItemRequest.getName();
+    this.price = upDateAuctionItemRequest.getPrice();
+    this.content = upDateAuctionItemRequest.getContent();
+    this.closedTime = upDateAuctionItemRequest.getClosedTime();
+    this.status = upDateAuctionItemRequest.getAuctionStatus();
   }
 }
