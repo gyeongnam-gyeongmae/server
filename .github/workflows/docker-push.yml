@@ -37,7 +37,7 @@ jobs:
         shell: bash
 
       - name: Build with Gradle
-        run: ./gradlew clean build -Pprofile=prod
+        run: ./gradlew clean && ./gradlew build -Pprofile=prod && ls
         shell: bash
 
       - name: Set up Docker Buildx
