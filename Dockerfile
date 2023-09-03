@@ -1,8 +1,8 @@
 FROM openjdk:8-jdk-alpine
 
-ARG JAR_FILE_PATH=build/libs/*.jar
+ARG JAR_FILE_PATH=target/**.jar
 
-COPY ${JAR_FILE_PATH} app.jar
+COPY --chown=appuser:appuser ${JAR_FILE_PATH} app.jar
 
 EXPOSE 8080
 
