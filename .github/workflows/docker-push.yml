@@ -55,6 +55,6 @@ jobs:
         with:
           context: .
           push: true
-          tags: ghcr.io/org/repo:tag
+          tags: ghcr.io/gyeongnam-gyeongmae/gyeongnam-gyeongmae-api:${{ github.run_number }}
           cache-from: type=gha
           cache-to: type=gha,mode=max
