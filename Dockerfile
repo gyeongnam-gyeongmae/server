@@ -1,9 +1,6 @@
 FROM openjdk:8-jdk-alpine
-
-ARG JAR_FILE_PATH=target/**.jar
-
-COPY --chown=appuser:appuser ${JAR_FILE_PATH} app.jar
-
+VOLUME /tmp
 EXPOSE 8080
+ADD build/libs/gyeongnam-gyeongmae-0.0.1-SNAPSHOT.jar app.jar
 
-ENTRYPOINT ["java", "-jar", "-Dspring.profiles.active=production", "/app.jar"]
+ENTRYPOINT ["java","-Djava.security.egd=file:/dev/./urandom","-jar","/app.jar"]
