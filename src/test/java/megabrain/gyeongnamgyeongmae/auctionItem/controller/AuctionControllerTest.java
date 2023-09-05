@@ -20,7 +20,7 @@ import megabrain.gyeongnamgyeongmae.auctionItem.domain.entity.AuctionStatus;
 import megabrain.gyeongnamgyeongmae.auctionItem.domain.repostiory.AuctionItemRepository;
 import megabrain.gyeongnamgyeongmae.auctionItem.dto.AuctionItemResponse;
 import megabrain.gyeongnamgyeongmae.auctionItem.dto.UpdateAuctionItemRequest;
-import megabrain.gyeongnamgyeongmae.auctionItem.service.Item.AuctionItemService;
+import megabrain.gyeongnamgyeongmae.auctionItem.service.Item.AuctionItemServiceImpl;
 import megabrain.gyeongnamgyeongmae.member.service.MemberService;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
@@ -43,7 +43,7 @@ public class AuctionControllerTest {
 
   @MockBean private CategoryService categoryService;
 
-  @MockBean private AuctionItemService auctionItemService;
+  @MockBean private AuctionItemServiceImpl auctionItemServiceImpl;
 
   @Autowired private ObjectMapper objectMapper;
 
@@ -87,7 +87,7 @@ public class AuctionControllerTest {
   @DisplayName("경매상품 조회 성공 케이스")
   void getAuctionItemTest() throws Exception {
 
-    when(auctionItemService.findAuctionItemById(1L))
+    when(auctionItemServiceImpl.findAuctionItemById(1L))
         .thenReturn((AuctionItemResponse.of(AUCTION_ITEM)));
     doAnswer(
             invocation -> {
@@ -95,7 +95,7 @@ public class AuctionControllerTest {
               arg.setView_count(1);
               return null;
             })
-        .when(auctionItemService)
+        .when(auctionItemServiceImpl)
         .updateAuctionItemViewCount(AUCTION_ITEM);
 
     AuctionItemResponse expectedResponse = AuctionItemResponse.of(AUCTION_ITEM);
@@ -142,7 +142,7 @@ public class AuctionControllerTest {
 
     ArgumentCaptor<UpdateAuctionItemRequest> captor = forClass(UpdateAuctionItemRequest.class);
 
-    verify(auctionItemService, times(1)).updateAuctionItem(captor.capture());
+    verify(auctionItemServiceImpl, times(1)).updateAuctionItem(captor.capture());
 
     UpdateAuctionItemRequest capturedAuctionItem = captor.getValue();
 
