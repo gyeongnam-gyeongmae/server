@@ -92,7 +92,7 @@ public class AuctionControllerTest {
     doAnswer(
             invocation -> {
               AuctionItem arg = invocation.getArgument(0);
-              arg.setView_count(1);
+              arg.setView_count(1L);
               return null;
             })
         .when(auctionItemServiceImpl)

@@ -21,7 +21,7 @@ public class AuctionItemFixture {
       new UpdateAuctionItemRequest(
           1L,
           "마우스 팝니다",
-          1000,
+          1000L,
           "mouse",
           new Content("update content", AuctionItemStatus.USED),
           LocalDateTime.parse("2066-12-31T12:00"),
