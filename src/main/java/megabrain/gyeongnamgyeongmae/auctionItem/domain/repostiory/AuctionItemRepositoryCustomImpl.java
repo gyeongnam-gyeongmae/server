@@ -12,6 +12,7 @@ import javax.persistence.EntityManager;
 import megabrain.gyeongnamgyeongmae.Category.domain.entity.QCategory;
 import megabrain.gyeongnamgyeongmae.auctionItem.domain.entity.AuctionItem;
 import megabrain.gyeongnamgyeongmae.auctionItem.domain.entity.AuctionItemStatus;
+import megabrain.gyeongnamgyeongmae.auctionItem.domain.entity.AuctionStatus;
 import megabrain.gyeongnamgyeongmae.auctionItem.domain.entity.QAuctionItem;
 import megabrain.gyeongnamgyeongmae.auctionItem.dto.SearchItem.SearchAuctionItemSortedRequest;
 import megabrain.gyeongnamgyeongmae.auctionItem.dto.SearchItem.SearchStatus;
@@ -35,16 +36,18 @@ public class AuctionItemRepositoryCustomImpl implements AuctionItemRepositoryCus
     QCategory category = QCategory.category;
 
     List<OrderSpecifier<?>> orderSpecifiers = new ArrayList<>();
-    BooleanBuilder builder = new BooleanBuilder();
+    BooleanBuilder statusBuilder = new BooleanBuilder();
+    BooleanBuilder sellStatus = new BooleanBuilder();
 
     if (SearchStatus.NEW.equals(searchAuctionItemSortedRequest.getSearch_status())) {
-      builder.and(auctionItem.content.status.eq(AuctionItemStatus.NEW));
+      statusBuilder.and(auctionItem.content.status.eq(AuctionItemStatus.NEW));
     }
     if (SearchStatus.USED.equals(searchAuctionItemSortedRequest.getSearch_status())) {
-      builder.and(auctionItem.content.status.eq(AuctionItemStatus.USED));
+      statusBuilder.and(auctionItem.content.status.eq(AuctionItemStatus.USED));
     }
     if (SearchStatus.ALL.equals(searchAuctionItemSortedRequest.getSearch_status())) {
-      builder.and(auctionItem.content.status.in(AuctionItemStatus.NEW, AuctionItemStatus.USED));
+      statusBuilder.and(
+          auctionItem.content.status.in(AuctionItemStatus.NEW, AuctionItemStatus.USED));
     }
 
     if (searchAuctionItemSortedRequest.isSearch_price()) {
@@ -65,12 +68,32 @@ public class AuctionItemRepositoryCustomImpl implements AuctionItemRepositoryCus
     if (!searchAuctionItemSortedRequest.isView_count()) {
       orderSpecifiers.add(auctionItem.view_count.asc());
     }
+    if (searchAuctionItemSortedRequest.isClosed()) {
+      sellStatus.and(auctionItem.status.eq(AuctionStatus.ONGOING));
+    }
+    if (!searchAuctionItemSortedRequest.isClosed()) {
+      sellStatus.and(
+          auctionItem.status.in(
+              AuctionStatus.ONGOING, AuctionStatus.CLOSED, AuctionStatus.BIDDING));
+    }
+    if (searchAuctionItemSortedRequest.isClosed()) {
+      sellStatus.and(auctionItem.status.eq(AuctionStatus.ONGOING));
+    }
+    if (searchAuctionItemSortedRequest.isSearch_time()) {
+      orderSpecifiers.add(auctionItem.closedTime.asc());
+    }
+    if (!searchAuctionItemSortedRequest.isSearch_time()) {
+      orderSpecifiers.add(auctionItem.closedTime.desc());
+    }
 
     JPAQuery<AuctionItem> query =
         queryFactory
             .selectFrom(auctionItem)
             .innerJoin(auctionItem.category, category)
-            .where(category.name.eq(searchAuctionItemSortedRequest.getCategory()), builder);
+            .where(
+                category.name.eq(searchAuctionItemSortedRequest.getCategory()),
+                statusBuilder,
+                sellStatus);
 
     List<AuctionItem> results =
         query

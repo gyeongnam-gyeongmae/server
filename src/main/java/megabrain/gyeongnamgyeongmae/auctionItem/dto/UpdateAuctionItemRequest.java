@@ -20,7 +20,7 @@ public class UpdateAuctionItemRequest {
   @NotEmpty private String name;
 
   @Min(1)
-  private Integer price;
+  private Long price;
 
   @NotEmpty private String category;
 
