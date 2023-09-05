@@ -13,7 +13,7 @@ import megabrain.gyeongnamgyeongmae.member.domain.entity.Member;
 @Entity
 @Table(name = "AuctionItem")
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
-public class AuctionItem extends BaseTimeEntity {
+public class  AuctionItem extends BaseTimeEntity {
 
   @Id
   @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -32,7 +32,7 @@ public class AuctionItem extends BaseTimeEntity {
 
   @Embedded private Content content;
 
-  @OneToOne(fetch = FetchType.EAGER)
+  @ManyToOne(fetch = FetchType.EAGER)
   @JoinColumn(name = "category_id")
   private Category category;
 
@@ -48,6 +48,13 @@ public class AuctionItem extends BaseTimeEntity {
   @Column(name = "auction_status")
   @Enumerated(EnumType.STRING)
   private AuctionStatus status = AuctionStatus.ONGOING;
+//
+//  @OneToOne(fetch = FetchType.EAGER)
+//  @JoinColumn(name = "location_id")
+//  private Location location;
+
+  @Column
+  private Long temperature;
 
   @Builder
   public AuctionItem(Long id, String name, int price, Content content, LocalDateTime closedTime) {
