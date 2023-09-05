@@ -28,11 +28,11 @@ public class AuctionItemFirstView {
 
   private Address address;
 
-  private int like_count;
+  private Long like_count;
 
-  private int view_count;
+  private Long view_count;
 
-  private int price;
+  private Long price;
 
   public static AuctionItemFirstView of(AuctionItem auctionItem) {
     return AuctionItemFirstView.builder()

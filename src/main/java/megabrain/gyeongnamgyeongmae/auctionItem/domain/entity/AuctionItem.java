@@ -28,7 +28,7 @@ public class  AuctionItem extends BaseTimeEntity {
   private String name;
 
   @Column(name = "highest_price")
-  private int price;
+  private Long price;
 
   @Embedded private Content content;
 
@@ -40,10 +40,10 @@ public class  AuctionItem extends BaseTimeEntity {
   protected LocalDateTime closedTime;
 
   @Column(name = "like_count")
-  private int like_count = 0;
+  private Long like_count = 0L;
 
   @Column(name = "view_count")
-  private int view_count = 0;
+  private Long view_count = 0L;
 
   @Column(name = "auction_status")
   @Enumerated(EnumType.STRING)
@@ -57,7 +57,7 @@ public class  AuctionItem extends BaseTimeEntity {
   private Long temperature;
 
   @Builder
-  public AuctionItem(Long id, String name, int price, Content content, LocalDateTime closedTime) {
+  public AuctionItem(Long id, String name, long price, Content content, LocalDateTime closedTime) {
 
     this.id = id;
     this.name = name;
@@ -70,7 +70,7 @@ public class  AuctionItem extends BaseTimeEntity {
   public AuctionItem(
       Long id,
       String name,
-      int price,
+      long price,
       Content content,
       LocalDateTime closedTime,
       Category category,
