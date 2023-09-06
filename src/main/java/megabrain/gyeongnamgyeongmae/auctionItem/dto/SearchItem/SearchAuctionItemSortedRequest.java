@@ -1,10 +1,14 @@
 package megabrain.gyeongnamgyeongmae.auctionItem.dto.SearchItem;
 
+import com.querydsl.core.BooleanBuilder;
+import com.querydsl.core.types.OrderSpecifier;
+import java.util.List;
 import lombok.*;
+import megabrain.gyeongnamgyeongmae.auctionItem.domain.entity.AuctionItemStatus;
+import megabrain.gyeongnamgyeongmae.auctionItem.domain.entity.AuctionStatus;
+import megabrain.gyeongnamgyeongmae.auctionItem.domain.entity.QAuctionItem;
 
 @Data
-@Getter
-@Setter
 public class SearchAuctionItemSortedRequest {
 
   private String category;
@@ -33,4 +37,57 @@ public class SearchAuctionItemSortedRequest {
 
   //  @NotNull private boolean temperature; // 온도별 정렬 기준
 
+  // 이 함수에 매개변수 인자로
+
+  public void applySearchStatus(BooleanBuilder status, QAuctionItem item) {
+    if (this.search_status == SearchStatus.NEW) {
+      status.and(item.content.status.eq(AuctionItemStatus.NEW));
+      return;
+    }
+    if (this.search_status == SearchStatus.USED) {
+      status.and(item.content.status.eq(AuctionItemStatus.USED));
+      return;
+    }
+    status.and(item.content.status.in(AuctionItemStatus.NEW, AuctionItemStatus.USED));
+  }
+
+  public void applySearchPrice(List<OrderSpecifier<?>> order, QAuctionItem item) {
+    if (this.search_price) {
+      order.add(item.price.desc());
+      return;
+    }
+    order.add(item.price.asc());
+  }
+
+  public void applySearchLike(List<OrderSpecifier<?>> order, QAuctionItem item) {
+    if (this.like) {
+      order.add(item.like_count.desc());
+      return;
+    }
+    order.add(item.like_count.asc());
+  }
+
+  public void applySearchView(List<OrderSpecifier<?>> order, QAuctionItem item) {
+    if (this.view_count) {
+      order.add(item.view_count.desc());
+      return;
+    }
+    order.add(item.view_count.asc());
+  }
+
+  public void applySearchTime(List<OrderSpecifier<?>> order, QAuctionItem item) {
+    if (this.search_time) {
+      order.add(item.closedTime.desc());
+      return;
+    }
+    order.add(item.closedTime.asc());
+  }
+
+  public void applySearchClosed(BooleanBuilder builder, QAuctionItem item) {
+    if (this.closed) {
+      builder.and(item.status.eq(AuctionStatus.ONGOING));
+      return;
+    }
+    builder.and(item.status.in(AuctionStatus.ONGOING, AuctionStatus.CLOSED, AuctionStatus.BIDDING));
+  }
 }
