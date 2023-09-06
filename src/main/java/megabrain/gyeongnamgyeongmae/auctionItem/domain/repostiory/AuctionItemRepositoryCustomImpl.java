@@ -34,14 +34,15 @@ public class AuctionItemRepositoryCustomImpl implements AuctionItemRepositoryCus
 
     List<OrderSpecifier<?>> orderSpecifiers = new ArrayList<>();
     BooleanBuilder statusBuilder = new BooleanBuilder();
-    BooleanBuilder sellStatus = new BooleanBuilder();
+    BooleanBuilder sellBuilder = new BooleanBuilder();
+    BooleanBuilder keywordStatus = new BooleanBuilder();
 
-    searchAuctionItemSortedRequest.applySearchStatus(statusBuilder, auctionItem);
+    searchAuctionItemSortedRequest.applyKeyWordStatus(keywordStatus, auctionItem);
     searchAuctionItemSortedRequest.applySearchPrice(orderSpecifiers, auctionItem);
     searchAuctionItemSortedRequest.applySearchLike(orderSpecifiers, auctionItem);
     searchAuctionItemSortedRequest.applySearchView(orderSpecifiers, auctionItem);
     searchAuctionItemSortedRequest.applySearchTime(orderSpecifiers, auctionItem);
-    searchAuctionItemSortedRequest.applySearchClosed(sellStatus, auctionItem);
+    searchAuctionItemSortedRequest.applySearchClosed(sellBuilder, auctionItem);
 
     JPAQuery<AuctionItem> query =
         queryFactory
@@ -50,7 +51,8 @@ public class AuctionItemRepositoryCustomImpl implements AuctionItemRepositoryCus
             .where(
                 category.name.eq(searchAuctionItemSortedRequest.getCategory()),
                 statusBuilder,
-                sellStatus);
+                sellBuilder,
+                keywordStatus);
 
     List<AuctionItem> results =
         query

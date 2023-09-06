@@ -11,6 +11,8 @@ import megabrain.gyeongnamgyeongmae.auctionItem.domain.entity.QAuctionItem;
 @Data
 public class SearchAuctionItemSortedRequest {
 
+  private String keyword = null;
+
   private String category;
 
   private SearchStatus search_status = SearchStatus.ALL; // 신품 중고품 전체
@@ -38,6 +40,13 @@ public class SearchAuctionItemSortedRequest {
   //  @NotNull private boolean temperature; // 온도별 정렬 기준
 
   // 이 함수에 매개변수 인자로
+
+  public void applyKeyWordStatus(BooleanBuilder status, QAuctionItem item) {
+    if (this.keyword == null) {
+      return;
+    }
+    status.and(item.name.like("%" + keyword + "%"));
+  }
 
   public void applySearchStatus(BooleanBuilder status, QAuctionItem item) {
     if (this.search_status == SearchStatus.NEW) {

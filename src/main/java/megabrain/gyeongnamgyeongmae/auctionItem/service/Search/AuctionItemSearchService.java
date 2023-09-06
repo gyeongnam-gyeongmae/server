@@ -9,5 +9,4 @@ public interface AuctionItemSearchService {
 
   Page<AuctionItemFirstView> findAuctionItembyRequest(
       SearchAuctionItemSortedRequest searchAuctionItemSortedRequest, Pageable pageable);
-
 }
