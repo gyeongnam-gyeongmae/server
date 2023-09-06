@@ -1,16 +1,25 @@
 package megabrain.gyeongnamgyeongmae.auctionItem.dto.SearchItem;
 
-import javax.validation.constraints.NotNull;
-import lombok.Getter;
+import lombok.*;
 
+@Data
 @Getter
+@Setter
 public class SearchAuctionItemSortedRequest {
 
-  @NotNull private SearchStatus search_status; // 신품 중고품 전체
+  private String category;
 
-  @NotNull private boolean closed; // 이미 경매가 끝낸 개시글도 보기
+  private SearchStatus search_status = SearchStatus.ALL; // 신품 중고품 전체
 
-  @NotNull private boolean search_time; // 마감시간 근접
+  private Boolean closed = Boolean.FALSE; // 이미 경매가 끝낸 개시글도 보기
+
+  private Boolean search_time = Boolean.FALSE; // 마감시간 근접
+
+  private Boolean like = Boolean.FALSE; // 좋아요 정렬 기준
+
+  private Boolean search_price = Boolean.FALSE; // 가격순 정렬
+
+  private Boolean view_count = Boolean.FALSE; // 조회수 정렬 기준
 
   //  @NotNull private Location my_location; // 나의 현재 위치
 
@@ -18,15 +27,7 @@ public class SearchAuctionItemSortedRequest {
 
   //  @NotNull private int town; // 몇개의 마을 조회
 
-  @NotNull private String category; // 카테고리 검색
-
-  @NotNull private boolean like; // 좋아요 정렬 기준
-
-  @NotNull private boolean search_price; // 가격순 정렬
-
   //  @NotNull private boolean comment; // 댓글수 정렬 기준
-
-  @NotNull private boolean view_count; // 조회수 정렬 기준
 
   //  @NotNull private String member; // 이름 검색
 

@@ -50,39 +50,39 @@ public class AuctionItemRepositoryCustomImpl implements AuctionItemRepositoryCus
           auctionItem.content.status.in(AuctionItemStatus.NEW, AuctionItemStatus.USED));
     }
 
-    if (searchAuctionItemSortedRequest.isSearch_price()) {
+    if (searchAuctionItemSortedRequest.getSearch_price()) {
       orderSpecifiers.add(auctionItem.price.desc());
     }
-    if (!searchAuctionItemSortedRequest.isSearch_price()) {
+    if (!searchAuctionItemSortedRequest.getSearch_price()) {
       orderSpecifiers.add(auctionItem.price.asc());
     }
-    if (searchAuctionItemSortedRequest.isLike()) {
+    if (searchAuctionItemSortedRequest.getLike()) {
       orderSpecifiers.add(auctionItem.like_count.desc());
     }
-    if (!searchAuctionItemSortedRequest.isLike()) {
+    if (!searchAuctionItemSortedRequest.getLike()) {
       orderSpecifiers.add(auctionItem.like_count.asc());
     }
-    if (searchAuctionItemSortedRequest.isView_count()) {
+    if (searchAuctionItemSortedRequest.getView_count()) {
       orderSpecifiers.add(auctionItem.view_count.desc());
     }
-    if (!searchAuctionItemSortedRequest.isView_count()) {
+    if (!searchAuctionItemSortedRequest.getView_count()) {
       orderSpecifiers.add(auctionItem.view_count.asc());
     }
-    if (searchAuctionItemSortedRequest.isClosed()) {
+    if (searchAuctionItemSortedRequest.getClosed()) {
       sellStatus.and(auctionItem.status.eq(AuctionStatus.ONGOING));
     }
-    if (!searchAuctionItemSortedRequest.isClosed()) {
+    if (!searchAuctionItemSortedRequest.getClosed()) {
       sellStatus.and(
           auctionItem.status.in(
               AuctionStatus.ONGOING, AuctionStatus.CLOSED, AuctionStatus.BIDDING));
     }
-    if (searchAuctionItemSortedRequest.isClosed()) {
+    if (searchAuctionItemSortedRequest.getClosed()) {
       sellStatus.and(auctionItem.status.eq(AuctionStatus.ONGOING));
     }
-    if (searchAuctionItemSortedRequest.isSearch_time()) {
+    if (searchAuctionItemSortedRequest.getSearch_time()) {
       orderSpecifiers.add(auctionItem.closedTime.asc());
     }
-    if (!searchAuctionItemSortedRequest.isSearch_time()) {
+    if (!searchAuctionItemSortedRequest.getSearch_time()) {
       orderSpecifiers.add(auctionItem.closedTime.desc());
     }
 
@@ -105,16 +105,3 @@ public class AuctionItemRepositoryCustomImpl implements AuctionItemRepositoryCus
     return new PageImpl<>(results, pageable, results.size());
   }
 }
-
-//    SearchAuctionItemSortedRequest.Sort a = searchAuctionItemSortedRequest.getSort();
-//    List<AuctionItem> results =
-//        queryFactory
-//            .selectFrom(auctionItem)
-//            .innerJoin(auctionItem.category, category)
-//            .where(category.name.eq(searchAuctionItemSortedRequest.getCategory()))
-//            .orderBy(sort)
-//            .offset(pageable.getOffset())
-//            .limit(pageable.getPageSize())
-//            .fetch();
-
-//  .orderBy(auctionItem.like_count.asc())
