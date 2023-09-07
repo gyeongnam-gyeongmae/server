@@ -43,6 +43,7 @@ public class AuctionItemServiceImpl implements AuctionItemService {
   @Transactional
   public AuctionItemResponse findAuctionItemById(Long id) {
     AuctionItem auctionItem = auctionItemRepository.findById(id).orElseThrow(RuntimeException::new);
+    auctionItem.checkShowAuctionItem(auctionItem);
     updateAuctionItemViewCount(auctionItem);
     return AuctionItemResponse.of(auctionItem);
   }
@@ -55,14 +56,12 @@ public class AuctionItemServiceImpl implements AuctionItemService {
 
   @Override
   @Transactional
-  public void updateAuctionItem(UpdateAuctionItemRequest upDateAuctionItemRequest) {
+  public void updateAuctionItem(UpdateAuctionItemRequest upDateAuctionItemRequest, Long id) {
     checkClosedTime(upDateAuctionItemRequest.getClosedTime());
     Category categoryEntity =
         categoryService.findCategoryByName(upDateAuctionItemRequest.getCategory());
-    AuctionItem auctionItem =
-        auctionItemRepository
-            .findById(upDateAuctionItemRequest.getId())
-            .orElseThrow(RuntimeException::new);
+    AuctionItem auctionItem = auctionItemRepository.findById(id).orElseThrow(RuntimeException::new);
+    auctionItem.checkShowAuctionItem(auctionItem);
     auctionItem.updateAuctionItem(upDateAuctionItemRequest);
     auctionItem.setCategory(categoryEntity);
     auctionItemRepository.save(auctionItem);
@@ -74,5 +73,13 @@ public class AuctionItemServiceImpl implements AuctionItemService {
     if (closedTime.isBefore(now.plusHours(24))) {
       throw new RuntimeException("경매 종료 시간은 현재 시간보다 24시간 이후여야 합니다.");
     }
+  }
+
+  @Override
+  @Transactional
+  public void deleteAuctionItemById(Long id) {
+    AuctionItem auctionItem = auctionItemRepository.findById(id).orElseThrow(RuntimeException::new);
+    auctionItem.removeAuctionItem(auctionItem);
+    auctionItemRepository.save(auctionItem);
   }
 }

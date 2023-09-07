@@ -13,7 +13,7 @@ public class SearchAuctionItemSortedRequest {
 
   private String keyword = null;
 
-  private String category;
+  private String category = null;
 
   private SearchStatus search_status = SearchStatus.ALL; // 신품 중고품 전체
 
@@ -39,13 +39,18 @@ public class SearchAuctionItemSortedRequest {
 
   //  @NotNull private boolean temperature; // 온도별 정렬 기준
 
-  // 이 함수에 매개변수 인자로
-
   public void applyKeyWordStatus(BooleanBuilder status, QAuctionItem item) {
     if (this.keyword == null) {
       return;
     }
     status.and(item.name.like("%" + keyword + "%"));
+  }
+
+  public void applySearchCategory(BooleanBuilder status, QAuctionItem item) {
+    if (this.category == null) {
+      return;
+    }
+    status.and(item.category.name.eq(category));
   }
 
   public void applySearchStatus(BooleanBuilder status, QAuctionItem item) {

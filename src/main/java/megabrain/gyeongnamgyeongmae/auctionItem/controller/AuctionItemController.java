@@ -39,10 +39,18 @@ public class AuctionItemController {
   }
 
   @Operation(summary = "Update AuctionItem", description = "경매품 수정하기")
-  @PutMapping()
+  @PutMapping("{id}")
   public ResponseEntity<HttpStatus> updateAuctionItemById(
+      @PathVariable Long id,
       @RequestBody @Valid UpdateAuctionItemRequest upDateAuctionItemRequest) {
-    auctionItemServiceImpl.updateAuctionItem(upDateAuctionItemRequest);
+    auctionItemServiceImpl.updateAuctionItem(upDateAuctionItemRequest, id);
+    return ResponseEntity.status(HttpStatus.OK).build();
+  }
+
+  @Operation(summary = "Delete AuctionItem", description = "경매품 삭제하기")
+  @DeleteMapping({"{id}"})
+  public ResponseEntity<HttpStatus> deleteAuctionItemById(@PathVariable Long id) {
+    auctionItemServiceImpl.deleteAuctionItemById(id);
     return ResponseEntity.status(HttpStatus.OK).build();
   }
 }

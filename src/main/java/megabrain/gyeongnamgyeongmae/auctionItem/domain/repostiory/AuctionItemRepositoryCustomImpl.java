@@ -1,7 +1,5 @@
 package megabrain.gyeongnamgyeongmae.auctionItem.domain.repostiory;
 
-import static megabrain.gyeongnamgyeongmae.auctionItem.domain.entity.QAuctionItem.auctionItem;
-
 import com.querydsl.core.BooleanBuilder;
 import com.querydsl.core.types.OrderSpecifier;
 import com.querydsl.jpa.impl.JPAQuery;
@@ -36,7 +34,10 @@ public class AuctionItemRepositoryCustomImpl implements AuctionItemRepositoryCus
     BooleanBuilder statusBuilder = new BooleanBuilder();
     BooleanBuilder sellBuilder = new BooleanBuilder();
     BooleanBuilder keywordStatus = new BooleanBuilder();
+    BooleanBuilder categoryStatus = new BooleanBuilder();
 
+    searchAuctionItemSortedRequest.applySearchCategory(categoryStatus, auctionItem);
+    searchAuctionItemSortedRequest.applySearchStatus(statusBuilder, auctionItem);
     searchAuctionItemSortedRequest.applyKeyWordStatus(keywordStatus, auctionItem);
     searchAuctionItemSortedRequest.applySearchPrice(orderSpecifiers, auctionItem);
     searchAuctionItemSortedRequest.applySearchLike(orderSpecifiers, auctionItem);
@@ -49,7 +50,8 @@ public class AuctionItemRepositoryCustomImpl implements AuctionItemRepositoryCus
             .selectFrom(auctionItem)
             .innerJoin(auctionItem.category, category)
             .where(
-                category.name.eq(searchAuctionItemSortedRequest.getCategory()),
+                auctionItem.removed.eq(false),
+                categoryStatus,
                 statusBuilder,
                 sellBuilder,
                 keywordStatus);

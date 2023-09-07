@@ -15,8 +15,6 @@ import megabrain.gyeongnamgyeongmae.auctionItem.domain.entity.Content;
 @AllArgsConstructor
 public class UpdateAuctionItemRequest {
 
-  @NotNull private Long id;
-
   @NotEmpty private String name;
 
   @Min(1)

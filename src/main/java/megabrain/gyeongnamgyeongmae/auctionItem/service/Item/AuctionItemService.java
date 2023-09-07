@@ -14,7 +14,9 @@ public interface AuctionItemService {
 
   void updateAuctionItemViewCount(AuctionItem auctionItem);
 
-  void updateAuctionItem(UpdateAuctionItemRequest upDateAuctionItemRequest);
+  void updateAuctionItem(UpdateAuctionItemRequest upDateAuctionItemRequest, Long id);
 
   void checkClosedTime(LocalDateTime closedTime);
+
+  void deleteAuctionItemById(Long id);
 }

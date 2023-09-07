@@ -13,12 +13,15 @@ import megabrain.gyeongnamgyeongmae.member.domain.entity.Member;
 @Entity
 @Table(name = "AuctionItem")
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
-public class  AuctionItem extends BaseTimeEntity {
+public class AuctionItem extends BaseTimeEntity {
 
   @Id
   @GeneratedValue(strategy = GenerationType.IDENTITY)
   @Column(name = "auction_id")
   private Long id;
+
+  @Column(name = "removed")
+  private boolean removed = false;
 
   @ManyToOne(fetch = FetchType.LAZY)
   @JoinColumn(name = "member_id")
@@ -48,13 +51,12 @@ public class  AuctionItem extends BaseTimeEntity {
   @Column(name = "auction_status")
   @Enumerated(EnumType.STRING)
   private AuctionStatus status = AuctionStatus.ONGOING;
-//
-//  @OneToOne(fetch = FetchType.EAGER)
-//  @JoinColumn(name = "location_id")
-//  private Location location;
+  //
+  //  @OneToOne(fetch = FetchType.EAGER)
+  //  @JoinColumn(name = "location_id")
+  //  private Location location;
 
-  @Column
-  private Long temperature;
+  @Column private Long temperature;
 
   @Builder
   public AuctionItem(Long id, String name, long price, Content content, LocalDateTime closedTime) {
@@ -94,5 +96,15 @@ public class  AuctionItem extends BaseTimeEntity {
     this.content = upDateAuctionItemRequest.getContent();
     this.closedTime = upDateAuctionItemRequest.getClosedTime();
     this.status = upDateAuctionItemRequest.getAuctionStatus();
+  }
+
+  public void removeAuctionItem(AuctionItem auctionItem) {
+    this.removed = true;
+  }
+
+  public void checkShowAuctionItem(AuctionItem auctionItem) {
+    if (this.removed) {
+      throw new RuntimeException("삭제된 상품입니다.");
+    }
   }
 }
