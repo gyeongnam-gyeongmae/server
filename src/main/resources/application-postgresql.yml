@@ -1,0 +1,17 @@
+spring:
+  datasource:
+    url: ${POSTGRES_URL}
+    driver-class-name: org.postgresql.Driver
+    password: ${POSTGRES_PASSWORD}
+    username: ${POSTGRES_USER}
+  jpa:
+    show-sql: true
+    database: postgresql
+    generate-ddl: true
+    hibernate:
+      ddlAuto: create
+    properties:
+      hibernate.jdbc.batch_size: 20
+      hibernate.cache.use_query_cache: false
+      hibernate.cache.use_second_level_cache: false
+      hibernate.cache.use_structured_entries: false
