@@ -56,6 +56,6 @@ jobs:
           context: .
           push: true
           tags: ghcr.io/gyeongnam-gyeongmae/gyeongnam-gyeongmae-api:${{ github.run_number }}
-          platform: linux/amd64
+          platform: linux/amd64/v3
           cache-from: type=gha
           cache-to: type=gha,mode=max
