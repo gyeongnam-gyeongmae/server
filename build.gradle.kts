@@ -41,6 +41,10 @@ sourceSets {
     }
 }
 
+tasks.withType<Jar>() {
+    duplicatesStrategy = DuplicatesStrategy.EXCLUDE
+}
+
 tasks.register<Copy>("check exist application.yml file") {
     val ymlFile = File("src/main/resources/application.yml");
     if (!ymlFile.exists()) {
