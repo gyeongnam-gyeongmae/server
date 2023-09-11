@@ -1,8 +1,8 @@
-package megabrain.gyeongnamgyeongmae.Category.service;
+package megabrain.gyeongnamgyeongmae.category.service;
 
 import lombok.RequiredArgsConstructor;
-import megabrain.gyeongnamgyeongmae.Category.domain.entity.Category;
-import megabrain.gyeongnamgyeongmae.Category.domain.repository.CategoryRepository;
+import megabrain.gyeongnamgyeongmae.category.domain.entity.Category;
+import megabrain.gyeongnamgyeongmae.category.domain.repository.CategoryRepository;
 import org.springframework.stereotype.Service;
 
 @Service

@@ -1,9 +1,9 @@
-package megabrain.gyeongnamgyeongmae.Category.controller;
+package megabrain.gyeongnamgyeongmae.category.controller;
 
 import javax.validation.Valid;
 import lombok.RequiredArgsConstructor;
-import megabrain.gyeongnamgyeongmae.Category.dto.CreateCategoryRequest;
-import megabrain.gyeongnamgyeongmae.Category.service.CategoryService;
+import megabrain.gyeongnamgyeongmae.category.dto.CreateCategoryRequest;
+import megabrain.gyeongnamgyeongmae.category.service.CategoryService;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.PostMapping;

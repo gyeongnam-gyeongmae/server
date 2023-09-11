@@ -1,13 +1,13 @@
 package megabrain.gyeongnamgyeongmae.fixture;
 
 import java.time.LocalDateTime;
-import megabrain.gyeongnamgyeongmae.Category.domain.entity.Category;
 import megabrain.gyeongnamgyeongmae.auctionItem.domain.entity.AuctionItem;
 import megabrain.gyeongnamgyeongmae.auctionItem.domain.entity.AuctionItemStatus;
 import megabrain.gyeongnamgyeongmae.auctionItem.domain.entity.AuctionStatus;
 import megabrain.gyeongnamgyeongmae.auctionItem.domain.entity.Content;
 import megabrain.gyeongnamgyeongmae.auctionItem.dto.CreateAuctionItemRequest;
 import megabrain.gyeongnamgyeongmae.auctionItem.dto.UpdateAuctionItemRequest;
+import megabrain.gyeongnamgyeongmae.category.domain.entity.Category;
 import megabrain.gyeongnamgyeongmae.member.domain.entity.Member;
 
 public class AuctionItemFixture {

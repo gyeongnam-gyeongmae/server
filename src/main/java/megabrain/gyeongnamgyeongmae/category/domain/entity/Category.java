@@ -1,4 +1,4 @@
-package megabrain.gyeongnamgyeongmae.Category.domain.entity;
+package megabrain.gyeongnamgyeongmae.category.domain.entity;
 
 import javax.persistence.*;
 import lombok.AccessLevel;
@@ -9,6 +9,7 @@ import lombok.NoArgsConstructor;
 @Getter
 @Entity
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
+@Table(name = "categories")
 public class Category {
 
   @Id

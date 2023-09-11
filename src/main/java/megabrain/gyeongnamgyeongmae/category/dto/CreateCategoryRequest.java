@@ -1,11 +1,11 @@
-package megabrain.gyeongnamgyeongmae.Category.dto;
+package megabrain.gyeongnamgyeongmae.category.dto;
 
 import javax.validation.constraints.NotNull;
 import lombok.AccessLevel;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
-import megabrain.gyeongnamgyeongmae.Category.domain.entity.Category;
+import megabrain.gyeongnamgyeongmae.category.domain.entity.Category;
 
 @Getter
 @NoArgsConstructor(access = AccessLevel.PRIVATE)

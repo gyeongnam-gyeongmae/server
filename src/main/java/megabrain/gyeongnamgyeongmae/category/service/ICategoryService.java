@@ -1,6 +1,6 @@
-package megabrain.gyeongnamgyeongmae.Category.service;
+package megabrain.gyeongnamgyeongmae.category.service;
 
-import megabrain.gyeongnamgyeongmae.Category.domain.entity.Category;
+import megabrain.gyeongnamgyeongmae.category.domain.entity.Category;
 
 public interface ICategoryService {
 

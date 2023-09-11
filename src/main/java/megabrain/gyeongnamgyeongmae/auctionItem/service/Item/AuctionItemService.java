@@ -2,14 +2,14 @@ package megabrain.gyeongnamgyeongmae.auctionItem.service.Item;
 
 import java.time.LocalDateTime;
 import lombok.RequiredArgsConstructor;
-import megabrain.gyeongnamgyeongmae.Category.domain.entity.Category;
-import megabrain.gyeongnamgyeongmae.Category.domain.repository.CategoryRepository;
-import megabrain.gyeongnamgyeongmae.Category.service.CategoryService;
 import megabrain.gyeongnamgyeongmae.auctionItem.domain.entity.AuctionItem;
 import megabrain.gyeongnamgyeongmae.auctionItem.domain.repostiory.AuctionItemRepository;
 import megabrain.gyeongnamgyeongmae.auctionItem.dto.AuctionItemResponse;
 import megabrain.gyeongnamgyeongmae.auctionItem.dto.CreateAuctionItemRequest;
 import megabrain.gyeongnamgyeongmae.auctionItem.dto.UpdateAuctionItemRequest;
+import megabrain.gyeongnamgyeongmae.category.domain.entity.Category;
+import megabrain.gyeongnamgyeongmae.category.domain.repository.CategoryRepository;
+import megabrain.gyeongnamgyeongmae.category.service.CategoryService;
 import megabrain.gyeongnamgyeongmae.member.domain.entity.Member;
 import megabrain.gyeongnamgyeongmae.member.domain.repository.MemberRepository;
 import megabrain.gyeongnamgyeongmae.member.service.MemberService;

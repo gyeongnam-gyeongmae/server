@@ -3,15 +3,15 @@ package megabrain.gyeongnamgyeongmae.auctionItem.domain.entity;
 import java.time.LocalDateTime;
 import javax.persistence.*;
 import lombok.*;
-import megabrain.gyeongnamgyeongmae.Category.domain.entity.Category;
 import megabrain.gyeongnamgyeongmae.auctionItem.dto.UpdateAuctionItemRequest;
+import megabrain.gyeongnamgyeongmae.category.domain.entity.Category;
 import megabrain.gyeongnamgyeongmae.commons.BaseTimeEntity;
 import megabrain.gyeongnamgyeongmae.member.domain.entity.Member;
 
 @Getter
 @Setter
 @Entity
-@Table(name = "AuctionItem")
+@Table(name = "auction_items")
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 public class AuctionItem extends BaseTimeEntity {
 

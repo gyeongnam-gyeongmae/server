@@ -10,7 +10,7 @@ import megabrain.gyeongnamgyeongmae.auctionItem.domain.entity.AuctionItem;
 import megabrain.gyeongnamgyeongmae.commons.BaseTimeEntity;
 
 @Entity
-@Table(name = "Image", indexes = @Index(name = "url", columnList = "image_url"))
+@Table(name = "images", indexes = @Index(name = "url", columnList = "image_url"))
 @Getter
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 public class Image extends BaseTimeEntity {
