@@ -10,6 +10,7 @@ buildscript {
     }
     dependencies {
         classpath("org.yaml:snakeyaml:1.10")
+        classpath("org.springframework.boot:spring-boot-gradle-plugin")
     }
 }
 
