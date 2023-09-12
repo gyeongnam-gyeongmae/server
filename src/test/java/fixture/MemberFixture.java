@@ -1,7 +1,7 @@
 package fixture;
 
-import megabrain.gyeongnamgyeongmae.member.domain.entity.Member;
-import megabrain.gyeongnamgyeongmae.member.dto.MemberCreateRequest;
+import megabrain.gyeongnamgyeongmae.domain.member.domain.entity.Member;
+import megabrain.gyeongnamgyeongmae.domain.member.dto.MemberCreateRequest;
 
 public class MemberFixture {
   public static final Member MEMBER1 = new Member("member1@gyeongmae.com", "!Member123", "user1");
