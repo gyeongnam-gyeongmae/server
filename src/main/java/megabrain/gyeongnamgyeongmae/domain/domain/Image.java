@@ -1,4 +1,4 @@
-package megabrain.gyeongnamgyeongmae.domain.Image.domain.entity;
+package megabrain.gyeongnamgyeongmae.domain.domain;
 
 import javax.persistence.*;
 import javax.validation.constraints.NotNull;
