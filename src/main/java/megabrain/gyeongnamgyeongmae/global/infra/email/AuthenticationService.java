@@ -23,4 +23,15 @@ public class AuthenticationService implements AuthenticationServiceInterface {
     mail.setText(content);
     mailSender.send(mail);
   }
+
+  public String generateMailAuthenticationCode() {
+    return "00269c19-363d-4e56-ab4a-b38a802f5200";
+  }
+
+  public String generateCellularPhoneAuthenticationCode() {
+    return "123456";
+  }
+
+  public void sendCellularPhoneAuthenticationCode(
+      String phoneNumber, String phoneAuthenticationCode) {}
 }
