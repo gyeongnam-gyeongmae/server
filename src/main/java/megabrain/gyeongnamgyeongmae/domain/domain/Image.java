@@ -31,9 +31,10 @@ public class Image extends BaseTimeEntity {
   @JoinColumn(name = "auction_id")
   private AuctionItem auctionItem;
 
-  @Builder
-  public Image(String url, AuctionItem auctionItem) {
-    this.url = url;
-    this.auctionItem = auctionItem;
-  }
+//  @Builder
+//  public Image(String url, AuctionItem auctionItem) {
+//    this.url = url;
+//    this.auctionItem = auctionItem;
+//  }
+
 }

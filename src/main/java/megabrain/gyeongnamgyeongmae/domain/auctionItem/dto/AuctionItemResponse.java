@@ -21,7 +21,7 @@ public class AuctionItemResponse {
   private String name;
 
   private String nickname;
-  private int price;
+  private Long price;
   private AuctionItemStatus itemStatus;
   private AuctionStatus auctionStatus;
 
@@ -35,8 +35,8 @@ public class AuctionItemResponse {
 
   private String content;
 
-  private int likeCount;
-  private int viewCount;
+  private Long likeCount;
+  private Long viewCount;
 
   public static AuctionItemResponse of(AuctionItem auctionItem) {
     return AuctionItemResponse.builder()
@@ -44,7 +44,7 @@ public class AuctionItemResponse {
         .nickname(auctionItem.getMember().getNickname())
         .name(auctionItem.getName())
         .price(auctionItem.getPrice())
-        .itemStatus(auctionItem.getContent().getStatus())
+        .itemStatus(auctionItem.getItemStatus())
         .auctionStatus(auctionItem.getStatus())
         .createdTime(auctionItem.getCreatedAt())
         .modifiedTime(auctionItem.getUpdatedAt())
@@ -52,9 +52,10 @@ public class AuctionItemResponse {
         .address(auctionItem.getMember().getAddress())
         .category(auctionItem.getCategory().getName())
         .email(auctionItem.getMember().getEmail())
-        .content(auctionItem.getContent().getContent())
+        .content(auctionItem.getContent())
         .likeCount(auctionItem.getLike_count())
         .viewCount(auctionItem.getView_count())
         .build();
   }
 }
+

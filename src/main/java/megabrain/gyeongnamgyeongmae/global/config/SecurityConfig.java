@@ -12,28 +12,29 @@ import org.springframework.security.web.SecurityFilterChain;
 @RequiredArgsConstructor
 public class SecurityConfig {
 
-  @Bean
-  public PasswordEncoder passwordEncoder() {
-    return new BCryptPasswordEncoder();
-  }
+    @Bean
+    public PasswordEncoder passwordEncoder() {
+        return new BCryptPasswordEncoder();
+    }
 
-  @Bean
-  public SecurityFilterChain securityFilterChain(HttpSecurity httpSecurity) throws Exception {
-    return httpSecurity
-        .httpBasic()
-        .disable()
-        .csrf()
-        .disable()
-        .cors()
-        .and()
-        .headers()
-        .frameOptions()
-        .disable()
-        .and()
-        .authorizeRequests()
-        .antMatchers("*")
-        .permitAll()
-        .and()
-        .build();
-  }
+    @Bean
+    public SecurityFilterChain securityFilterChain(HttpSecurity httpSecurity) throws Exception {
+        return httpSecurity
+                .httpBasic()
+                .disable()
+                .csrf()
+                .disable()
+                .cors()
+                .and()
+                .headers()
+                .frameOptions()
+                .disable()
+                .and()
+                .authorizeRequests()
+                .antMatchers("*")
+                .permitAll()
+                .and()
+                .build();
+    }
+
 }

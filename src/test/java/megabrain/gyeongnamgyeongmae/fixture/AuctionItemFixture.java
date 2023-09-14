@@ -1,3 +1,18 @@
+
+//package megabrain.gyeongnamgyeongmae.fixture;
+//
+//import java.time.LocalDateTime;
+//import megabrain.gyeongnamgyeongmae.Category.domain.entity.Category;
+//import megabrain.gyeongnamgyeongmae.auctionItem.domain.entity.AuctionItem;
+//import megabrain.gyeongnamgyeongmae.auctionItem.domain.entity.AuctionItemStatus;
+//import megabrain.gyeongnamgyeongmae.auctionItem.domain.entity.AuctionStatus;
+//import megabrain.gyeongnamgyeongmae.auctionItem.domain.entity.Content;
+//import megabrain.gyeongnamgyeongmae.auctionItem.dto.CreateAuctionItemRequest;
+//import megabrain.gyeongnamgyeongmae.auctionItem.dto.UpdateAuctionItemRequest;
+//import megabrain.gyeongnamgyeongmae.member.domain.entity.Member;
+//
+//public class AuctionItemFixture {
+
 // package megabrain.gyeongnamgyeongmae.fixture;
 //
 // import java.time.LocalDateTime;
@@ -11,6 +26,7 @@
 // import megabrain.gyeongnamgyeongmae.member.domain.entity.Member;
 //
 // public class AuctionItemFixture {
+
 //  public static final Category NEW_CATEGORY = new Category("phone");
 //
 //  public static final Category UPDATE_CATEGORY = new Category("mouse");
@@ -21,7 +37,9 @@
 //      new UpdateAuctionItemRequest(
 //          1L,
 //          "마우스 팝니다",
-//          1000,
+
+//          1000L,
+
 //          "mouse",
 //          new Content("update content", AuctionItemStatus.USED),
 //          LocalDateTime.parse("2066-12-31T12:00"),
@@ -47,4 +65,6 @@
 //          member,
 //          LocalDateTime.parse("2023-12-31T12:00:00"),
 //          LocalDateTime.parse("2023-12-31T12:00:00"));
-// }
+
+//}
+

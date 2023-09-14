@@ -1,91 +1,124 @@
 package megabrain.gyeongnamgyeongmae.domain.auctionItem.domain.entity;
 
-import java.time.LocalDateTime;
+
 import javax.persistence.*;
 import lombok.*;
 import megabrain.gyeongnamgyeongmae.domain.auctionItem.dto.UpdateAuctionItemRequest;
 import megabrain.gyeongnamgyeongmae.domain.category.domain.entity.Category;
 import megabrain.gyeongnamgyeongmae.domain.member.domain.entity.Member;
 import megabrain.gyeongnamgyeongmae.global.commons.BaseTimeEntity;
+import java.time.LocalDateTime;
 
 @Getter
 @Setter
 @Entity
-@Table(name = "auction_items")
+@Table(name = "AuctionItem")
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 public class AuctionItem extends BaseTimeEntity {
 
-  @Id
-  @GeneratedValue(strategy = GenerationType.IDENTITY)
-  @Column(name = "auction_id")
-  private Long id;
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Column(name = "auction_id")
+    private Long id;
 
-  @ManyToOne(fetch = FetchType.LAZY)
-  @JoinColumn(name = "member_id")
-  private Member member;
+    @Column(name = "removed")
+    private boolean removed = false;
 
-  @Column(name = "name")
-  private String name;
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "member_id")
+    private Member member;
 
-  @Column(name = "highest_price")
-  private int price;
+    @Column(name = "name")
+    private String name;
 
-  @Embedded private Content content;
+    @Column(name = "highest_price")
+    private Long price;
 
-  @OneToOne(fetch = FetchType.EAGER)
-  @JoinColumn(name = "category_id")
-  private Category category;
+    @Column(name = "content")
+    private String content;
 
-  @Column(name = "close_at")
-  protected LocalDateTime closedTime;
+    @Column(name = "item_status")
+    private AuctionItemStatus itemStatus;
 
-  @Column(name = "like_count")
-  private int like_count = 0;
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "category_id")
+    private Category category;
 
-  @Column(name = "view_count")
-  private int view_count = 0;
+    @Column(name = "close_at")
+    protected LocalDateTime closedTime;
 
-  @Column(name = "auction_status")
-  @Enumerated(EnumType.STRING)
-  private AuctionStatus status = AuctionStatus.ONGOING;
+    @Column(name = "like_count")
+    private Long like_count = 0L;
 
-  @Builder
-  public AuctionItem(Long id, String name, int price, Content content, LocalDateTime closedTime) {
+    @Column(name = "view_count")
+    private Long view_count = 0L;
 
-    this.id = id;
-    this.name = name;
-    this.price = price;
-    this.content = content;
-    this.closedTime = closedTime;
-  }
+    @Column(name = "auction_status")
+    @Enumerated(EnumType.STRING)
+    private AuctionStatus status;
 
-  @Builder
-  public AuctionItem(
-      Long id,
-      String name,
-      int price,
-      Content content,
-      LocalDateTime closedTime,
-      Category category,
-      Member member,
-      LocalDateTime createdAt,
-      LocalDateTime updatedAt) {
-    this.id = id;
-    this.name = name;
-    this.price = price;
-    this.content = content;
-    this.closedTime = closedTime;
-    this.category = category;
-    this.member = member;
-    this.createdAt = createdAt;
-    this.updatedAt = updatedAt;
-  }
+    @Column(name = "comment_count")
+    private Long comment_count;
 
-  public void updateAuctionItem(UpdateAuctionItemRequest upDateAuctionItemRequest) {
-    this.name = upDateAuctionItemRequest.getName();
-    this.price = upDateAuctionItemRequest.getPrice();
-    this.content = upDateAuctionItemRequest.getContent();
-    this.closedTime = upDateAuctionItemRequest.getClosedTime();
-    this.status = upDateAuctionItemRequest.getAuctionStatus();
-  }
+    @Column
+    private Long temperature;
+
+    @Builder
+    public AuctionItem(Long id, String name, long price, String content, AuctionItemStatus itemStatus, LocalDateTime closedTime) {
+        this.status = AuctionStatus.ONGOING;
+        this.comment_count = 0L;
+        this.id = id;
+        this.name = name;
+        this.price = price;
+        this.content = content;
+        this.itemStatus = itemStatus;
+        this.closedTime = closedTime;
+    }
+
+    @Builder
+    private AuctionItem(String name, long price, String content, AuctionItemStatus itemStatus, LocalDateTime localDateTime){
+        this.name = name;
+        this.price = price;
+        this.content = content;
+        this.itemStatus = itemStatus;
+        this.closedTime = localDateTime;
+        this.status = AuctionStatus.ONGOING;
+        this.comment_count = 0L;
+    }
+
+
+    @Builder
+    public AuctionItem(Long id, String name, long price, String content, AuctionItemStatus itemStatus, LocalDateTime closedTime, Category category, Member member, LocalDateTime createdAt, LocalDateTime updatedAt) {
+        this.status = AuctionStatus.ONGOING;
+        this.comment_count = 0L;
+        this.id = id;
+        this.name = name;
+        this.price = price;
+        this.content = content;
+        this.itemStatus = itemStatus;
+        this.closedTime = closedTime;
+        this.category = category;
+        this.member = member;
+        this.createdAt = createdAt;
+        this.updatedAt = updatedAt;
+    }
+
+    public void removeAuctionItem(AuctionItem auctionItem) {
+        this.removed = true;
+    }
+
+    public void checkShowAuctionItem(AuctionItem auctionItem) {
+        if (this.removed) {
+            throw new RuntimeException("삭제된 상품입니다.");
+        }
+    }
+
+    public void updateAuctionItem(UpdateAuctionItemRequest upDateAuctionItemRequest) {
+        this.name = upDateAuctionItemRequest.getName();
+        this.price = upDateAuctionItemRequest.getPrice();
+        this.content = upDateAuctionItemRequest.getContent();
+        this.itemStatus = upDateAuctionItemRequest.getItemStatus();
+        this.closedTime = upDateAuctionItemRequest.getClosedTime();
+        this.status = upDateAuctionItemRequest.getAuctionStatus();
+    }
 }
