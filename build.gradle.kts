@@ -1,7 +1,7 @@
 import com.ewerk.gradle.plugins.tasks.QuerydslCompile
 
 group = "megabrain"
-version = "0.0.1-SNAPSHOT"
+version = "0.0.1"
 
 val javaVersion = JavaVersion.VERSION_1_8
 val springBootVersion: String = "2.7.14"
