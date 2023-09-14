@@ -1,0 +1,3 @@
+server.port: ${PORT}
+spring.config.import:
+  - application-postgresql.yml
