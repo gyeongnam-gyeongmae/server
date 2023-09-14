@@ -80,3 +80,4 @@ tasks.withType<QuerydslCompile> {
     options.annotationProcessorPath = configurations.querydsl.get()
 }
 
+

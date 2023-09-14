@@ -1,3 +1,4 @@
+
 //package megabrain.gyeongnamgyeongmae.auctionItem.controller;
 //
 //import static megabrain.gyeongnamgyeongmae.fixture.AuctionItemFixture.*;
@@ -45,6 +46,55 @@
 //  @MockBean private CategoryService categoryService;
 //
 //  @MockBean private AuctionItemServiceImpl auctionItemServiceImpl;
+=======
+// package megabrain.gyeongnamgyeongmae.auctionItem.controller;
+//
+// import static megabrain.gyeongnamgyeongmae.fixture.AuctionItemFixture.*;
+// import static org.hamcrest.Matchers.startsWith;
+// import static org.junit.jupiter.api.Assertions.assertEquals;
+// import static org.mockito.ArgumentCaptor.forClass;
+// import static org.mockito.Mockito.*;
+// import static
+// org.springframework.restdocs.mockmvc.MockMvcRestDocumentation.documentationConfiguration;
+// import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
+// import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
+// import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
+// import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
+//
+// import com.fasterxml.jackson.core.JsonProcessingException;
+// import com.fasterxml.jackson.databind.ObjectMapper;
+// import java.util.Optional;
+// import megabrain.gyeongnamgyeongmae.auctionItem.domain.entity.AuctionItem;
+// import megabrain.gyeongnamgyeongmae.auctionItem.domain.entity.AuctionStatus;
+// import megabrain.gyeongnamgyeongmae.auctionItem.domain.repostiory.AuctionItemRepository;
+// import megabrain.gyeongnamgyeongmae.auctionItem.dto.AuctionItemResponse;
+// import megabrain.gyeongnamgyeongmae.auctionItem.dto.UpdateAuctionItemRequest;
+// import megabrain.gyeongnamgyeongmae.auctionItem.service.Item.AuctionItemService;
+// import megabrain.gyeongnamgyeongmae.category.service.CategoryService;
+// import megabrain.gyeongnamgyeongmae.member.service.MemberService;
+// import org.junit.jupiter.api.BeforeEach;
+// import org.junit.jupiter.api.DisplayName;
+// import org.junit.jupiter.api.Test;
+// import org.junit.jupiter.api.extension.ExtendWith;
+// import org.mockito.ArgumentCaptor;
+// import org.springframework.beans.factory.annotation.Autowired;
+// import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
+// import org.springframework.boot.test.mock.mockito.MockBean;
+// import org.springframework.http.MediaType;
+// import org.springframework.restdocs.RestDocumentationContextProvider;
+// import org.springframework.restdocs.RestDocumentationExtension;
+// import org.springframework.test.web.servlet.MockMvc;
+// import org.springframework.test.web.servlet.setup.MockMvcBuilders;
+// import org.springframework.web.context.WebApplicationContext;
+//
+// @ExtendWith(RestDocumentationExtension.class)
+// @WebMvcTest(AuctionItemController.class)
+// public class AuctionControllerTest {
+//
+//  @MockBean private CategoryService categoryService;
+//
+//  @MockBean private AuctionItemService auctionItemService;
+
 //
 //  @Autowired private ObjectMapper objectMapper;
 //
@@ -56,7 +106,10 @@
 //
 //  @BeforeEach
 //  void setUp(
-//      WebApplicationContext applicationContext, RestDocumentationContextProvider contextProvider) {
+
+//      WebApplicationContext applicationContext, RestDocumentationContextProvider contextProvider)
+// {
+
 //
 //    mockMvc =
 //        MockMvcBuilders.webAppContextSetup(applicationContext)
@@ -88,15 +141,19 @@
 //  @DisplayName("경매상품 조회 성공 케이스")
 //  void getAuctionItemTest() throws Exception {
 //
-//    when(auctionItemServiceImpl.findAuctionItemById(1L))
+
+//    when(auctionItemService.findAuctionItemById(1L))
+
 //        .thenReturn((AuctionItemResponse.of(AUCTION_ITEM)));
 //    doAnswer(
 //            invocation -> {
 //              AuctionItem arg = invocation.getArgument(0);
-//              arg.setView_count(1L);
+
+//              arg.setView_count(1);
 //              return null;
 //            })
-//        .when(auctionItemServiceImpl)
+//        .when(auctionItemService)
+
 //        .updateAuctionItemViewCount(AUCTION_ITEM);
 //
 //    AuctionItemResponse expectedResponse = AuctionItemResponse.of(AUCTION_ITEM);
@@ -143,7 +200,10 @@
 //
 //    ArgumentCaptor<UpdateAuctionItemRequest> captor = forClass(UpdateAuctionItemRequest.class);
 //
-//    verify(auctionItemServiceImpl, times(1)).updateAuctionItem(captor.capture());
+
+
+//    verify(auctionItemService, times(1)).updateAuctionItem(captor.capture());
+
 //
 //    UpdateAuctionItemRequest capturedAuctionItem = captor.getValue();
 //
@@ -155,4 +215,6 @@
 //    assertEquals("2066-12-31T12:00", capturedAuctionItem.getClosedTime().toString());
 //    assertEquals(AuctionStatus.CLOSED, capturedAuctionItem.getAuctionStatus());
 //  }
-//}
+
+// }
+

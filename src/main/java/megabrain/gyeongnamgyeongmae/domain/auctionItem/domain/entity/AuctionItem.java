@@ -1,13 +1,12 @@
 package megabrain.gyeongnamgyeongmae.domain.auctionItem.domain.entity;
 
-import javax.persistence.*;
 
+import javax.persistence.*;
 import lombok.*;
 import megabrain.gyeongnamgyeongmae.domain.auctionItem.dto.UpdateAuctionItemRequest;
 import megabrain.gyeongnamgyeongmae.domain.category.domain.entity.Category;
 import megabrain.gyeongnamgyeongmae.domain.member.domain.entity.Member;
 import megabrain.gyeongnamgyeongmae.global.commons.BaseTimeEntity;
-
 import java.time.LocalDateTime;
 
 @Getter

@@ -55,3 +55,4 @@ public class AuctionItemController {
         return ResponseEntity.status(HttpStatus.OK).build();
     }
 }
+

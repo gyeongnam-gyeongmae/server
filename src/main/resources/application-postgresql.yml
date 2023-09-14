@@ -9,7 +9,7 @@ spring:
     database: postgresql
     generate-ddl: true
     hibernate:
-      ddlAuto: update # craete
+      ddlAuto: create
     properties:
       hibernate.jdbc.batch_size: 20
       hibernate.cache.use_query_cache: false

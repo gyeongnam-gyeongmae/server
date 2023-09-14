@@ -1,12 +1,12 @@
 package megabrain.gyeongnamgyeongmae.domain.auctionItem.service.Item;
+
+import java.time.LocalDateTime;
 import megabrain.gyeongnamgyeongmae.domain.auctionItem.domain.entity.AuctionItem;
 import megabrain.gyeongnamgyeongmae.domain.auctionItem.dto.AuctionItemResponse;
 import megabrain.gyeongnamgyeongmae.domain.auctionItem.dto.CreateAuctionItemRequest;
 import megabrain.gyeongnamgyeongmae.domain.auctionItem.dto.UpdateAuctionItemRequest;
 
-import java.time.LocalDateTime;
-
-public interface AuctionItemService {
+public interface IAuctionItemService {
 
   void createAuctionItem(CreateAuctionItemRequest createAuctionItemRequest);
 
@@ -14,9 +14,7 @@ public interface AuctionItemService {
 
   void updateAuctionItemViewCount(AuctionItem auctionItem);
 
-  void updateAuctionItem(UpdateAuctionItemRequest upDateAuctionItemRequest, Long id);
+  void updateAuctionItem(UpdateAuctionItemRequest upDateAuctionItemRequest);
 
   void checkClosedTime(LocalDateTime closedTime);
-
-  void deleteAuctionItemById(Long id);
 }

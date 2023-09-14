@@ -7,11 +7,13 @@ import org.springframework.context.annotation.Configuration;
 
 @Configuration
 public class SwaggerConfig {
-    @Bean
-    public OpenAPI openAPI() {
 
-        Info info =
-                new Info().version("v1.0.0").title("GyeongnamGyeongmae API").description("경남경매 API ");
-        return new OpenAPI().info(info);
-    }
+  @Bean
+  public OpenAPI openAPI() {
+
+    Info info =
+        new Info().version("v1.0.0").title("GyeongnamGyeongmae API").description("경남경매 API ");
+    return new OpenAPI().info(info);
+  }
+
 }

@@ -36,4 +36,5 @@ public class Image extends BaseTimeEntity {
 //    this.url = url;
 //    this.auctionItem = auctionItem;
 //  }
+
 }

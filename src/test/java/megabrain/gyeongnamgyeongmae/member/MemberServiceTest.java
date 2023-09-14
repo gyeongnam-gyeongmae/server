@@ -1,3 +1,4 @@
+
 //package megabrain.gyeongnamgyeongmae.member;
 //
 //import static org.junit.jupiter.api.Assertions.*;
@@ -18,6 +19,26 @@
 //
 //@ExtendWith(MockitoExtension.class)
 //public class MemberServiceTest {
+// package megabrain.gyeongnamgyeongmae.member;
+//
+// import static org.junit.jupiter.api.Assertions.*;
+// import static org.mockito.Mockito.*;
+//
+// import megabrain.gyeongnamgyeongmae.member.domain.entity.Member;
+// import megabrain.gyeongnamgyeongmae.member.domain.repository.MemberRepository;
+// import megabrain.gyeongnamgyeongmae.member.dto.MemberCreateRequest;
+// import megabrain.gyeongnamgyeongmae.member.service.GeneralMemberService;
+// import org.junit.jupiter.api.BeforeEach;
+// import org.junit.jupiter.api.DisplayName;
+// import org.junit.jupiter.api.Test;
+// import org.junit.jupiter.api.extension.ExtendWith;
+// import org.mockito.InjectMocks;
+// import org.mockito.Mock;
+// import org.mockito.junit.jupiter.MockitoExtension;
+// import org.springframework.security.crypto.password.PasswordEncoder;
+//
+// @ExtendWith(MockitoExtension.class)
+// public class MemberServiceTest {
 //
 //  @InjectMocks private GeneralMemberService memberService;
 //
@@ -62,3 +83,4 @@
 //    assertTrue(memberService.isDuplicatedEmail(member.getEmail()));
 //  }
 //}
+
