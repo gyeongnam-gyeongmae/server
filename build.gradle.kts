@@ -1,30 +1,80 @@
 import com.ewerk.gradle.plugins.tasks.QuerydslCompile
 
-plugins {
-    java
-    id("org.springframework.boot") version "2.7.14"
-    id("io.spring.dependency-management") version "1.0.15.RELEASE"
-    id("com.ewerk.gradle.plugins.querydsl") version "1.0.10"
-
-}
-
 group = "megabrain"
 version = "0.0.1-SNAPSHOT"
 
+val javaVersion = JavaVersion.VERSION_1_8
+val springBootVersion: String = "2.7.14"
 val queryDslVersion = "5.0.0"
+val querydslDir = "$buildDir/generated/querydsl"
 
-java {
-    sourceCompatibility = JavaVersion.VERSION_1_8
+buildscript {
+    repositories {
+        gradlePluginPortal()
+    }
+    dependencies {
+        classpath("org.yaml:snakeyaml:1.10")
+        classpath("org.springframework.boot:spring-boot-gradle-plugin")
+    }
 }
 
-
+// 종속성 조회에 사용되는 레퍼지토리입니다.
 repositories {
     mavenCentral()
+}
+
+plugins {
+    java
+    idea
+    jacoco
+
+    id("org.springframework.boot") version "2.7.14"
+    id("io.spring.dependency-management") version "1.0.15.RELEASE"
+    id("com.ewerk.gradle.plugins.querydsl") version "1.0.10"
 }
 
 configurations {
     compileOnly {
         extendsFrom(configurations.annotationProcessor.get())
+    }
+}
+
+java {
+    sourceCompatibility = javaVersion
+    withSourcesJar()
+}
+
+sourceSets {
+    main {
+        java {
+            srcDir(querydslDir)
+        }
+
+    }
+}
+
+querydsl {
+    jpa = true
+    querydslSourcesDir = querydslDir
+}
+
+tasks.register<Copy>("check exist application.yml file") {
+    val ymlFile = File("src/main/resources/application.yml")
+    if (!ymlFile.exists()) {
+        logger.error("We were unable to find the application.yml file, please verify that it is located in the resource folder.")
+    } else {
+        logger.error("found yml")
+    }
+}
+
+
+springBoot {
+    buildInfo()
+}
+
+configurations {
+    named("querydsl") {
+        extendsFrom(configurations.compileClasspath.get())
     }
 }
 
@@ -41,43 +91,20 @@ dependencies {
     annotationProcessor("org.projectlombok:lombok")
     testAnnotationProcessor("org.projectlombok:lombok")
     testImplementation("org.springframework.boot:spring-boot-starter-test")
-
+    annotationProcessor("org.springframework.boot:spring-boot-configuration-processor")
 
 
     implementation("com.querydsl:querydsl-jpa:${queryDslVersion}")
     annotationProcessor("com.querydsl:querydsl-apt:${queryDslVersion}")
 
-    annotationProcessor("org.springframework.boot:spring-boot-configuration-processor")
-}
-
-tasks.withType<Test> {
-    useJUnitPlatform()
-}
-
-val querydslDir = "$buildDir/generated/querydsl" //
-
-querydsl {
-    jpa = true
-    querydslSourcesDir = querydslDir
-}
-// 소스 루트 지정
-sourceSets {
-    main {
-        java {
-            srcDir(querydslDir)
-
-        }
-    }
-}
-
-configurations {
-    named("querydsl") {
-        extendsFrom(configurations.compileClasspath.get())
-    }
 }
 
 tasks.withType<QuerydslCompile> {
     options.annotationProcessorPath = configurations.querydsl.get()
+}
+
+tasks.withType<Test> {
+    useJUnitPlatform()
 }
 
 
