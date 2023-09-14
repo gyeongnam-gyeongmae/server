@@ -1,11 +1,17 @@
 package megabrain.gyeongnamgyeongmae.global.infra.email;
 
+import megabrain.gyeongnamgyeongmae.domain.authentication.domain.KakaoUserProfile;
+import megabrain.gyeongnamgyeongmae.domain.member.domain.entity.Member;
+
 public interface AuthenticationServiceInterface {
-  String generateMailAuthenticationCode();
 
-  String generateCellularPhoneAuthenticationCode();
+  KakaoUserProfile getKakaoUserProfile(String accessToken);
 
-  void sendAuthenticationMail(String email, String subject, String content);
+  Member getKakaoAccessTokenByKakaoCode(String code);
 
-  void sendCellularPhoneAuthenticationCode(String phoneNumber, String phoneAuthenticationCode);
+  String generatePhoneAuthenticationCode();
+
+  void sendPhoneAuthenticationCode(String phoneNumber, String phoneAuthenticationCode);
+
+  boolean isPhoneAuthenticationCodeExist(String phoneNumber, String code);
 }

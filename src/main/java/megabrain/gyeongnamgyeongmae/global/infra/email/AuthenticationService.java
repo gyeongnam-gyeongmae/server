@@ -1,37 +1,34 @@
 package megabrain.gyeongnamgyeongmae.global.infra.email;
 
 import lombok.RequiredArgsConstructor;
-import org.springframework.beans.factory.annotation.Value;
-import org.springframework.mail.SimpleMailMessage;
-import org.springframework.mail.javamail.JavaMailSender;
+import megabrain.gyeongnamgyeongmae.domain.authentication.domain.KakaoUserProfile;
+import megabrain.gyeongnamgyeongmae.domain.member.domain.entity.Member;
 import org.springframework.stereotype.Service;
 
 @Service
 @RequiredArgsConstructor
 public class AuthenticationService implements AuthenticationServiceInterface {
 
-  @Value("${spring.mail.username}")
-  private String username;
-
-  final JavaMailSender mailSender;
-
-  public void sendAuthenticationMail(String to, String subject, String content) {
-    SimpleMailMessage mail = new SimpleMailMessage();
-    mail.setTo(to);
-    mail.setFrom(username);
-    mail.setSubject(subject);
-    mail.setText(content);
-    mailSender.send(mail);
+  @Override
+  public KakaoUserProfile getKakaoUserProfile(String code) {
+    return KakaoUserProfile.builder().nickname("nickname").email("email").id("id").build();
   }
 
-  public String generateMailAuthenticationCode() {
-    return "00269c19-363d-4e56-ab4a-b38a802f5200";
+  @Override
+  public Member getKakaoAccessTokenByKakaoCode(String code) {
+    return null;
   }
 
-  public String generateCellularPhoneAuthenticationCode() {
+  @Override()
+  public String generatePhoneAuthenticationCode() {
     return "123456";
   }
 
-  public void sendCellularPhoneAuthenticationCode(
-      String phoneNumber, String phoneAuthenticationCode) {}
+  @Override()
+  public void sendPhoneAuthenticationCode(String phoneNumber, String phoneAuthenticationCode) {}
+
+  @Override
+  public boolean isPhoneAuthenticationCodeExist(String email, String code) {
+    return true;
+  }
 }
