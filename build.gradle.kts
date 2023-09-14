@@ -6,7 +6,6 @@ version = "0.0.1-SNAPSHOT"
 val javaVersion = JavaVersion.VERSION_1_8
 val springBootVersion: String = "2.7.14"
 val queryDslVersion = "5.0.0"
-val querydslDir = "$buildDir/generated/querydsl"
 
 buildscript {
     repositories {
@@ -21,6 +20,12 @@ buildscript {
 // 종속성 조회에 사용되는 레퍼지토리입니다.
 repositories {
     mavenCentral()
+}
+
+sourceSets {
+    main {
+        java.srcDir("src/core/java")
+    }
 }
 
 plugins {
@@ -44,20 +49,6 @@ java {
     withSourcesJar()
 }
 
-sourceSets {
-    main {
-        java {
-            srcDir(querydslDir)
-        }
-
-    }
-}
-
-querydsl {
-    jpa = true
-    querydslSourcesDir = querydslDir
-}
-
 tasks.register<Copy>("check exist application.yml file") {
     val ymlFile = File("src/main/resources/application.yml")
     if (!ymlFile.exists()) {
@@ -67,15 +58,8 @@ tasks.register<Copy>("check exist application.yml file") {
     }
 }
 
-
 springBoot {
     buildInfo()
-}
-
-configurations {
-    named("querydsl") {
-        extendsFrom(configurations.compileClasspath.get())
-    }
 }
 
 dependencies {
@@ -93,18 +77,30 @@ dependencies {
     testImplementation("org.springframework.boot:spring-boot-starter-test")
     annotationProcessor("org.springframework.boot:spring-boot-configuration-processor")
 
-
     implementation("com.querydsl:querydsl-jpa:${queryDslVersion}")
     annotationProcessor("com.querydsl:querydsl-apt:${queryDslVersion}")
-
 }
 
+// 쿼리DSL 설치 검증
+val querydslDir = "$buildDir/generated/querydsl"
+querydsl {
+    jpa = true
+    querydslSourcesDir = querydslDir
+}
+sourceSets.getByName("main") {
+    java.srcDir(querydslDir)
+}
+configurations {
+    named("querydsl") {
+        extendsFrom(configurations.compileClasspath.get())
+    }
+}
 tasks.withType<QuerydslCompile> {
     options.annotationProcessorPath = configurations.querydsl.get()
+    dependsOn("sourcesJar")
 }
 
+// 테스트
 tasks.withType<Test> {
     useJUnitPlatform()
 }
-
-
