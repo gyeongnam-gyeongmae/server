@@ -46,7 +46,6 @@
 //  @MockBean private CategoryService categoryService;
 //
 //  @MockBean private AuctionItemServiceImpl auctionItemServiceImpl;
-=======
 // package megabrain.gyeongnamgyeongmae.auctionItem.controller;
 //
 // import static megabrain.gyeongnamgyeongmae.fixture.AuctionItemFixture.*;
