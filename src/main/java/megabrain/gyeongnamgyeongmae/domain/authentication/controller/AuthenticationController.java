@@ -1,6 +1,11 @@
 package megabrain.gyeongnamgyeongmae.domain.authentication.controller;
 
 import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.Parameter;
+import io.swagger.v3.oas.annotations.media.Content;
+import io.swagger.v3.oas.annotations.media.Schema;
+import io.swagger.v3.oas.annotations.parameters.RequestBody;
+import io.swagger.v3.oas.annotations.tags.Tag;
 import javax.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import megabrain.gyeongnamgyeongmae.domain.authentication.domain.entity.OAuthUserProfile;
@@ -18,6 +23,7 @@ import org.springframework.web.bind.annotation.*;
 
 @RestController
 @RequiredArgsConstructor
+@Tag(name = "인증 기능", description = "회원 인증 API")
 @RequestMapping("api/authentications")
 public class AuthenticationController {
   private final AuthenticationServiceInterface authenticationService;
@@ -27,7 +33,13 @@ public class AuthenticationController {
   @PostMapping("register/{auth-vendor}")
   @Operation(summary = "회원가입 요청", description = "회원의 회원가입을 요청합니다.")
   public ResponseEntity<HttpStatus> memberRegisterWithOAuthVendor(
-      @PathVariable("auth-vendor") String authVendorName,
+      @Parameter(
+              name = "auth-vendor",
+              example = "KAKAO",
+              required = true,
+              description = "지원중인 OAuth2 제공사(KAKAO)")
+          @PathVariable("auth-vendor")
+          String authVendorName,
       @RequestBody() @Valid MemberRegisterRequest memberRegisterRequest) {
     authenticationService.isValidateOAuthVendorName(authVendorName);
     OAuthVendorName vendorName = OAuthVendorName.valueOf(authVendorName);
@@ -58,7 +70,16 @@ public class AuthenticationController {
   @Operation(summary = "휴대전화 인증번호 검증", description = "회원가입 전 올바른 휴대전화 인증번호인지 여부를 요청합니다.")
   @ResponseStatus(HttpStatus.OK)
   public ResponseEntity<HttpStatus> checkPhoneAuthenticationCode(
-      @RequestParam String phoneNumber, @RequestParam String code) {
+      @Parameter(
+              name = "phoneNumber",
+              example = "01012345678",
+              required = true,
+              description = "인증번호를 받은 전화번호(길이 11)")
+          @RequestParam
+          String phoneNumber,
+      @Parameter(name = "code", example = "123456", required = true, description = "인증번호(길이 6)")
+          @RequestParam
+          String code) {
 
     boolean exist = authenticationService.isPhoneAuthenticationCodeExist(phoneNumber, code);
 
@@ -70,7 +91,12 @@ public class AuthenticationController {
   @Operation(summary = "휴대전화 인증 요청", description = "휴대전화 번호를 통해 인증번호 송신을 요청합니다.")
   @ResponseStatus(HttpStatus.CREATED)
   public ResponseEntity<HttpStatus> authenticationByMail(
-      @RequestBody @Valid PhoneAuthenticationRequest phoneAuthenticationRequest) {
+      @RequestBody(
+              required = true,
+              content =
+                  @Content(schema = @Schema(implementation = PhoneAuthenticationRequest.class)))
+          @Valid
+          PhoneAuthenticationRequest phoneAuthenticationRequest) {
     String phoneAuthenticationCode = authenticationService.generatePhoneAuthenticationCode();
 
     authenticationService.sendPhoneAuthenticationCode(
