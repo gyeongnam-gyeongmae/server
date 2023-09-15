@@ -1,4 +1,4 @@
-package megabrain.gyeongnamgyeongmae.domain.Image.domain.entity;
+package megabrain.gyeongnamgyeongmae.domain.domain;
 
 import javax.persistence.*;
 import javax.validation.constraints.NotNull;
@@ -31,9 +31,10 @@ public class Image extends BaseTimeEntity {
   @JoinColumn(name = "auction_id")
   private AuctionItem auctionItem;
 
-  @Builder
-  public Image(String url, AuctionItem auctionItem) {
-    this.url = url;
-    this.auctionItem = auctionItem;
-  }
+//  @Builder
+//  public Image(String url, AuctionItem auctionItem) {
+//    this.url = url;
+//    this.auctionItem = auctionItem;
+//  }
+
 }

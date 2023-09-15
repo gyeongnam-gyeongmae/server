@@ -4,29 +4,39 @@ import java.time.LocalDateTime;
 import javax.validation.constraints.Min;
 import javax.validation.constraints.NotEmpty;
 import javax.validation.constraints.NotNull;
-import lombok.*;
-import megabrain.gyeongnamgyeongmae.domain.auctionItem.domain.entity.AuctionStatus;
-import megabrain.gyeongnamgyeongmae.domain.auctionItem.domain.entity.Content;
 
-@Builder
+import lombok.*;
+import megabrain.gyeongnamgyeongmae.domain.auctionItem.domain.entity.AuctionItemStatus;
+import megabrain.gyeongnamgyeongmae.domain.auctionItem.domain.entity.AuctionStatus;
+
 @Getter
 @Setter
 @NoArgsConstructor(access = AccessLevel.PRIVATE)
 @AllArgsConstructor
 public class UpdateAuctionItemRequest {
 
-  @NotNull private Long id;
+    @NotEmpty
+    private String name;
 
-  @NotEmpty private String name;
+    @NotNull
+    private Long memberId;
 
-  @Min(1)
-  private Integer price;
+    @Min(1)
+    private Long price;
 
-  @NotEmpty private String category;
+    @NotEmpty
+    private String category;
 
-  @NotNull private Content content;
+    @NotEmpty
+    private String content;
 
-  @NotNull private LocalDateTime closedTime;
+    @NotNull
+    private AuctionItemStatus itemStatus;
 
-  @NotNull private AuctionStatus auctionStatus;
+    @NotNull
+    private LocalDateTime closedTime;
+
+    @NotNull
+    private AuctionStatus auctionStatus;
+
 }

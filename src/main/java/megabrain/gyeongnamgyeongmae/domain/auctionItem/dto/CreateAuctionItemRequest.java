@@ -2,9 +2,10 @@ package megabrain.gyeongnamgyeongmae.domain.auctionItem.dto;
 
 import java.time.LocalDateTime;
 import javax.validation.constraints.NotNull;
+
 import lombok.*;
 import megabrain.gyeongnamgyeongmae.domain.auctionItem.domain.entity.AuctionItem;
-import megabrain.gyeongnamgyeongmae.domain.auctionItem.domain.entity.Content;
+import megabrain.gyeongnamgyeongmae.domain.auctionItem.domain.entity.AuctionItemStatus;
 
 @Builder
 @Getter
@@ -12,30 +13,34 @@ import megabrain.gyeongnamgyeongmae.domain.auctionItem.domain.entity.Content;
 @AllArgsConstructor
 public class CreateAuctionItemRequest {
 
-  @NotNull private String name;
+    @NotNull
+    private String name;
 
-  @NotNull private Integer price;
+    @NotNull
+    private Long price;
 
-  @NotNull private String category;
+    @NotNull
+    private String category;
 
-  @NotNull private Content content;
+    @NotNull
+    private String content;
 
-  @NotNull private LocalDateTime closedTime;
+    @NotNull
+    private AuctionItemStatus status;
 
-  @NotNull private Long member;
+    @NotNull
+    private LocalDateTime closedTime;
 
-  public AuctionItem toEntity() {
-    Content content =
-        Content.builder()
-            .content(this.content.getContent())
-            .status(this.content.getStatus())
-            .build();
+    @NotNull
+    private Long member;
 
-    return AuctionItem.builder()
-        .name(name)
-        .price(price)
-        .content(content)
-        .closedTime(closedTime)
-        .build();
-  }
+    public AuctionItem toEntity() {
+        return AuctionItem.builder()
+                .name(this.name)
+                .price(this.price)
+                .content(this.content)
+                .itemStatus(this.status)
+                .closedTime(this.closedTime)
+                .build();
+    }
 }
