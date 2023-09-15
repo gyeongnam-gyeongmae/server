@@ -19,11 +19,6 @@ public class GeneralMemberService implements MemberService {
   }
 
   @Override
-  public boolean isDuplicatedEmail(String email) {
-    return memberRepository.existsByEmail(email);
-  }
-
-  @Override
   public Member findMemberById(Long Id) {
     return memberRepository.findById(Id).orElseThrow(RuntimeException::new);
   }

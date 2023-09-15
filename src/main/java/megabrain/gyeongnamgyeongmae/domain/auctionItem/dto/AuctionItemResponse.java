@@ -31,7 +31,6 @@ public class AuctionItemResponse {
 
   private Address address;
   private String category;
-  private String email;
 
   private String content;
 

@@ -1,6 +1,5 @@
 package megabrain.gyeongnamgyeongmae.domain.member.dto;
 
-import javax.validation.constraints.Email;
 import javax.validation.constraints.NotEmpty;
 import javax.validation.constraints.Pattern;
 import lombok.*;
@@ -14,9 +13,6 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 @AllArgsConstructor
 public class MemberCreateRequest {
 
-  @NotEmpty @Email private String email;
-
-  @NotEmpty private String emailAuthenticationCode;
 
   @NotEmpty
   @Length(min = 11, max = 11)

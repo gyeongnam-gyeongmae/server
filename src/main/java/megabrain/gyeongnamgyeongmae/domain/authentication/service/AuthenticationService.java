@@ -5,11 +5,15 @@ import lombok.RequiredArgsConstructor;
 import megabrain.gyeongnamgyeongmae.domain.authentication.domain.entity.OAuthUserProfile;
 import megabrain.gyeongnamgyeongmae.domain.authentication.domain.entity.OAuthVendorName;
 import megabrain.gyeongnamgyeongmae.domain.authentication.exception.OAuthVendorNotFoundException;
+import megabrain.gyeongnamgyeongmae.domain.member.domain.entity.Member;
+import megabrain.gyeongnamgyeongmae.domain.member.domain.repository.MemberRepository;
 import org.springframework.stereotype.Service;
 
 @Service
 @RequiredArgsConstructor
 public class AuthenticationService implements AuthenticationServiceInterface {
+
+  private final MemberRepository memberRepository;
 
   @Override
   public OAuthUserProfile oauthLoginStrategy(OAuthVendorName vendorName, String vendorAccessToken) {
@@ -27,6 +31,16 @@ public class AuthenticationService implements AuthenticationServiceInterface {
       default:
         return 0;
     }
+  }
+
+  @Override
+  public boolean isDuplicateAuthVendorMemberId(String authVendorMemberId) {
+    // return memberRepository.existsByAuthVendorMemberId(authVendorMemberId);
+    return false;
+  }
+
+  public void saveMember(Member member) {
+    memberRepository.save(member);
   }
 
   @Override

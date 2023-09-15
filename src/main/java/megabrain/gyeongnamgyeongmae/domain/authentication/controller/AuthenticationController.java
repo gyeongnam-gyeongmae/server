@@ -14,7 +14,6 @@ import megabrain.gyeongnamgyeongmae.domain.authentication.dto.MemberRegisterRequ
 import megabrain.gyeongnamgyeongmae.domain.authentication.dto.PhoneAuthenticationRequest;
 import megabrain.gyeongnamgyeongmae.domain.authentication.service.AuthenticationServiceInterface;
 import megabrain.gyeongnamgyeongmae.domain.member.domain.entity.Member;
-import megabrain.gyeongnamgyeongmae.domain.member.domain.repository.MemberRepository;
 import megabrain.gyeongnamgyeongmae.domain.member.exception.DuplicateAuthVendorMemberId;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -27,7 +26,6 @@ import org.springframework.web.bind.annotation.*;
 @RequestMapping("api/authentications")
 public class AuthenticationController {
   private final AuthenticationServiceInterface authenticationService;
-  private final MemberRepository memberRepository;
   private final PasswordEncoder passwordEncoder;
 
   @PostMapping("register/{auth-vendor}")
@@ -48,9 +46,10 @@ public class AuthenticationController {
         authenticationService.oauthLoginStrategy(
             vendorName, memberRegisterRequest.getVendorAccessToken());
 
-    boolean exist =
-        memberRepository.existsByAuthVendorMemberId(oAuthUserProfile.getAuthVendorMemberId());
-    if (!exist) throw new DuplicateAuthVendorMemberId();
+    boolean isDuplicated =
+        authenticationService.isDuplicateAuthVendorMemberId(
+            oAuthUserProfile.getAuthVendorMemberId());
+    if (!isDuplicated) throw new DuplicateAuthVendorMemberId();
 
     int authVendorId = authenticationService.GetOAuthVendorIdByName(vendorName);
 
@@ -61,7 +60,7 @@ public class AuthenticationController {
             authVendorId,
             oAuthUserProfile.getAuthVendorMemberId());
 
-    memberRepository.save(member);
+    authenticationService.saveMember(member);
 
     return ResponseEntity.status(HttpStatus.CREATED).build();
   }
