@@ -54,7 +54,7 @@ public class AuthenticationController {
     int authVendorId = authenticationService.GetOAuthVendorIdByName(vendorName);
 
     Member member =
-        memberRegisterRequest.toEntity(
+        MemberRegisterRequest.toEntity(
             memberRegisterRequest,
             passwordEncoder,
             authVendorId,

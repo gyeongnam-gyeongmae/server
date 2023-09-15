@@ -39,10 +39,10 @@ public class MemberRegisterRequest {
 
     return Member.builder()
         .phoneNumber(memberRegisterRequest.getPhoneNumber())
-        .password(passwordEncoder.encode(memberRegisterRequest.getPassword()))
         .nickname(memberRegisterRequest.getNickname())
         .authVendor(authVendor)
         .authVendorMemberId(authVendorMemberId)
+        .password(passwordEncoder.encode(memberRegisterRequest.getPassword()))
         .build();
   }
 }
