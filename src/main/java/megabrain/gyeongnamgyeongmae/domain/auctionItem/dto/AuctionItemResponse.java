@@ -51,10 +51,9 @@ public class AuctionItemResponse {
         .closeTime(auctionItem.getClosedTime())
         .address(auctionItem.getMember().getAddress())
         .category(auctionItem.getCategory().getName())
-        .content(auctionItem.getContent().getContent())
+        .content(auctionItem.getContent())
         .likeCount(auctionItem.getLike_count())
         .viewCount(auctionItem.getView_count())
         .build();
   }
 }
-
