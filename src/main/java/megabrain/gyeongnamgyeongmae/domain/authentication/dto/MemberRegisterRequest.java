@@ -1,6 +1,5 @@
-package megabrain.gyeongnamgyeongmae.domain.member.dto;
+package megabrain.gyeongnamgyeongmae.domain.authentication.dto;
 
-import javax.validation.constraints.Email;
 import javax.validation.constraints.NotEmpty;
 import javax.validation.constraints.Pattern;
 import lombok.*;
@@ -12,15 +11,13 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 @Builder
 @NoArgsConstructor(access = AccessLevel.PRIVATE)
 @AllArgsConstructor
-public class MemberCreateRequest {
+public class MemberRegisterRequest {
 
-  @NotEmpty @Email private String email;
-
-  @NotEmpty private String emailAuthenticationCode;
+  @NotEmpty private String vendorAccessToken;
 
   @NotEmpty
   @Length(min = 11, max = 11)
-  private String PhoneNumber;
+  private String phoneNumber;
 
   @NotEmpty
   @Length(min = 6, max = 6)
@@ -35,10 +32,17 @@ public class MemberCreateRequest {
   @NotEmpty private String nickname;
 
   public static Member toEntity(
-      MemberCreateRequest memberCreateRequest, PasswordEncoder passwordEncoder) {
+      MemberRegisterRequest memberRegisterRequest,
+      PasswordEncoder passwordEncoder,
+      int authVendor,
+      String authVendorMemberId) {
+
     return Member.builder()
-        .nickname(memberCreateRequest.nickname)
-        .password(passwordEncoder.encode(memberCreateRequest.password))
+        .phoneNumber(memberRegisterRequest.getPhoneNumber())
+        .password(passwordEncoder.encode(memberRegisterRequest.getPassword()))
+        .nickname(memberRegisterRequest.getNickname())
+        .authVendor(authVendor)
+        .authVendorMemberId(authVendorMemberId)
         .build();
   }
 }
