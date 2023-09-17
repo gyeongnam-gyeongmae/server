@@ -5,6 +5,8 @@ import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.RequiredArgsConstructor;
 import megabrain.gyeongnamgyeongmae.domain.auctionItem.domain.repostiory.AuctionItemRepository;
 import megabrain.gyeongnamgyeongmae.domain.auctionItem.dto.AuctionItemFirstView;
+import megabrain.gyeongnamgyeongmae.domain.auctionItem.dto.SearchItem.AuctionItemPaginationDto;
+import megabrain.gyeongnamgyeongmae.domain.auctionItem.dto.SearchItem.AuctionItemSearchResponse;
 import megabrain.gyeongnamgyeongmae.domain.auctionItem.dto.SearchItem.SearchAuctionItemSortedRequest;
 import megabrain.gyeongnamgyeongmae.domain.auctionItem.service.Item.AuctionItemServiceImpl;
 import megabrain.gyeongnamgyeongmae.domain.auctionItem.service.Search.AuctionItemSearchServiceImpl;
@@ -28,8 +30,8 @@ public class AuctionItemSearchController {
 
     @Operation(summary = "Search AuctionItem", description = "경매품 검색하기")
     @GetMapping("")
-    public ResponseEntity<Page<AuctionItemFirstView>> findItemCategory(@ModelAttribute SearchAuctionItemSortedRequest searchAuctionItemSortedRequest, Pageable pageable) {
-        Page<AuctionItemFirstView> result = this.auctionItemSearchServiceImpl.findAuctionItembyRequest(searchAuctionItemSortedRequest, pageable);
+    public ResponseEntity<AuctionItemSearchResponse> findItemCategory(@ModelAttribute SearchAuctionItemSortedRequest searchAuctionItemSortedRequest){
+        AuctionItemSearchResponse result = this.auctionItemSearchServiceImpl.findAuctionItemByRequest(searchAuctionItemSortedRequest);
         return ResponseEntity.ok(result);
     }
 }

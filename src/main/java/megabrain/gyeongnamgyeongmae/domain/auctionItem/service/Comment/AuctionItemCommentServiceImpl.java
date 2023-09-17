@@ -72,8 +72,6 @@ public class AuctionItemCommentServiceImpl implements AuctionItemCommentService 
 
     @Transactional
     public void deleteAuctionItemComment(AuctionItemCommentDeleteRequest auctionItemCommentDeleteRequest) {
-        System.out.println(auctionItemCommentDeleteRequest.getCommentId());
-        System.out.println(auctionItemCommentDeleteRequest.getUserId());
         Comment comment = (Comment) this.auctionItemCommentRepository.findById(auctionItemCommentDeleteRequest.getCommentId()).orElseThrow(() -> {
             return new RuntimeException("댓글을 찾을수 없습니다");
         });

@@ -10,6 +10,8 @@ import megabrain.gyeongnamgyeongmae.domain.auctionItem.domain.entity.AuctionItem
 import megabrain.gyeongnamgyeongmae.domain.auctionItem.domain.entity.AuctionStatus;
 import megabrain.gyeongnamgyeongmae.domain.auctionItem.domain.entity.QAuctionItem;
 
+import javax.validation.constraints.NotEmpty;
+
 
 @Getter
 @Setter
@@ -22,6 +24,9 @@ public class SearchAuctionItemSortedRequest {
     private Boolean like;
     private Boolean search_price;
     private Boolean view_count;
+
+    @NotEmpty
+    private Long page;
 
     public void applyKeyWordStatus(BooleanBuilder status, QAuctionItem item) {
         if (this.keyword != null) {
@@ -41,7 +46,7 @@ public class SearchAuctionItemSortedRequest {
         } else if (this.search_status == SearchStatus.USED) {
             status.and(item.itemStatus.eq(AuctionItemStatus.USED));
         } else {
-            status.and(item.itemStatus.in(new AuctionItemStatus[]{AuctionItemStatus.NEW, AuctionItemStatus.USED}));
+            status.and(item.itemStatus.in(AuctionItemStatus.NEW, AuctionItemStatus.USED));
         }
     }
 
@@ -81,7 +86,7 @@ public class SearchAuctionItemSortedRequest {
         if (this.closed) {
             builder.and(item.status.eq(AuctionStatus.ONGOING));
         } else {
-            builder.and(item.status.in(new AuctionStatus[]{AuctionStatus.ONGOING, AuctionStatus.CLOSED, AuctionStatus.BIDDING}));
+            builder.and(item.status.in(AuctionStatus.ONGOING, AuctionStatus.CLOSED, AuctionStatus.BIDDING));
         }
     }
 

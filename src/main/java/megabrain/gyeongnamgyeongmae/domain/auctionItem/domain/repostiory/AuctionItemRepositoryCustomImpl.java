@@ -6,6 +6,9 @@ import com.querydsl.jpa.impl.JPAQuery;
 import com.querydsl.jpa.impl.JPAQueryFactory;
 import megabrain.gyeongnamgyeongmae.domain.auctionItem.domain.entity.AuctionItem;
 import megabrain.gyeongnamgyeongmae.domain.auctionItem.domain.entity.QAuctionItem;
+import megabrain.gyeongnamgyeongmae.domain.auctionItem.dto.AuctionItemFirstView;
+import megabrain.gyeongnamgyeongmae.domain.auctionItem.dto.SearchItem.AuctionItemPaginationDto;
+import megabrain.gyeongnamgyeongmae.domain.auctionItem.dto.SearchItem.AuctionItemSearchResponse;
 import megabrain.gyeongnamgyeongmae.domain.auctionItem.dto.SearchItem.SearchAuctionItemSortedRequest;
 import megabrain.gyeongnamgyeongmae.domain.category.domain.entity.QCategory;
 import org.springframework.data.domain.Page;
@@ -15,6 +18,7 @@ import org.springframework.data.domain.Pageable;
 import javax.persistence.EntityManager;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.stream.Collectors;
 
 public class AuctionItemRepositoryCustomImpl implements AuctionItemRepositoryCustom{
 
@@ -24,12 +28,12 @@ public class AuctionItemRepositoryCustomImpl implements AuctionItemRepositoryCus
         this.queryFactory = new JPAQueryFactory(em);
     }
 
-    public Page<AuctionItem> searchAuctionItemPage(SearchAuctionItemSortedRequest searchAuctionItemSortedRequest, Pageable pageable){
+    public AuctionItemSearchResponse searchAuctionItemPage(SearchAuctionItemSortedRequest searchAuctionItemSortedRequest){
 
         QAuctionItem auctionItem = QAuctionItem.auctionItem;
         QCategory category = QCategory.category;
 
-        List<OrderSpecifier<?>> orderSpecifiers = new ArrayList();
+        List<OrderSpecifier<?>> orderSpecifiers = new ArrayList<>();
         BooleanBuilder statusBuilder = new BooleanBuilder();
         BooleanBuilder sellBuilder = new BooleanBuilder();
         BooleanBuilder keywordStatus = new BooleanBuilder();
@@ -55,13 +59,34 @@ public class AuctionItemRepositoryCustomImpl implements AuctionItemRepositoryCus
                                 sellBuilder,
                                 keywordStatus);
 
+        Long page = searchAuctionItemSortedRequest.getPage(); // 1 부터
+        int itemsPerPage = 10;
+
         List<AuctionItem> results =
                 query
                         .orderBy(orderSpecifiers.toArray(new OrderSpecifier[0]))
-                        .offset(pageable.getOffset())
-                        .limit(pageable.getPageSize())
+                        .offset((page - 1) * itemsPerPage)
+                        .limit(itemsPerPage)
                         .fetch();
 
-        return new PageImpl<>(results, pageable, results.size());
+        AuctionItemPaginationDto paginationInfo = new AuctionItemPaginationDto();
+        paginationInfo.setCurrentPage(page);
+        paginationInfo.setItemCount((long) results.size());
+        paginationInfo.setItemsPerPage((long) itemsPerPage);
+        paginationInfo.setTotalItems(query.fetchCount()); // 이거 왜이럼 ?
+        paginationInfo.setTotalPages((query.fetchCount()+itemsPerPage-1)/itemsPerPage);
+
+
+
+        List<AuctionItemFirstView> auctionItemFirstViews = results.stream()
+                .map(AuctionItemFirstView::of)
+                .collect(Collectors.toList());
+
+        AuctionItemSearchResponse auctionItemSearchResponse = new AuctionItemSearchResponse();
+        auctionItemSearchResponse.setAuctionItemPaginationDto(paginationInfo);
+        auctionItemSearchResponse.setAuctionItemFirstViewPage(auctionItemFirstViews);
+
+        return auctionItemSearchResponse;
     }
+
 }
