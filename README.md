@@ -7,26 +7,16 @@
 
 ## Conventions
 
-- [Commit Convention](https://gist.github.com/stephenparish/9941e89d80e2bc58a153)
-- [Code Style Convention](https://google.github.io/styleguide/javaguide.html)
-- [Clean Code Checklists](https://github.com/woowacourse/woowacourse-docs/blob/main/cleancode/pr_checklist.md)
-- [Java Folder Structure]
-- Branch Naming Convention
-    - 종류
-        - `main` : 제품 출시 가능 브랜치
-        - `release` : 이번 출시 버전을 준비하는 브랜치
-        - `dev` : 다음 출시 버전을 개발하는 브랜치
-            - `feat` : 새로운 기능 개발
-            - `refactor` : 기존 개발 리팩토링
-        - `hotfix` : 출시 버전에서 발생한 버그를 수정 하는 브랜치
-    - Branch 네이밍 규칙
-        - `{종류}/{issue-number}-{feature-name}`
-        - 예시: `feat/1/login`
+- [컨벤션 정리 페이지](https://github.com/gyeongnam-gyeongmae/server/wiki/02.-Convention)
 
-## .env file to environment variable
+## 로컬 환경 구축 방법
+
+> gradle build & 도커 컴포즈 빌드 & 실행
 
 ```bash
-set -a
-source .env
-set +a
+./gradlew build && docker compose build && docker compose up
 ```
+
+로컬 환경에서는 `ghcr.io/gyeongnam-gyeongmae/gyeongnam-gyeongmae-api:test`으로 실행할 수 있습니다.<br><ins>실서버의 태그와 겹치지 않게
+주의부탁드립니다.</ins>
+
