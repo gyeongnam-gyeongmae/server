@@ -1,18 +1,20 @@
 package megabrain.gyeongnamgyeongmae.domain.authentication.domain.entity;
 
-import lombok.Builder;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
+import lombok.*;
+import megabrain.gyeongnamgyeongmae.domain.member.domain.entity.Member;
 
-@Getter
-@NoArgsConstructor
 @Builder
+@Getter
+@NoArgsConstructor(access = AccessLevel.PRIVATE)
+@AllArgsConstructor
 public class OAuthUserProfile {
   String authVendorMemberId;
   String nickname;
 
-  public OAuthUserProfile(String authVendorMemberId, String nickname) {
-    this.authVendorMemberId = authVendorMemberId;
-    this.nickname = nickname;
+  public static Member toEntity(OAuthUserProfile authUserProfile) {
+    return Member.builder()
+        .authVendorMemberId(authUserProfile.getAuthVendorMemberId())
+        .nickname(authUserProfile.getNickname())
+        .build();
   }
 }

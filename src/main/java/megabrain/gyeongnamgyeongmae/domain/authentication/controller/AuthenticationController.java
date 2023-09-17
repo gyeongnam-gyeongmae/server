@@ -2,14 +2,10 @@ package megabrain.gyeongnamgyeongmae.domain.authentication.controller;
 
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;
-import io.swagger.v3.oas.annotations.media.Content;
-import io.swagger.v3.oas.annotations.media.Schema;
-import io.swagger.v3.oas.annotations.parameters.RequestBody;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import javax.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import megabrain.gyeongnamgyeongmae.domain.authentication.domain.entity.OAuthUserProfile;
-import megabrain.gyeongnamgyeongmae.domain.authentication.domain.entity.OAuthVendorName;
 import megabrain.gyeongnamgyeongmae.domain.authentication.dto.MemberRegisterRequest;
 import megabrain.gyeongnamgyeongmae.domain.authentication.dto.PhoneAuthenticationRequest;
 import megabrain.gyeongnamgyeongmae.domain.authentication.service.AuthenticationServiceInterface;
@@ -38,27 +34,22 @@ public class AuthenticationController {
               description = "지원중인 OAuth2 제공사(KAKAO)")
           @PathVariable("auth-vendor")
           String authVendorName,
-      @RequestBody() @Valid MemberRegisterRequest memberRegisterRequest) {
-    authenticationService.isValidateOAuthVendorName(authVendorName);
-    OAuthVendorName vendorName = OAuthVendorName.valueOf(authVendorName);
+      @RequestBody @Valid MemberRegisterRequest memberRegisterRequest) {
 
     OAuthUserProfile oAuthUserProfile =
         authenticationService.oauthLoginStrategy(
-            vendorName, memberRegisterRequest.getVendorAccessToken());
+            authVendorName, memberRegisterRequest.getVendorAccessToken());
 
     boolean isDuplicated =
         authenticationService.isDuplicateAuthVendorMemberId(
             oAuthUserProfile.getAuthVendorMemberId());
-    if (!isDuplicated) throw new DuplicateAuthVendorMemberId();
+    if (isDuplicated) throw new DuplicateAuthVendorMemberId("이미 회원가입되어있는 회원입니다.");
 
-    int authVendorId = authenticationService.GetOAuthVendorIdByName(vendorName);
+    int authVendorId = authenticationService.GetOAuthVendorIdByName(authVendorName);
 
     Member member =
         MemberRegisterRequest.toEntity(
-            memberRegisterRequest,
-            passwordEncoder,
-            authVendorId,
-            oAuthUserProfile.getAuthVendorMemberId());
+            memberRegisterRequest, passwordEncoder, oAuthUserProfile, authVendorId);
 
     authenticationService.saveMember(member);
 
@@ -90,12 +81,7 @@ public class AuthenticationController {
   @Operation(summary = "휴대전화 인증 요청", description = "휴대전화 번호를 통해 인증번호 송신을 요청합니다.")
   @ResponseStatus(HttpStatus.CREATED)
   public ResponseEntity<HttpStatus> authenticationByMail(
-      @RequestBody(
-              required = true,
-              content =
-                  @Content(schema = @Schema(implementation = PhoneAuthenticationRequest.class)))
-          @Valid
-          PhoneAuthenticationRequest phoneAuthenticationRequest) {
+      @RequestBody @Valid PhoneAuthenticationRequest phoneAuthenticationRequest) {
     String phoneAuthenticationCode = authenticationService.generatePhoneAuthenticationCode();
 
     authenticationService.sendPhoneAuthenticationCode(
