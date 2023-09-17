@@ -36,8 +36,7 @@ public class AuthenticationService implements AuthenticationServiceInterface {
 
   @Override
   public boolean isDuplicateAuthVendorMemberId(String authVendorMemberId) {
-    // return memberRepository.existsByAuthVendorMemberId(authVendorMemberId);
-    return false;
+    return memberRepository.existsByAuthVendorMemberId(authVendorMemberId);
   }
 
   public void saveMember(Member member) {
