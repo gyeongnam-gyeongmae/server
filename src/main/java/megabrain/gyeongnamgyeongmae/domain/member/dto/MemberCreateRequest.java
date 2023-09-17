@@ -1,10 +1,10 @@
 package megabrain.gyeongnamgyeongmae.domain.member.dto;
 
-import javax.validation.constraints.Email;
 import javax.validation.constraints.NotEmpty;
 import javax.validation.constraints.Pattern;
 import lombok.*;
 import megabrain.gyeongnamgyeongmae.domain.member.domain.entity.Member;
+import org.hibernate.validator.constraints.Length;
 import org.springframework.security.crypto.password.PasswordEncoder;
 
 @Getter
@@ -13,7 +13,14 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 @AllArgsConstructor
 public class MemberCreateRequest {
 
-  @NotEmpty @Email private String email;
+
+  @NotEmpty
+  @Length(min = 11, max = 11)
+  private String PhoneNumber;
+
+  @NotEmpty
+  @Length(min = 6, max = 6)
+  private String phoneAuthenticationCode;
 
   @NotEmpty
   @Pattern(
@@ -26,7 +33,6 @@ public class MemberCreateRequest {
   public static Member toEntity(
       MemberCreateRequest memberCreateRequest, PasswordEncoder passwordEncoder) {
     return Member.builder()
-        .email(memberCreateRequest.email)
         .nickname(memberCreateRequest.nickname)
         .password(passwordEncoder.encode(memberCreateRequest.password))
         .build();

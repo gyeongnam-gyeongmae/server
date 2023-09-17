@@ -1,3 +1,4 @@
 server.port: ${PORT}
 spring.config.import:
+  - application-mailer.yml
   - application-postgresql.yml

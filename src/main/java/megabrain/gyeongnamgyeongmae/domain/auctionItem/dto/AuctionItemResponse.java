@@ -31,7 +31,6 @@ public class AuctionItemResponse {
 
   private Address address;
   private String category;
-  private String email;
 
   private String content;
 
@@ -51,11 +50,9 @@ public class AuctionItemResponse {
         .closeTime(auctionItem.getClosedTime())
         .address(auctionItem.getMember().getAddress())
         .category(auctionItem.getCategory().getName())
-        .email(auctionItem.getMember().getEmail())
         .content(auctionItem.getContent())
         .likeCount(auctionItem.getLike_count())
         .viewCount(auctionItem.getView_count())
         .build();
   }
 }
-
