@@ -18,8 +18,4 @@ public class GeneralMemberService implements MemberService {
     memberRepository.save(member);
   }
 
-  @Override
-  public Member findMemberById(Long Id) {
-    return memberRepository.findById(Id).orElseThrow(RuntimeException::new);
-  }
 }

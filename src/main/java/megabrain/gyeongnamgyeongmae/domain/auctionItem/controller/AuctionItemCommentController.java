@@ -8,6 +8,7 @@ import megabrain.gyeongnamgyeongmae.domain.auctionItem.dto.AuctionItemCommentDel
 import megabrain.gyeongnamgyeongmae.domain.auctionItem.dto.Comment.AuctionItemCommentParentDto;
 import megabrain.gyeongnamgyeongmae.domain.auctionItem.dto.AuctionItemCommentRequest;
 import megabrain.gyeongnamgyeongmae.domain.auctionItem.dto.AuctionItemCommentUpdateRequest;
+import megabrain.gyeongnamgyeongmae.domain.auctionItem.service.Comment.AuctionItemCommentService;
 import megabrain.gyeongnamgyeongmae.domain.auctionItem.service.Comment.AuctionItemCommentServiceImpl;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -22,21 +23,21 @@ import java.util.List;
 public class AuctionItemCommentController {
 
     private final AuctionItemCommentRepository auctionItemCommentRepository;
-    private final AuctionItemCommentServiceImpl auctionItemCommentServiceImpl;
+    private final AuctionItemCommentService auctionItemCommentService;
 
     @Operation(summary = "댓글 쓰기 ", description = "경매품 댓글 쓰기")
     @ResponseStatus(HttpStatus.CREATED)
     @PostMapping({"{id}"})
     public ResponseEntity<HttpStatus> createAuctionItemComment(@PathVariable Long id, @RequestBody AuctionItemCommentRequest auctionItemCommentRequest) {
         Long memberId = auctionItemCommentRequest.getUserId();
-        this.auctionItemCommentServiceImpl.createAuctionItemComment(auctionItemCommentRequest, id, memberId);
+        this.auctionItemCommentService.createAuctionItemComment(auctionItemCommentRequest, id, memberId);
         return ResponseEntity.status(HttpStatus.CREATED).build();
     }
 
     @Operation(summary = "경매품에 대한 댓글 보기", description = "경매품에 대한 경매품 댓글 보기")
     @GetMapping({"{id}"})
     public ResponseEntity<List<AuctionItemCommentParentDto>> findAuctionItemCommentById(@PathVariable Long id) {
-        List<AuctionItemCommentParentDto> commentViews = this.auctionItemCommentServiceImpl.findAuctionItemCommentById(id);
+        List<AuctionItemCommentParentDto> commentViews = this.auctionItemCommentService.findAuctionItemCommentById(id);
         return ResponseEntity.ok(commentViews);
     }
 
@@ -44,14 +45,14 @@ public class AuctionItemCommentController {
     @Operation(summary = "경매품 댓글 수정 ", description = "경매품 댓글 수정")
     @PutMapping({""})
     public ResponseEntity<HttpStatus> updateAuctionItemComment(@RequestBody AuctionItemCommentUpdateRequest auctionItemCommentUpdateRequest) {
-        this.auctionItemCommentServiceImpl.updateAuctionItemComment(auctionItemCommentUpdateRequest);
+        this.auctionItemCommentService.updateAuctionItemComment(auctionItemCommentUpdateRequest);
         return ResponseEntity.status(HttpStatus.OK).build();
     }
 
     @Operation(summary = "경매품 댓글 삭제",description = "경매품 댓글 삭제")
     @DeleteMapping({""})
     public ResponseEntity<HttpStatus> deleteAuctionItemComment(AuctionItemCommentDeleteRequest auctionItemCommentDeleteRequest) {
-        this.auctionItemCommentServiceImpl.deleteAuctionItemComment(auctionItemCommentDeleteRequest);
+        this.auctionItemCommentService.deleteAuctionItemComment(auctionItemCommentDeleteRequest);
         return ResponseEntity.status(HttpStatus.OK).build();
     }
 }

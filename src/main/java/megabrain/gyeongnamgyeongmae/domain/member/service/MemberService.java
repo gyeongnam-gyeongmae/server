@@ -6,5 +6,4 @@ public interface MemberService {
 
   void createMember(Member member);
 
-  Member findMemberById(Long Id);
 }
