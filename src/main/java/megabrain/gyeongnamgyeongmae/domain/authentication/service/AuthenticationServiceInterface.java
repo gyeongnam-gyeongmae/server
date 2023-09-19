@@ -1,15 +1,20 @@
 package megabrain.gyeongnamgyeongmae.domain.authentication.service;
 
 import megabrain.gyeongnamgyeongmae.domain.authentication.domain.entity.OAuthUserProfile;
-import megabrain.gyeongnamgyeongmae.domain.member.domain.entity.Member;
+import megabrain.gyeongnamgyeongmae.domain.authentication.domain.entity.OAuthVendorName;
+import megabrain.gyeongnamgyeongmae.domain.user.domain.entity.User;
 
 public interface AuthenticationServiceInterface {
 
-  boolean isDuplicateAuthVendorMemberId(String authVendorMemberId);
+  void login(long id);
 
-  void saveMember(Member member);
+  void logout();
 
-  OAuthUserProfile getKakaoUserProfile(String accessToken);
+  User getLoginUser();
+
+  Long getLoginUserId();
+
+  boolean isDuplicateAuthVendorUserId(String authVendorUserId);
 
   String generatePhoneAuthenticationCode();
 
@@ -17,7 +22,5 @@ public interface AuthenticationServiceInterface {
 
   boolean isPhoneAuthenticationCodeExist(String phoneNumber, String code);
 
-  OAuthUserProfile oauthLoginStrategy(String vendorName, String vendorAccessToken);
-
-  int GetOAuthVendorIdByName(String vendorName);
+  OAuthUserProfile oauthLoginStrategy(OAuthVendorName vendorName, String vendorAccessToken);
 }

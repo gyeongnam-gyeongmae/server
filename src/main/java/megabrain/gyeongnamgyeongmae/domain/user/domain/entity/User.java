@@ -1,25 +1,22 @@
-package megabrain.gyeongnamgyeongmae.domain.member.domain.entity;
+package megabrain.gyeongnamgyeongmae.domain.user.domain.entity;
 
 import javax.persistence.*;
 import lombok.*;
 import lombok.NoArgsConstructor;
-import megabrain.gyeongnamgyeongmae.global.commons.BaseTimeEntity;
+import megabrain.gyeongnamgyeongmae.global.BaseTimeEntity;
 
 @Getter
 @Entity
-@Table(name = "members")
+@Table(name = "users")
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
-public class Member extends BaseTimeEntity {
+public class User extends BaseTimeEntity {
   @Id
   @GeneratedValue(strategy = GenerationType.IDENTITY)
-  @Column(name = "member_id")
+  @Column(name = "user_id")
   private Long id;
 
-  @Column(name = "auth_vendor_memebr_id", unique = true)
-  private String authVendorMemberId;
-
-  @Column(name = "auth_vendor")
-  private int authVendor;
+  @Column(name = "auth_vendor_user_id", unique = true)
+  private String authVendorUserId;
 
   @Column(name = "phone_number", unique = true, length = 11)
   private String phoneNumber;
@@ -36,15 +33,9 @@ public class Member extends BaseTimeEntity {
   @Embedded private Address address;
 
   @Builder
-  public Member(
-      String phoneNumber,
-      String authVendorMemberId,
-      int authVendor,
-      String password,
-      String nickname) {
+  public User(String phoneNumber, String authVendorUserId, String password, String nickname) {
     this.phoneNumber = phoneNumber;
-    this.authVendorMemberId = authVendorMemberId;
-    this.authVendor = authVendor;
+    this.authVendorUserId = authVendorUserId;
     this.password = password;
     this.nickname = nickname;
   }

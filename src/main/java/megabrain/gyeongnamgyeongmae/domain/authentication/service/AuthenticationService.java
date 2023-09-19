@@ -1,53 +1,57 @@
 package megabrain.gyeongnamgyeongmae.domain.authentication.service;
 
+import java.util.List;
+import javax.servlet.http.HttpSession;
 import lombok.RequiredArgsConstructor;
 import megabrain.gyeongnamgyeongmae.domain.authentication.domain.entity.OAuthUserProfile;
 import megabrain.gyeongnamgyeongmae.domain.authentication.domain.entity.OAuthVendorName;
 import megabrain.gyeongnamgyeongmae.domain.authentication.exception.OAuthVendorNotFoundException;
-import megabrain.gyeongnamgyeongmae.domain.member.domain.entity.Member;
-import megabrain.gyeongnamgyeongmae.domain.member.domain.repository.MemberRepository;
+import megabrain.gyeongnamgyeongmae.domain.user.domain.entity.User;
+import megabrain.gyeongnamgyeongmae.domain.user.domain.repository.UserRepository;
+import megabrain.gyeongnamgyeongmae.domain.user.service.UserService;
 import org.springframework.stereotype.Service;
 
 @Service
 @RequiredArgsConstructor
 public class AuthenticationService implements AuthenticationServiceInterface {
 
-  private final MemberRepository memberRepository;
+  private final List<OAuthLogin> oAuthLogins;
+  private final UserRepository userRepository;
+  private final UserService userService;
+  private final HttpSession httpSession;
+  public static final String USER_ID = "USER_ID";
 
   @Override
-  public OAuthUserProfile oauthLoginStrategy(String vendorName, String vendorAccessToken) {
-    if (OAuthVendorName.KAKAO.toString().equals(vendorName)) {
-      return this.getKakaoUserProfile(vendorAccessToken);
-    }
-    throw new OAuthVendorNotFoundException(vendorName + "는 지원하지 않은 인증사입니다.");
+  public void login(long id) {
+    httpSession.setAttribute(USER_ID, id);
   }
 
   @Override
-  public int GetOAuthVendorIdByName(String vendorName) {
-    int vendorId = 1;
-    for (OAuthVendorName oAuthVendorName : OAuthVendorName.values()) {
-      if (oAuthVendorName.toString().equals(vendorName)) {
-        return vendorId;
-      }
-      vendorId++;
-    }
-    return 0;
+  public void logout() {
+    httpSession.removeAttribute(USER_ID);
   }
 
   @Override
-  public boolean isDuplicateAuthVendorMemberId(String authVendorMemberId) {
-    // return memberRepository.existsByAuthVendorMemberId(authVendorMemberId);
-    return false;
-  }
+  public User getLoginUser() {
+    Long userId = (Long) httpSession.getAttribute(USER_ID);
 
-  public void saveMember(Member member) {
-    memberRepository.save(member);
+    return userService.findUserById(userId);
   }
 
   @Override
-  public OAuthUserProfile getKakaoUserProfile(String code) {
+  public Long getLoginUserId() {
+    return (Long) httpSession.getAttribute(USER_ID);
+  }
 
-    return OAuthUserProfile.builder().authVendorMemberId("1234").nickname("test").build();
+  @Override
+  public OAuthUserProfile oauthLoginStrategy(OAuthVendorName vendorName, String vendorAccessToken) {
+    OAuthLogin oAuthLoginService = getOAuthLoginServiceByVendorName(vendorName);
+    return oAuthLoginService.getUserProfileByAccessToken(vendorAccessToken);
+  }
+
+  @Override
+  public boolean isDuplicateAuthVendorUserId(String authVendorUserId) {
+    return userRepository.existsByAuthVendorUserId(authVendorUserId);
   }
 
   @Override()
@@ -61,5 +65,13 @@ public class AuthenticationService implements AuthenticationServiceInterface {
   @Override
   public boolean isPhoneAuthenticationCodeExist(String email, String code) {
     return true;
+  }
+
+  private OAuthLogin getOAuthLoginServiceByVendorName(OAuthVendorName vendorName) {
+    for (OAuthLogin authLoginService : oAuthLogins) {
+      if (authLoginService.getOAuthVendorName().equals(vendorName)) return authLoginService;
+    }
+
+    throw new OAuthVendorNotFoundException(vendorName + "는 지원하지 않은 인증사입니다.");
   }
 }

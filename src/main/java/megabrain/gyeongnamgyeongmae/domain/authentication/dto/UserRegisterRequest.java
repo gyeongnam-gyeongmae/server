@@ -3,8 +3,7 @@ package megabrain.gyeongnamgyeongmae.domain.authentication.dto;
 import javax.validation.constraints.NotEmpty;
 import javax.validation.constraints.Pattern;
 import lombok.*;
-import megabrain.gyeongnamgyeongmae.domain.authentication.domain.entity.OAuthUserProfile;
-import megabrain.gyeongnamgyeongmae.domain.member.domain.entity.Member;
+import megabrain.gyeongnamgyeongmae.domain.user.domain.entity.User;
 import org.hibernate.validator.constraints.Length;
 import org.springframework.security.crypto.password.PasswordEncoder;
 
@@ -12,7 +11,7 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 @Getter
 @NoArgsConstructor(access = AccessLevel.PRIVATE)
 @AllArgsConstructor
-public class MemberRegisterRequest {
+public class UserRegisterRequest {
 
   @NotEmpty private String vendorAccessToken;
 
@@ -30,18 +29,11 @@ public class MemberRegisterRequest {
       regexp = "^(?=.*[0-9])(?=.*[a-z])(?=.*[A-Z])(?=.*[@#!~$%^&-+=()])(?=\\S+$).{8,16}$")
   private String password;
 
-  public static Member toEntity(
-      MemberRegisterRequest memberRegisterRequest,
-      PasswordEncoder passwordEncoder,
-      OAuthUserProfile oauthUserProfile,
-      int authVendor) {
-
-    return Member.builder()
-        .phoneNumber(memberRegisterRequest.getPhoneNumber())
-        .password(passwordEncoder.encode(memberRegisterRequest.getPassword()))
-        .nickname(oauthUserProfile.getNickname())
-        .authVendorMemberId(oauthUserProfile.getAuthVendorMemberId())
-        .authVendor(authVendor)
+  public User toEntity(PasswordEncoder passwordEncoder, String authVendorUserId) {
+    return User.builder()
+        .authVendorUserId(authVendorUserId)
+        .phoneNumber(phoneNumber)
+        .password(passwordEncoder.encode(password))
         .build();
   }
 }

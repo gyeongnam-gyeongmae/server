@@ -73,6 +73,10 @@ dependencies {
     implementation("org.springframework:spring-context-support")
     implementation("org.springdoc:springdoc-openapi-ui:1.6.9")
     implementation("org.projectlombok:lombok")
+    implementation("com.googlecode.json-simple:json-simple:1.1.1")
+//    implementation("org.springframework.session:spring-session-core")
+//    implementation("org.springframework.session:spring-session-jdbc")
+    compile("io.lettuce:lettuce-core:6.2.6.RELEASE")
     runtimeOnly("org.postgresql:postgresql")
     annotationProcessor("org.projectlombok:lombok")
     testAnnotationProcessor("org.projectlombok:lombok")
@@ -100,6 +104,7 @@ configurations {
 tasks.withType<QuerydslCompile> {
     options.annotationProcessorPath = configurations.querydsl.get()
     dependsOn("sourcesJar")
+    dependsOn("compileQuerydslJava")
 }
 
 // 테스트

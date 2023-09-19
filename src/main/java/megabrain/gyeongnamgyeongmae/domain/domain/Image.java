@@ -3,11 +3,10 @@ package megabrain.gyeongnamgyeongmae.domain.domain;
 import javax.persistence.*;
 import javax.validation.constraints.NotNull;
 import lombok.AccessLevel;
-import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import megabrain.gyeongnamgyeongmae.domain.auctionItem.domain.entity.AuctionItem;
-import megabrain.gyeongnamgyeongmae.global.commons.BaseTimeEntity;
+import megabrain.gyeongnamgyeongmae.global.BaseTimeEntity;
 
 @Entity
 @Table(name = "images", indexes = @Index(name = "url", columnList = "image_url"))
@@ -31,10 +30,10 @@ public class Image extends BaseTimeEntity {
   @JoinColumn(name = "auction_id")
   private AuctionItem auctionItem;
 
-//  @Builder
-//  public Image(String url, AuctionItem auctionItem) {
-//    this.url = url;
-//    this.auctionItem = auctionItem;
-//  }
+  //  @Builder
+  //  public Image(String url, AuctionItem auctionItem) {
+  //    this.url = url;
+  //    this.auctionItem = auctionItem;
+  //  }
 
 }

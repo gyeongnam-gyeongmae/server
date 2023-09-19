@@ -11,9 +11,11 @@ services:
     env_file:
       - .env
     ports:
-      - 12000:12000
+      - 5001:5001
     networks:
       - gg-backend
+    depends_on:
+      - postgres
   postgres:
     container_name: gg-postgres
     image: postgres:14.1

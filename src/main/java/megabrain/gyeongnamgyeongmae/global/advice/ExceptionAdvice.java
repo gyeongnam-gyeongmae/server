@@ -2,7 +2,7 @@ package megabrain.gyeongnamgyeongmae.global.advice;
 
 import java.util.Objects;
 import megabrain.gyeongnamgyeongmae.domain.authentication.exception.OAuthVendorNotFoundException;
-import megabrain.gyeongnamgyeongmae.domain.member.exception.DuplicateAuthVendorMemberId;
+import megabrain.gyeongnamgyeongmae.domain.user.exception.DuplicateAuthVendorUserId;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.MethodArgumentNotValidException;
@@ -23,8 +23,8 @@ public class ExceptionAdvice {
     return new ResponseEntity<>(error.getMessage(), HttpStatus.NOT_FOUND);
   }
 
-  @ExceptionHandler(DuplicateAuthVendorMemberId.class)
-  public ResponseEntity<String> duplicateAuthVendorMemberId(DuplicateAuthVendorMemberId error) {
+  @ExceptionHandler(DuplicateAuthVendorUserId.class)
+  public ResponseEntity<String> duplicateAuthVendorUserId(DuplicateAuthVendorUserId error) {
     return new ResponseEntity<>(error.getMessage(), HttpStatus.CONFLICT);
   }
 }

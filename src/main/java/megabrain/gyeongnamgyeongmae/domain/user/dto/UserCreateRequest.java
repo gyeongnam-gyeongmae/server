@@ -1,9 +1,9 @@
-package megabrain.gyeongnamgyeongmae.domain.member.dto;
+package megabrain.gyeongnamgyeongmae.domain.user.dto;
 
 import javax.validation.constraints.NotEmpty;
 import javax.validation.constraints.Pattern;
 import lombok.*;
-import megabrain.gyeongnamgyeongmae.domain.member.domain.entity.Member;
+import megabrain.gyeongnamgyeongmae.domain.user.domain.entity.User;
 import org.hibernate.validator.constraints.Length;
 import org.springframework.security.crypto.password.PasswordEncoder;
 
@@ -11,8 +11,7 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 @Builder
 @NoArgsConstructor(access = AccessLevel.PRIVATE)
 @AllArgsConstructor
-public class MemberCreateRequest {
-
+public class UserCreateRequest {
 
   @NotEmpty
   @Length(min = 11, max = 11)
@@ -30,11 +29,11 @@ public class MemberCreateRequest {
 
   @NotEmpty private String nickname;
 
-  public static Member toEntity(
-      MemberCreateRequest memberCreateRequest, PasswordEncoder passwordEncoder) {
-    return Member.builder()
-        .nickname(memberCreateRequest.nickname)
-        .password(passwordEncoder.encode(memberCreateRequest.password))
+  public static User toEntity(
+      UserCreateRequest userCreateRequest, PasswordEncoder passwordEncoder) {
+    return User.builder()
+        .nickname(userCreateRequest.nickname)
+        .password(passwordEncoder.encode(userCreateRequest.password))
         .build();
   }
 }
