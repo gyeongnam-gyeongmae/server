@@ -4,6 +4,7 @@ import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import javax.validation.Valid;
 import lombok.RequiredArgsConstructor;
+import megabrain.gyeongnamgyeongmae.domain.auctionItem.dto.AuctionItemLikeRequest;
 import megabrain.gyeongnamgyeongmae.domain.auctionItem.dto.AuctionItemResponse;
 import megabrain.gyeongnamgyeongmae.domain.auctionItem.dto.CreateAuctionItemRequest;
 import megabrain.gyeongnamgyeongmae.domain.auctionItem.dto.UpdateAuctionItemRequest;
@@ -55,4 +56,12 @@ public class AuctionItemController {
     this.auctionItemService.deleteAuctionItemById(id);
     return ResponseEntity.status(HttpStatus.OK).build();
   }
+
+  @Operation(summary = "경매품 좋아요", description = "경매품 관심")
+  @PostMapping("{id}/like")
+  public ResponseEntity<HttpStatus> likeAuctionItemById(@PathVariable Long id, @RequestBody AuctionItemLikeRequest auctionItemLikeRequest) {
+    this.auctionItemService.likeAuctionItemById(id, auctionItemLikeRequest);
+    return ResponseEntity.status(HttpStatus.OK).build();
+  }
+
 }
