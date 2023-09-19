@@ -14,7 +14,6 @@ import megabrain.gyeongnamgyeongmae.domain.user.service.UserService;
 import megabrain.gyeongnamgyeongmae.global.anotation.LoginRequired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.web.bind.annotation.*;
 
 @RestController
@@ -24,7 +23,6 @@ import org.springframework.web.bind.annotation.*;
 public class AuthenticationController {
   private final AuthenticationServiceInterface authenticationService;
   private final UserService userService;
-  private final PasswordEncoder passwordEncoder;
 
   @PostMapping("register/{auth-vendor}")
   @Operation(summary = "회원가입/로그인 요청", description = "회원의 OAuth 회원가입/로그인을 요청합니다.")

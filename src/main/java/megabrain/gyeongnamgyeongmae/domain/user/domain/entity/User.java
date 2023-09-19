@@ -21,9 +21,6 @@ public class User extends BaseTimeEntity {
   @Column(name = "phone_number", unique = true, length = 11)
   private String phoneNumber;
 
-  @Column(name = "pasword", nullable = false)
-  private String password;
-
   @Column(name = "nickname", unique = true)
   private String nickname;
 
@@ -33,10 +30,9 @@ public class User extends BaseTimeEntity {
   @Embedded private Address address;
 
   @Builder
-  public User(String phoneNumber, String authVendorUserId, String password, String nickname) {
+  public User(String phoneNumber, String authVendorUserId, String nickname) {
     this.phoneNumber = phoneNumber;
     this.authVendorUserId = authVendorUserId;
-    this.password = password;
     this.nickname = nickname;
   }
 }
