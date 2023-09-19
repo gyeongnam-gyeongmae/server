@@ -59,7 +59,7 @@ public class AuctionItemRepositoryCustomImpl implements AuctionItemRepositoryCus
                                 sellBuilder,
                                 keywordStatus);
 
-        Long page = searchAuctionItemSortedRequest.getPage(); // 1 부터
+        Long page = searchAuctionItemSortedRequest.getPage();
         int itemsPerPage = 10;
 
         List<AuctionItem> results =
@@ -73,7 +73,7 @@ public class AuctionItemRepositoryCustomImpl implements AuctionItemRepositoryCus
         paginationInfo.setCurrentPage(page);
         paginationInfo.setItemCount((long) results.size());
         paginationInfo.setItemsPerPage((long) itemsPerPage);
-        paginationInfo.setTotalItems(query.fetchCount()); // 이거 왜이럼 ?
+        paginationInfo.setTotalItems(query.fetchCount());
         paginationInfo.setTotalPages((query.fetchCount()+itemsPerPage-1)/itemsPerPage);
 
 
