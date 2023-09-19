@@ -21,7 +21,7 @@ public class UpdateAuctionItemRequest {
     @NotNull
     private Long memberId;
 
-    @Min(1)
+    @Min(0)
     private Long price;
 
     @NotEmpty
