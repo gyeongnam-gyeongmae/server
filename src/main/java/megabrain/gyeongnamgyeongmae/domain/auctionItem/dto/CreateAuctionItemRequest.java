@@ -1,6 +1,7 @@
 package megabrain.gyeongnamgyeongmae.domain.auctionItem.dto;
 
 import java.time.LocalDateTime;
+import javax.validation.constraints.Min;
 import javax.validation.constraints.NotNull;
 import lombok.*;
 import megabrain.gyeongnamgyeongmae.domain.auctionItem.domain.entity.AuctionItem;
@@ -14,7 +15,9 @@ public class CreateAuctionItemRequest {
 
   @NotNull private String name;
 
-  @NotNull private Long price;
+  @Min(0)
+  @NotNull
+  private Long price;
 
   @NotNull private String category;
 

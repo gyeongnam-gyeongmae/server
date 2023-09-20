@@ -18,7 +18,7 @@ public class UpdateAuctionItemRequest {
 
   @NotNull private Long userId;
 
-  @Min(1)
+  @Min(0)
   private Long price;
 
   @NotEmpty private String category;
