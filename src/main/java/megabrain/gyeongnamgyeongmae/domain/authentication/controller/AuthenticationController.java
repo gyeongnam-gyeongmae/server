@@ -61,7 +61,6 @@ public class AuthenticationController {
     return ResponseEntity.status(HttpStatus.OK).build();
   }
 
-<<<<<<< HEAD
   @LoginRequired
   @GetMapping("profile")
   @Operation(
@@ -72,8 +71,6 @@ public class AuthenticationController {
     return new ResponseEntity<>(logedInUser, HttpStatus.OK);
   }
 
-=======
->>>>>>> 4a39bbb72f5763f76cf87b49cd016a02904318bf
   @GetMapping("phone")
   @Operation(summary = "휴대전화 인증번호 검증", description = "회원가입 전 올바른 휴대전화 인증번호인지 여부를 요청합니다.")
   @ResponseStatus(HttpStatus.OK)

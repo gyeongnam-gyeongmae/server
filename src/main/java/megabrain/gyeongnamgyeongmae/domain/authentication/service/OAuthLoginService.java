@@ -2,10 +2,7 @@ package megabrain.gyeongnamgyeongmae.domain.authentication.service;
 
 import megabrain.gyeongnamgyeongmae.domain.authentication.domain.entity.OAuthUserProfile;
 import megabrain.gyeongnamgyeongmae.domain.authentication.domain.entity.OAuthVendorName;
-<<<<<<< HEAD
 import megabrain.gyeongnamgyeongmae.domain.authentication.exception.OAuthLoginException;
-=======
->>>>>>> 4a39bbb72f5763f76cf87b49cd016a02904318bf
 import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpMethod;
@@ -35,11 +32,7 @@ public abstract class OAuthLoginService implements OAuthLogin {
     if (userProfile.getAuthVendorUserId() == null
         // || userProfile.getEmail() == null
         || userProfile.getNickname() == null) {
-<<<<<<< HEAD
       throw new OAuthLoginException("프로필 정보를 가져오는데 실패했습니다.");
-=======
-      throw new Exception("프로필 정보를 가져오는데 실패했습니다.");
->>>>>>> 4a39bbb72f5763f76cf87b49cd016a02904318bf
     }
 
     return userProfile;
