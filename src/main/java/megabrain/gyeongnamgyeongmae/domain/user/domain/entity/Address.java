@@ -1,4 +1,4 @@
-package megabrain.gyeongnamgyeongmae.domain.member.domain.entity;
+package megabrain.gyeongnamgyeongmae.domain.user.domain.entity;
 
 import javax.persistence.Embeddable;
 

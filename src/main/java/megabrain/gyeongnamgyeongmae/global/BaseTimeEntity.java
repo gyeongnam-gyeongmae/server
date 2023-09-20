@@ -1,4 +1,4 @@
-package megabrain.gyeongnamgyeongmae.global.commons;
+package megabrain.gyeongnamgyeongmae.global;
 
 import java.time.LocalDateTime;
 import javax.persistence.EntityListeners;

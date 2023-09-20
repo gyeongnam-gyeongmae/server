@@ -1,4 +1,7 @@
 server.port: ${PORT}
 spring.config.import:
   - application-mailer.yml
+  - application-redis.yml
   - application-postgresql.yml
+  # oauth2 vendors
+  - oauth/kakao-oauth.yml
