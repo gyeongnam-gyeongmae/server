@@ -8,7 +8,7 @@ import lombok.NoArgsConstructor;
 import megabrain.gyeongnamgyeongmae.domain.auctionItem.domain.entity.AuctionItem;
 import megabrain.gyeongnamgyeongmae.domain.auctionItem.domain.entity.AuctionItemStatus;
 import megabrain.gyeongnamgyeongmae.domain.auctionItem.domain.entity.AuctionStatus;
-import megabrain.gyeongnamgyeongmae.domain.member.domain.entity.Address;
+import megabrain.gyeongnamgyeongmae.domain.user.domain.entity.Address;
 
 @Builder
 @Getter
@@ -40,7 +40,7 @@ public class AuctionItemResponse {
   public static AuctionItemResponse of(AuctionItem auctionItem) {
     return AuctionItemResponse.builder()
         .id(auctionItem.getId())
-        .nickname(auctionItem.getMember().getNickname())
+        .nickname(auctionItem.getUser().getNickname())
         .name(auctionItem.getName())
         .price(auctionItem.getPrice())
         .itemStatus(auctionItem.getItemStatus())
@@ -48,7 +48,7 @@ public class AuctionItemResponse {
         .createdTime(auctionItem.getCreatedAt())
         .modifiedTime(auctionItem.getUpdatedAt())
         .closeTime(auctionItem.getClosedTime())
-        .address(auctionItem.getMember().getAddress())
+        .address(auctionItem.getUser().getAddress())
         .category(auctionItem.getCategory().getName())
         .content(auctionItem.getContent())
         .likeCount(auctionItem.getLike_count())

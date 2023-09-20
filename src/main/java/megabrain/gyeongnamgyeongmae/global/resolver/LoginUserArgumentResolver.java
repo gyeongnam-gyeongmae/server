@@ -1,6 +1,8 @@
-package megabrain.gyeongnamgyeongmae.global.commons.resolver;
+package megabrain.gyeongnamgyeongmae.global.resolver;
 
 import lombok.RequiredArgsConstructor;
+import megabrain.gyeongnamgyeongmae.domain.authentication.service.AuthenticationService;
+import megabrain.gyeongnamgyeongmae.global.anotation.LoginUser;
 import org.springframework.core.MethodParameter;
 import org.springframework.stereotype.Component;
 import org.springframework.web.bind.support.WebDataBinderFactory;
@@ -10,11 +12,13 @@ import org.springframework.web.method.support.ModelAndViewContainer;
 
 @RequiredArgsConstructor
 @Component
-public class LoginMemberArgumentResolver implements HandlerMethodArgumentResolver {
+public class LoginUserArgumentResolver implements HandlerMethodArgumentResolver {
+
+  private final AuthenticationService authenticationService;
 
   @Override
   public boolean supportsParameter(MethodParameter parameter) {
-    return false;
+    return parameter.hasParameterAnnotation(LoginUser.class);
   }
 
   @Override
@@ -24,6 +28,6 @@ public class LoginMemberArgumentResolver implements HandlerMethodArgumentResolve
       NativeWebRequest webRequest,
       WebDataBinderFactory binderFactory)
       throws Exception {
-    return null;
+    return authenticationService.getLoginUser();
   }
 }
