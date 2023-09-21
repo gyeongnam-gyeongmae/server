@@ -10,7 +10,7 @@ import megabrain.gyeongnamgyeongmae.domain.auctionItem.dto.CreateAuctionItemRequ
 import megabrain.gyeongnamgyeongmae.domain.auctionItem.dto.UpdateAuctionItemRequest;
 import megabrain.gyeongnamgyeongmae.domain.auctionItem.service.Item.AuctionItemService;
 import megabrain.gyeongnamgyeongmae.domain.category.service.CategoryService;
-import megabrain.gyeongnamgyeongmae.domain.member.service.MemberService;
+import megabrain.gyeongnamgyeongmae.domain.user.service.UserService;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -23,7 +23,7 @@ public class AuctionItemController {
 
   private final AuctionItemService auctionItemService;
   private final CategoryService categoryService;
-  private final MemberService memberService;
+  private final UserService userService;
 
   @Operation(summary = "Post AuctionItem", description = "경매품 올리기")
   @ResponseStatus(HttpStatus.CREATED)
@@ -59,9 +59,9 @@ public class AuctionItemController {
 
   @Operation(summary = "경매품 좋아요", description = "경매품 관심")
   @PostMapping("{id}/like")
-  public ResponseEntity<HttpStatus> likeAuctionItemById(@PathVariable Long id, @RequestBody AuctionItemLikeRequest auctionItemLikeRequest) {
+  public ResponseEntity<HttpStatus> likeAuctionItemById(
+      @PathVariable Long id, @RequestBody AuctionItemLikeRequest auctionItemLikeRequest) {
     this.auctionItemService.likeAuctionItemById(id, auctionItemLikeRequest);
     return ResponseEntity.status(HttpStatus.OK).build();
   }
-
 }

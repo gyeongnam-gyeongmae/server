@@ -1,10 +1,9 @@
 package megabrain.gyeongnamgyeongmae.domain.auctionItem.domain.entity;
 
-import lombok.*;
-import megabrain.gyeongnamgyeongmae.domain.member.domain.entity.Member;
-import megabrain.gyeongnamgyeongmae.global.commons.BaseTimeEntity;
-
 import javax.persistence.*;
+import lombok.*;
+import megabrain.gyeongnamgyeongmae.domain.user.domain.entity.User;
+import megabrain.gyeongnamgyeongmae.global.BaseTimeEntity;
 
 @Getter
 @Setter
@@ -13,24 +12,22 @@ import javax.persistence.*;
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 public class AuctionItemLike extends BaseTimeEntity {
 
-    @EmbeddedId
-    private AuctionItemLikePK id;
+  @EmbeddedId private AuctionItemLikePK id;
 
-    @MapsId("auctionItemId")
-    @ManyToOne
-    @JoinColumn(name = "auctionItemId")
-    private AuctionItem auctionItem;
+  @MapsId("auctionItemId")
+  @ManyToOne
+  @JoinColumn(name = "auctionItemId")
+  private AuctionItem auctionItem;
 
-    @MapsId("memberId")
-    @ManyToOne
-    @JoinColumn(name = "memberId")
-    private Member member;
+  @MapsId("userId")
+  @ManyToOne
+  @JoinColumn(name = "userId")
+  private User user;
 
-    @Builder
-    public AuctionItemLike(AuctionItemLikePK id, AuctionItem auctionItem, Member member) {
-        this.id = id;
-        this.auctionItem = auctionItem;
-        this.member = member;
-    }
-
+  @Builder
+  public AuctionItemLike(AuctionItemLikePK id, AuctionItem auctionItem, User user) {
+    this.id = id;
+    this.auctionItem = auctionItem;
+    this.user = user;
+  }
 }
