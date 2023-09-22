@@ -1,6 +1,8 @@
 package megabrain.gyeongnamgyeongmae.domain.auctionItem.dto;
 
 import java.time.LocalDateTime;
+import java.util.Optional;
+
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
@@ -24,7 +26,7 @@ public class AuctionItemFirstView {
 
     private LocalDateTime closedTime;
 
-    private AuctionItemStatus auctionItemStatus;
+//    private AuctionItemStatus auctionItemStatus;
 
     private AuctionStatus status;
 
@@ -51,10 +53,10 @@ public class AuctionItemFirstView {
                 .view_count(auctionItem.getView_count())
                 .price(auctionItem.getPrice())
                 .closedTime(auctionItem.getClosedTime())
-                .auctionItemStatus(auctionItem.getItemStatus())
+//                .auctionItemStatus(auctionItem.getItemStatus())
                 .status(auctionItem.getStatus())
                 .now_price(20000L)
-                .image_url(image.getImageUrl())
+                .image_url(Optional.ofNullable(image).map(Image::getImageUrl).orElse(null))
                 .build();
     }
 

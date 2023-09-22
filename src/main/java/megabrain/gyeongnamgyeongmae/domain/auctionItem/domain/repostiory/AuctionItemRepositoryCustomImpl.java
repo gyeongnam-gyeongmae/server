@@ -42,11 +42,11 @@ public class AuctionItemRepositoryCustomImpl implements AuctionItemRepositoryCus
         BooleanBuilder categoryStatus = new BooleanBuilder();
 
         searchAuctionItemSortedRequest.applySearchCategory(categoryStatus, auctionItem);
-        searchAuctionItemSortedRequest.applySearchStatus(statusBuilder, auctionItem);
+//        searchAuctionItemSortedRequest.applySearchStatus(statusBuilder, auctionItem);
         searchAuctionItemSortedRequest.applyKeyWordStatus(keywordStatus, auctionItem);
         searchAuctionItemSortedRequest.applySearchPrice(orderSpecifiers, auctionItem);
-        searchAuctionItemSortedRequest.applySearchLike(orderSpecifiers, auctionItem);
-        searchAuctionItemSortedRequest.applySearchView(orderSpecifiers, auctionItem);
+//        searchAuctionItemSortedRequest.applySearchLike(orderSpecifiers, auctionItem);
+//        searchAuctionItemSortedRequest.applySearchView(orderSpecifiers, auctionItem);
         searchAuctionItemSortedRequest.applySearchTime(orderSpecifiers, auctionItem);
         searchAuctionItemSortedRequest.applySearchClosed(sellBuilder, auctionItem);
 
@@ -56,8 +56,8 @@ public class AuctionItemRepositoryCustomImpl implements AuctionItemRepositoryCus
                 .where(auctionItem.removed.eq(false),
                         categoryStatus,
                         statusBuilder,
-                        sellBuilder,
-                        keywordStatus);
+                        keywordStatus,
+                        sellBuilder);
 
         Long page = searchAuctionItemSortedRequest.getPage();
         int itemsPerPage = 10;
