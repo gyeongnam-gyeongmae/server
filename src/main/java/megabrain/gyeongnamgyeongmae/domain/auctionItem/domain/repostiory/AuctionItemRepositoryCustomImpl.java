@@ -45,10 +45,12 @@ public class AuctionItemRepositoryCustomImpl implements AuctionItemRepositoryCus
 //        searchAuctionItemSortedRequest.applySearchStatus(statusBuilder, auctionItem);
         searchAuctionItemSortedRequest.applyKeyWordStatus(keywordStatus, auctionItem);
         searchAuctionItemSortedRequest.applySearchPrice(orderSpecifiers, auctionItem);
-//        searchAuctionItemSortedRequest.applySearchLike(orderSpecifiers, auctionItem);
+        searchAuctionItemSortedRequest.applySearchLike(orderSpecifiers, auctionItem);
+        searchAuctionItemSortedRequest.applySearchTime(orderSpecifiers, auctionItem);
 //        searchAuctionItemSortedRequest.applySearchView(orderSpecifiers, auctionItem);
         searchAuctionItemSortedRequest.applySearchTime(orderSpecifiers, auctionItem);
         searchAuctionItemSortedRequest.applySearchClosed(sellBuilder, auctionItem);
+
 
         JPAQuery<AuctionItem> query = queryFactory
                 .selectFrom(auctionItem)
@@ -58,6 +60,10 @@ public class AuctionItemRepositoryCustomImpl implements AuctionItemRepositoryCus
                         statusBuilder,
                         keywordStatus,
                         sellBuilder);
+
+        if (searchAuctionItemSortedRequest.getNick_name() != null) {
+            query.where(auctionItem.user.nickname.in(searchAuctionItemSortedRequest.getNick_name()));
+        }
 
         Long page = searchAuctionItemSortedRequest.getPage();
         int itemsPerPage = 10;

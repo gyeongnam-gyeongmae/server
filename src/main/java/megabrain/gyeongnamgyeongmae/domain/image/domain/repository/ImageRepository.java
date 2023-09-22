@@ -8,7 +8,7 @@ import java.util.List;
 
 @Repository
 public interface ImageRepository extends JpaRepository<Image, Long> {
-
+    //TODO: 중복제거 쿼리 제거
     @Query(value = "SELECT DISTINCT * FROM Image where auction_id = :id", nativeQuery = true)
     List<Image> findImageByAuctionItemId(Long id);
 

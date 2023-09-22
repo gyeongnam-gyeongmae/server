@@ -6,7 +6,6 @@ import com.querydsl.core.types.OrderSpecifier;
 import java.util.List;
 
 import lombok.*;
-import megabrain.gyeongnamgyeongmae.domain.auctionItem.domain.entity.AuctionItemStatus;
 import megabrain.gyeongnamgyeongmae.domain.auctionItem.domain.entity.AuctionStatus;
 import megabrain.gyeongnamgyeongmae.domain.auctionItem.domain.entity.QAuctionItem;
 
@@ -22,6 +21,8 @@ public class SearchAuctionItemSortedRequest {
     @NotEmpty
     private String category = null;
 
+    private String nick_name = null;
+
 //    @NotEmpty
 //    private SearchStatus search_status;
 
@@ -31,8 +32,8 @@ public class SearchAuctionItemSortedRequest {
     @NotEmpty
     private Boolean search_time;
 
-//    @NotEmpty
-//    private Boolean like;
+    @NotEmpty
+    private Boolean like;
 
     @NotEmpty
     private Boolean search_price;
@@ -73,13 +74,13 @@ public class SearchAuctionItemSortedRequest {
         }
     }
 
-//    public void applySearchLike(List<OrderSpecifier<?>> order, QAuctionItem item) {
-//        if (this.like) {
-//            order.add(item.like_count.desc());
-//        } else {
-//            order.add(item.like_count.asc());
-//        }
-//    }
+    public void applySearchLike(List<OrderSpecifier<?>> order, QAuctionItem item) {
+        if (this.like) {
+            order.add(item.like_count.desc());
+        } else {
+            order.add(item.like_count.asc());
+        }
+    }
 
 //    public void applySearchView(List<OrderSpecifier<?>> order, QAuctionItem item) {
 //        if (this.view_count) {
@@ -93,7 +94,7 @@ public class SearchAuctionItemSortedRequest {
         if (this.search_time) {
             order.add(item.createdAt.desc());
         } else {
-            order.add(item.createdAt.asc());
+            order.add(item.closedTime.desc());
         }
     }
 
