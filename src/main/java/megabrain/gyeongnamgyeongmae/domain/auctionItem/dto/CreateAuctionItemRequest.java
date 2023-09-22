@@ -23,7 +23,7 @@ public class CreateAuctionItemRequest {
 
   @NotNull private String content;
 
-  @NotNull private AuctionItemStatus status;
+//  @NotNull private AuctionItemStatus status;
 
   @NotNull private LocalDateTime closedTime;
 
@@ -34,7 +34,7 @@ public class CreateAuctionItemRequest {
         .name(this.name)
         .price(this.price)
         .content(this.content)
-        .itemStatus(this.status)
+//        .itemStatus(this.status)
         .closedTime(this.closedTime)
         .build();
   }

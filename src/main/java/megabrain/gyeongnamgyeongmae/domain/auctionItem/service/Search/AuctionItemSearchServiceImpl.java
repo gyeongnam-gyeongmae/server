@@ -12,14 +12,19 @@ import org.springframework.transaction.annotation.Transactional;
 @RequiredArgsConstructor
 public class AuctionItemSearchServiceImpl implements AuctionItemSearchService {
 
-  private final CategoryService categoryService;
-  private final AuctionItemRepository auctionItemRepository;
+    private final CategoryService categoryService;
+    private final AuctionItemRepository auctionItemRepository;
 
-  @Override
-  @Transactional(readOnly = true)
-  public AuctionItemSearchResponse findAuctionItemByRequest(
-      SearchAuctionItemSortedRequest searchAuctionItemSortedRequest) {
-    //    return auctionItemEntityList.map(AuctionItemFirstView::of);
-    return auctionItemRepository.searchAuctionItemPage(searchAuctionItemSortedRequest);
-  }
+    @Override
+    @Transactional(readOnly = true)
+    public AuctionItemSearchResponse findAuctionItemByRequest(
+            SearchAuctionItemSortedRequest searchAuctionItemSortedRequest) {
+        if (searchAuctionItemSortedRequest.getKeyword().equals("")) {
+            searchAuctionItemSortedRequest.setKeyword(null);
+        }
+        if (searchAuctionItemSortedRequest.getCategory().equals("")) {
+            searchAuctionItemSortedRequest.setCategory(null);
+        }
+        return auctionItemRepository.searchAuctionItemPage(searchAuctionItemSortedRequest);
+    }
 }

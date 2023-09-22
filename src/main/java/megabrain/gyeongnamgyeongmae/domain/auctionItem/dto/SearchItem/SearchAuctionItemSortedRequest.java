@@ -13,17 +13,32 @@ import megabrain.gyeongnamgyeongmae.domain.auctionItem.domain.entity.QAuctionIte
 import javax.validation.constraints.NotEmpty;
 
 
-@Getter
-@Setter
+@Data
 public class SearchAuctionItemSortedRequest {
+
+    @NotEmpty
     private String keyword = null;
+
+    @NotEmpty
     private String category = null;
-    private SearchStatus search_status;
+
+//    @NotEmpty
+//    private SearchStatus search_status;
+
+    @NotEmpty
     private Boolean closed;
+
+    @NotEmpty
     private Boolean search_time;
-    private Boolean like;
+
+//    @NotEmpty
+//    private Boolean like;
+
+    @NotEmpty
     private Boolean search_price;
-    private Boolean view_count;
+
+//    @NotEmpty
+//    private Boolean view_count;
 
     @NotEmpty
     private Long page;
@@ -40,15 +55,15 @@ public class SearchAuctionItemSortedRequest {
         }
     }
 
-    public void applySearchStatus(BooleanBuilder status, QAuctionItem item) {
-        if (this.search_status == SearchStatus.NEW) {
-            status.and(item.itemStatus.eq(AuctionItemStatus.NEW));
-        } else if (this.search_status == SearchStatus.USED) {
-            status.and(item.itemStatus.eq(AuctionItemStatus.USED));
-        } else {
-            status.and(item.itemStatus.in(AuctionItemStatus.NEW, AuctionItemStatus.USED));
-        }
-    }
+//    public void applySearchStatus(BooleanBuilder status, QAuctionItem item) {
+//        if (this.search_status == SearchStatus.NEW) {
+//            status.and(item.itemStatus.eq(AuctionItemStatus.NEW));
+//        } else if (this.search_status == SearchStatus.USED) {
+//            status.and(item.itemStatus.eq(AuctionItemStatus.USED));
+//        } else {
+//            status.and(item.itemStatus.in(AuctionItemStatus.NEW, AuctionItemStatus.USED));
+//        }
+//    }
 
     public void applySearchPrice(List<OrderSpecifier<?>> order, QAuctionItem item) {
         if (this.search_price) {
@@ -58,27 +73,27 @@ public class SearchAuctionItemSortedRequest {
         }
     }
 
-    public void applySearchLike(List<OrderSpecifier<?>> order, QAuctionItem item) {
-        if (this.like) {
-            order.add(item.like_count.desc());
-        } else {
-            order.add(item.like_count.asc());
-        }
-    }
+//    public void applySearchLike(List<OrderSpecifier<?>> order, QAuctionItem item) {
+//        if (this.like) {
+//            order.add(item.like_count.desc());
+//        } else {
+//            order.add(item.like_count.asc());
+//        }
+//    }
 
-    public void applySearchView(List<OrderSpecifier<?>> order, QAuctionItem item) {
-        if (this.view_count) {
-            order.add(item.view_count.desc());
-        } else {
-            order.add(item.view_count.asc());
-        }
-    }
+//    public void applySearchView(List<OrderSpecifier<?>> order, QAuctionItem item) {
+//        if (this.view_count) {
+//            order.add(item.view_count.desc());
+//        } else {
+//            order.add(item.view_count.asc());
+//        }
+//    }
 
     public void applySearchTime(List<OrderSpecifier<?>> order, QAuctionItem item) {
         if (this.search_time) {
-            order.add(item.closedTime.desc());
+            order.add(item.createdAt.desc());
         } else {
-            order.add(item.closedTime.asc());
+            order.add(item.createdAt.asc());
         }
     }
 
@@ -91,12 +106,12 @@ public class SearchAuctionItemSortedRequest {
     }
 
     public SearchAuctionItemSortedRequest() {
-        this.search_status = SearchStatus.ALL;
+//        this.search_status = SearchStatus.ALL;
         this.closed = Boolean.FALSE;
         this.search_time = Boolean.FALSE;
-        this.like = Boolean.FALSE;
+//        this.like = Boolean.FALSE;
         this.search_price = Boolean.FALSE;
-        this.view_count = Boolean.FALSE;
+//        this.view_count = Boolean.FALSE;
     }
 
 }
