@@ -1,7 +1,10 @@
 package megabrain.gyeongnamgyeongmae.domain.auctionItem.service.Item;
 
 import java.time.LocalDateTime;
+import java.util.List;
 import java.util.Objects;
+import java.util.stream.Collectors;
+
 import lombok.RequiredArgsConstructor;
 import megabrain.gyeongnamgyeongmae.domain.auctionItem.domain.entity.AuctionItem;
 import megabrain.gyeongnamgyeongmae.domain.auctionItem.domain.entity.AuctionItemLike;
@@ -15,6 +18,8 @@ import megabrain.gyeongnamgyeongmae.domain.auctionItem.dto.UpdateAuctionItemRequ
 import megabrain.gyeongnamgyeongmae.domain.category.domain.entity.Category;
 import megabrain.gyeongnamgyeongmae.domain.category.domain.repository.CategoryRepository;
 import megabrain.gyeongnamgyeongmae.domain.category.service.CategoryService;
+import megabrain.gyeongnamgyeongmae.domain.image.domain.entity.Image;
+import megabrain.gyeongnamgyeongmae.domain.image.domain.repository.ImageRepository;
 import megabrain.gyeongnamgyeongmae.domain.user.domain.entity.User;
 import megabrain.gyeongnamgyeongmae.domain.user.domain.repository.UserRepository;
 import megabrain.gyeongnamgyeongmae.domain.user.service.UserService;
@@ -31,6 +36,7 @@ public class AuctionItemServiceImpl implements AuctionItemService {
   private final UserRepository userRepository;
   private final CategoryRepository categoryRepository;
   private final UserService userService;
+  private final ImageRepository imageRepository;
 
   @Override
   @Transactional
@@ -52,9 +58,19 @@ public class AuctionItemServiceImpl implements AuctionItemService {
   @Transactional
   public AuctionItemResponse findAuctionItemById(Long id) {
     AuctionItem auctionItem = auctionItemRepository.findById(id).orElseThrow(RuntimeException::new);
+    List<Image> images = imageRepository.findImageByAuctionItemId(id);
     auctionItem.checkShowAuctionItem(auctionItem);
     updateAuctionItemViewCount(auctionItem);
-    return AuctionItemResponse.of(auctionItem);
+    AuctionItemResponse auctionItemResponse = AuctionItemResponse.of(auctionItem);
+    if (!images.isEmpty()){
+      List<String> imageUrls = images.stream().map(this::makeImageUrl).collect(Collectors.toList());
+        auctionItemResponse.setImages(imageUrls);
+    }
+    return auctionItemResponse;
+  }
+
+  private String makeImageUrl(Image image){
+    return image.getImageUrl();
   }
 
   @Override

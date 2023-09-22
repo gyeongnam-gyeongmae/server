@@ -2,10 +2,8 @@ package megabrain.gyeongnamgyeongmae.domain.auctionItem.dto;
 
 import java.time.LocalDateTime;
 import java.util.List;
-import lombok.AllArgsConstructor;
-import lombok.Builder;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
+
+import lombok.*;
 import megabrain.gyeongnamgyeongmae.domain.auctionItem.domain.entity.AuctionItem;
 import megabrain.gyeongnamgyeongmae.domain.auctionItem.domain.entity.AuctionItemStatus;
 import megabrain.gyeongnamgyeongmae.domain.auctionItem.domain.entity.AuctionStatus;
@@ -15,6 +13,7 @@ import megabrain.gyeongnamgyeongmae.domain.user.domain.entity.Address;
 @Getter
 @NoArgsConstructor
 @AllArgsConstructor
+@Setter
 public class AuctionItemResponse {
 
   private Long id;
