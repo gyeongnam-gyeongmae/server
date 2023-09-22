@@ -1,6 +1,7 @@
 package megabrain.gyeongnamgyeongmae.domain.auctionItem.service.Item;
 
 import java.time.LocalDateTime;
+import java.util.List;
 import java.util.Objects;
 
 import lombok.RequiredArgsConstructor;
@@ -16,6 +17,8 @@ import megabrain.gyeongnamgyeongmae.domain.auctionItem.dto.UpdateAuctionItemRequ
 import megabrain.gyeongnamgyeongmae.domain.category.domain.entity.Category;
 import megabrain.gyeongnamgyeongmae.domain.category.domain.repository.CategoryRepository;
 import megabrain.gyeongnamgyeongmae.domain.category.service.CategoryService;
+import megabrain.gyeongnamgyeongmae.domain.image.domain.entity.Image;
+import megabrain.gyeongnamgyeongmae.domain.image.domain.repository.ImageRepository;
 import megabrain.gyeongnamgyeongmae.domain.member.domain.entity.Member;
 import megabrain.gyeongnamgyeongmae.domain.member.domain.repository.MemberRepository;
 import megabrain.gyeongnamgyeongmae.domain.member.service.MemberService;
@@ -32,6 +35,7 @@ public class AuctionItemServiceImpl implements AuctionItemService {
     private final CategoryRepository categoryRepository;
     private final MemberService memberService;
     private final AuctionItemLikeRepository auctionItemLikeRepository;
+    private final ImageRepository imageRepository;
 
     @Override
     @Transactional
@@ -44,6 +48,7 @@ public class AuctionItemServiceImpl implements AuctionItemService {
         auctionItem.setMember(memberEntity);
         auctionItem.setCategory(categoryEntity);
         auctionItemRepository.save(auctionItem);
+
     }
 
     @Override
@@ -51,6 +56,8 @@ public class AuctionItemServiceImpl implements AuctionItemService {
     public AuctionItemResponse findAuctionItemById(Long id) {
         AuctionItem auctionItem = auctionItemRepository.findById(id).orElseThrow(RuntimeException::new);
         auctionItem.checkShowAuctionItem(auctionItem);
+        List<Image> images = imageRepository.findImageByAuctionItemId(id);
+
         updateAuctionItemViewCount(auctionItem);
         return AuctionItemResponse.of(auctionItem);
     }

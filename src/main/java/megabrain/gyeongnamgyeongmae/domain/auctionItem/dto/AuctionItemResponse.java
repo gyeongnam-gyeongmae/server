@@ -1,6 +1,7 @@
 package megabrain.gyeongnamgyeongmae.domain.auctionItem.dto;
 
 import java.time.LocalDateTime;
+import java.util.List;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
@@ -36,6 +37,8 @@ public class AuctionItemResponse {
 
   private Long likeCount;
   private Long viewCount;
+
+  private List<String> images;
 
   public static AuctionItemResponse of(AuctionItem auctionItem) {
     return AuctionItemResponse.builder()
