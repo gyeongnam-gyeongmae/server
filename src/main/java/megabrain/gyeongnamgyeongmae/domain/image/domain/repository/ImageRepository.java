@@ -11,4 +11,7 @@ public interface ImageRepository extends JpaRepository<Image, Long> {
 
     @Query(value = "SELECT DISTINCT * FROM Image where auction_id = :id", nativeQuery = true)
     List<Image> findImageByAuctionItemId(Long id);
+
+    @Query(value = "SELECT DISTINCT * FROM Image where auction_id = :id ORDER BY created_at ASC LIMIT 1", nativeQuery = true)
+    Image findFirstImageByAuctionItemId(Long id);
 }

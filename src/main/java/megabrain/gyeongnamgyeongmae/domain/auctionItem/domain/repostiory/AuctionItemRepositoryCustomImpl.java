@@ -17,13 +17,17 @@ import megabrain.gyeongnamgyeongmae.domain.auctionItem.dto.SearchItem.AuctionIte
 import megabrain.gyeongnamgyeongmae.domain.auctionItem.dto.SearchItem.AuctionItemSearchResponse;
 import megabrain.gyeongnamgyeongmae.domain.auctionItem.dto.SearchItem.SearchAuctionItemSortedRequest;
 import megabrain.gyeongnamgyeongmae.domain.category.domain.entity.QCategory;
+import megabrain.gyeongnamgyeongmae.domain.image.domain.repository.ImageRepository;
 
 public class AuctionItemRepositoryCustomImpl implements AuctionItemRepositoryCustom {
 
     public final JPAQueryFactory queryFactory;
 
-    public AuctionItemRepositoryCustomImpl(EntityManager em) {
+    public final ImageRepository imageRepository;
+
+    public AuctionItemRepositoryCustomImpl(EntityManager em, ImageRepository imageRepository) {
         this.queryFactory = new JPAQueryFactory(em);
+        this.imageRepository = imageRepository;
     }
 
     public AuctionItemSearchResponse searchAuctionItemPage(SearchAuctionItemSortedRequest searchAuctionItemSortedRequest) {
@@ -46,12 +50,22 @@ public class AuctionItemRepositoryCustomImpl implements AuctionItemRepositoryCus
         searchAuctionItemSortedRequest.applySearchTime(orderSpecifiers, auctionItem);
         searchAuctionItemSortedRequest.applySearchClosed(sellBuilder, auctionItem);
 
-        JPAQuery<AuctionItem> query = queryFactory.selectFrom(auctionItem).innerJoin(auctionItem.category, category).where(auctionItem.removed.eq(false), categoryStatus, statusBuilder, sellBuilder, keywordStatus);
+        JPAQuery<AuctionItem> query = queryFactory
+                .selectFrom(auctionItem)
+                .innerJoin(auctionItem.category, category)
+                .where(auctionItem.removed.eq(false),
+                        categoryStatus,
+                        statusBuilder,
+                        sellBuilder,
+                        keywordStatus);
 
         Long page = searchAuctionItemSortedRequest.getPage();
         int itemsPerPage = 10;
 
-        List<AuctionItem> results = query.orderBy(orderSpecifiers.toArray(new OrderSpecifier[0])).offset((page - 1) * itemsPerPage).limit(itemsPerPage).fetch();
+        List<AuctionItem> results = query
+                .orderBy(orderSpecifiers.toArray(new OrderSpecifier[0])).offset((page - 1) * itemsPerPage)
+                .limit(itemsPerPage)
+                .fetch();
 
         AuctionItemPaginationDto paginationInfo = new AuctionItemPaginationDto();
         paginationInfo.setCurrentPage(page);
@@ -60,8 +74,9 @@ public class AuctionItemRepositoryCustomImpl implements AuctionItemRepositoryCus
         paginationInfo.setTotalItems(query.fetchCount());
         paginationInfo.setTotalPages((query.fetchCount() + itemsPerPage - 1) / itemsPerPage);
 
-
-        List<AuctionItemFirstView> auctionItemFirstViews = results.stream().map(AuctionItemFirstView::of).collect(Collectors.toList());
+        List<AuctionItemFirstView> auctionItemFirstViews = results.stream()
+                .map(result -> AuctionItemFirstView.of(result, imageRepository.findFirstImageByAuctionItemId(result.getId())))
+                .collect(Collectors.toList());
 
         AuctionItemSearchResponse auctionItemSearchResponse = new AuctionItemSearchResponse();
         auctionItemSearchResponse.setAuctionItemPaginationDto(paginationInfo);

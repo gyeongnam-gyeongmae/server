@@ -6,6 +6,8 @@ import lombok.NoArgsConstructor;
 import lombok.Setter;
 import megabrain.gyeongnamgyeongmae.domain.auctionItem.domain.entity.AuctionItem;
 import megabrain.gyeongnamgyeongmae.domain.auctionItem.domain.entity.Comment;
+import megabrain.gyeongnamgyeongmae.global.BaseTimeEntity;
+
 import javax.persistence.*;
 
 @NoArgsConstructor
@@ -13,7 +15,7 @@ import javax.persistence.*;
 @Table(name = "Image")
 @Getter
 @Setter
-public class Image {
+public class Image extends BaseTimeEntity {
 
     @Id
     @Column(name = "image_url")

@@ -8,6 +8,7 @@ import lombok.NoArgsConstructor;
 import megabrain.gyeongnamgyeongmae.domain.auctionItem.domain.entity.AuctionItem;
 import megabrain.gyeongnamgyeongmae.domain.auctionItem.domain.entity.AuctionItemStatus;
 import megabrain.gyeongnamgyeongmae.domain.auctionItem.domain.entity.AuctionStatus;
+import megabrain.gyeongnamgyeongmae.domain.image.domain.entity.Image;
 import megabrain.gyeongnamgyeongmae.domain.user.domain.entity.Address;
 
 @Builder
@@ -17,6 +18,7 @@ import megabrain.gyeongnamgyeongmae.domain.user.domain.entity.Address;
 public class AuctionItemFirstView {
 
     private Long id;
+    private String nickname;
 
     private String name;
 
@@ -36,10 +38,13 @@ public class AuctionItemFirstView {
     // 나중에 실시간 가격 추가시 수정
     private Long now_price;
 
+    private String image_url;
+
     @Builder
-    public static AuctionItemFirstView of(AuctionItem auctionItem) {
+    public static AuctionItemFirstView of(AuctionItem auctionItem, Image image) {
         return AuctionItemFirstView.builder()
                 .id(auctionItem.getId())
+                .nickname(auctionItem.getUser().getNickname())
                 .name(auctionItem.getName())
                 .address(auctionItem.getUser().getAddress())
                 .like_count(auctionItem.getLike_count())
@@ -49,6 +54,8 @@ public class AuctionItemFirstView {
                 .auctionItemStatus(auctionItem.getItemStatus())
                 .status(auctionItem.getStatus())
                 .now_price(20000L)
+                .image_url(image.getImageUrl())
                 .build();
     }
+
 }
