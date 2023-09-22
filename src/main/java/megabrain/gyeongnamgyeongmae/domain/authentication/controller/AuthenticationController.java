@@ -5,15 +5,15 @@ import io.swagger.v3.oas.annotations.Parameter;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import javax.validation.Valid;
 import lombok.RequiredArgsConstructor;
-import megabrain.gyeongnamgyeongmae.domain.authentication.domain.entity.OAuthUserProfile;
-import megabrain.gyeongnamgyeongmae.domain.authentication.dto.MemberRegisterRequest;
+import megabrain.gyeongnamgyeongmae.domain.authentication.domain.entity.OAuthVendorName;
 import megabrain.gyeongnamgyeongmae.domain.authentication.dto.PhoneAuthenticationRequest;
+import megabrain.gyeongnamgyeongmae.domain.authentication.dto.UserRegisterRequest;
 import megabrain.gyeongnamgyeongmae.domain.authentication.service.AuthenticationServiceInterface;
-import megabrain.gyeongnamgyeongmae.domain.member.domain.entity.Member;
-import megabrain.gyeongnamgyeongmae.domain.member.exception.DuplicateAuthVendorMemberId;
+import megabrain.gyeongnamgyeongmae.domain.user.domain.entity.User;
+import megabrain.gyeongnamgyeongmae.domain.user.service.UserService;
+import megabrain.gyeongnamgyeongmae.global.anotation.LoginRequired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.web.bind.annotation.*;
 
 @RestController
@@ -22,38 +22,53 @@ import org.springframework.web.bind.annotation.*;
 @RequestMapping("api/authentications")
 public class AuthenticationController {
   private final AuthenticationServiceInterface authenticationService;
-  private final PasswordEncoder passwordEncoder;
+  private final UserService userService;
 
   @PostMapping("register/{auth-vendor}")
-  @Operation(summary = "회원가입 요청", description = "회원의 회원가입을 요청합니다.")
-  public ResponseEntity<HttpStatus> memberRegisterWithOAuthVendor(
+  @Operation(summary = "회원가입/로그인 요청", description = "회원의 OAuth 회원가입/로그인을 요청합니다.")
+  @ResponseStatus(value = HttpStatus.CREATED, reason = "회원가입/로그인 성공, 세션 키를 쿠키에 담아 반환합니다.")
+  public ResponseEntity<HttpStatus> userRegisterWithOAuthVendor(
       @Parameter(
               name = "auth-vendor",
               example = "KAKAO",
               required = true,
               description = "지원중인 OAuth2 제공사(KAKAO)")
           @PathVariable("auth-vendor")
-          String authVendorName,
-      @RequestBody @Valid MemberRegisterRequest memberRegisterRequest) {
+          OAuthVendorName authVendorName,
+      @RequestBody @Valid UserRegisterRequest userRegisterRequest) {
 
-    OAuthUserProfile oAuthUserProfile =
-        authenticationService.oauthLoginStrategy(
-            authVendorName, memberRegisterRequest.getVendorAccessToken());
+    User user =
+        this.authenticationService
+            .oauthLoginStrategy(authVendorName, userRegisterRequest.getVendorAccessToken())
+            .toUserEntity();
 
-    boolean isDuplicated =
-        authenticationService.isDuplicateAuthVendorMemberId(
-            oAuthUserProfile.getAuthVendorMemberId());
-    if (isDuplicated) throw new DuplicateAuthVendorMemberId("이미 회원가입되어있는 회원입니다.");
+    Long userId = this.userService.getIdByAuthVendorUserId(user.getAuthVendorUserId());
 
-    int authVendorId = authenticationService.GetOAuthVendorIdByName(authVendorName);
-
-    Member member =
-        MemberRegisterRequest.toEntity(
-            memberRegisterRequest, passwordEncoder, oAuthUserProfile, authVendorId);
-
-    authenticationService.saveMember(member);
+    if (userId == null) {
+      this.userService.registerUser(user);
+      userId = user.getId();
+    }
+    this.authenticationService.login(userId);
 
     return ResponseEntity.status(HttpStatus.CREATED).build();
+  }
+
+  @LoginRequired
+  @PostMapping("logout")
+  @Operation(summary = "로그아웃 요청", description = "로그아웃을 요청합니다.")
+  public ResponseEntity<HttpStatus> logout() {
+    this.authenticationService.logout();
+    return ResponseEntity.status(HttpStatus.OK).build();
+  }
+
+  @LoginRequired
+  @GetMapping("profile")
+  @Operation(
+      summary = "프로필 조회 요청",
+      description = "쿠키에 존재하는 세션 키를 사용하여 현재 로그인되어있는 회원의 프로필 정보를 조회합니다.")
+  public ResponseEntity<User> getMyProfile() {
+    User logedInUser = this.authenticationService.getLoginUser();
+    return new ResponseEntity<>(logedInUser, HttpStatus.OK);
   }
 
   @GetMapping("phone")

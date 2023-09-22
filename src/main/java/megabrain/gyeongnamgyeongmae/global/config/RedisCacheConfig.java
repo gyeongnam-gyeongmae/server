@@ -1,15 +1,12 @@
 package megabrain.gyeongnamgyeongmae.global.config;
 
-import org.springframework.cache.annotation.EnableCaching;
-import org.springframework.context.annotation.Configuration;
-
-@Configuration
-@EnableCaching
-public class RedisCacheConfig {
-
-  //  @Value("${spring.redis.cache.host}")
-  //  private String host;
-  //
-  //  @Value("${spring.redis.cache.port}")
-  //  private int port;
-}
+// @Configuration
+// @EnableCaching
+// public class RedisCacheConfig {
+//
+//  @Value("${spring.redis.host}")
+//  private String host;
+//
+//  @Value("${spring.redis.port}")
+//  private int port;
+// }
