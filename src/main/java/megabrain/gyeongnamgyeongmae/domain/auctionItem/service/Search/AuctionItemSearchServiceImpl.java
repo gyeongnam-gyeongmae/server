@@ -25,6 +25,9 @@ public class AuctionItemSearchServiceImpl implements AuctionItemSearchService {
         if (searchAuctionItemSortedRequest.getCategory().equals("")) {
             searchAuctionItemSortedRequest.setCategory(null);
         }
+        if(searchAuctionItemSortedRequest.getNick_name().equals("")){
+            searchAuctionItemSortedRequest.setNick_name(null);
+        }
         return auctionItemRepository.searchAuctionItemPage(searchAuctionItemSortedRequest);
     }
 }
