@@ -16,36 +16,39 @@ import megabrain.gyeongnamgyeongmae.domain.user.domain.entity.Address;
 @AllArgsConstructor
 public class AuctionItemFirstView {
 
-  private Long id;
+    private Long id;
 
-  private String name;
+    private String name;
 
-  private LocalDateTime closedTime;
+    private LocalDateTime closedTime;
 
-  private AuctionItemStatus auctionItemStatus;
+    private AuctionItemStatus auctionItemStatus;
 
-  private AuctionStatus status;
+    private AuctionStatus status;
 
-  private Address address;
+    private Address address;
 
-  private Long like_count;
+    private Long like_count;
 
-  private Long view_count;
+    private Long view_count;
 
-  private Long price;
+    private Long price;
+    // 나중에 실시간 가격 추가시 수정
+    private Long now_price;
 
-  @Builder
-  public static AuctionItemFirstView of(AuctionItem auctionItem) {
-    return AuctionItemFirstView.builder()
-        .id(auctionItem.getId())
-        .name(auctionItem.getName())
-        .address(auctionItem.getUser().getAddress())
-        .like_count(auctionItem.getLike_count())
-        .view_count(auctionItem.getView_count())
-        .price(auctionItem.getPrice())
-        .closedTime(auctionItem.getClosedTime())
-        .auctionItemStatus(auctionItem.getItemStatus())
-        .status(auctionItem.getStatus())
-        .build();
-  }
+    @Builder
+    public static AuctionItemFirstView of(AuctionItem auctionItem) {
+        return AuctionItemFirstView.builder()
+                .id(auctionItem.getId())
+                .name(auctionItem.getName())
+                .address(auctionItem.getUser().getAddress())
+                .like_count(auctionItem.getLike_count())
+                .view_count(auctionItem.getView_count())
+                .price(auctionItem.getPrice())
+                .closedTime(auctionItem.getClosedTime())
+                .auctionItemStatus(auctionItem.getItemStatus())
+                .status(auctionItem.getStatus())
+                .now_price(20000L)
+                .build();
+    }
 }

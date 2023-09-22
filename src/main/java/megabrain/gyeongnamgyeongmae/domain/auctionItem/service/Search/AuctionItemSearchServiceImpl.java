@@ -19,7 +19,6 @@ public class AuctionItemSearchServiceImpl implements AuctionItemSearchService {
   @Transactional(readOnly = true)
   public AuctionItemSearchResponse findAuctionItemByRequest(
       SearchAuctionItemSortedRequest searchAuctionItemSortedRequest) {
-    //    return auctionItemEntityList.map(AuctionItemFirstView::of);
     return auctionItemRepository.searchAuctionItemPage(searchAuctionItemSortedRequest);
   }
 }

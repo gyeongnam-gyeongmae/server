@@ -13,8 +13,7 @@ import megabrain.gyeongnamgyeongmae.domain.auctionItem.domain.entity.QAuctionIte
 import javax.validation.constraints.NotEmpty;
 
 
-@Getter
-@Setter
+@Data
 public class SearchAuctionItemSortedRequest {
     private String keyword = null;
     private String category = null;
