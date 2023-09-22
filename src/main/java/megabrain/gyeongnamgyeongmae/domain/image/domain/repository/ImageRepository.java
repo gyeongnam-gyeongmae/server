@@ -9,6 +9,6 @@ import java.util.List;
 @Repository
 public interface ImageRepository extends JpaRepository<Image, Long> {
 
-    @Query(value = "select image_url from image where auction_id = :id", nativeQuery = true)
+    @Query(value = "SELECT DISTINCT * FROM Image where auction_id = :id", nativeQuery = true)
     List<Image> findImageByAuctionItemId(Long id);
 }
