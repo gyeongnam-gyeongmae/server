@@ -4,7 +4,10 @@ import java.util.Objects;
 import megabrain.gyeongnamgyeongmae.domain.authentication.exception.OAuthLoginException;
 import megabrain.gyeongnamgyeongmae.domain.authentication.exception.OAuthVendorNotFoundException;
 import megabrain.gyeongnamgyeongmae.domain.authentication.exception.UnAuthenticatedException;
+import megabrain.gyeongnamgyeongmae.domain.chat.exception.ChatRoomNotFoundException;
+import megabrain.gyeongnamgyeongmae.domain.chat.exception.UserNotParticipantInChatRoomException;
 import megabrain.gyeongnamgyeongmae.domain.user.exception.DuplicateAuthVendorUserId;
+import megabrain.gyeongnamgyeongmae.domain.user.exception.UserNotFoundException;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.MethodArgumentNotValidException;
@@ -25,6 +28,11 @@ public class ExceptionAdvice {
     return new ResponseEntity<>(error.getMessage(), HttpStatus.NOT_FOUND);
   }
 
+  @ExceptionHandler(UserNotFoundException.class)
+  public ResponseEntity<String> userNotFoundException(UserNotFoundException error) {
+    return new ResponseEntity<>(error.getMessage(), HttpStatus.NOT_FOUND);
+  }
+
   @ExceptionHandler(DuplicateAuthVendorUserId.class)
   public ResponseEntity<String> duplicateAuthVendorUserId(DuplicateAuthVendorUserId error) {
     return new ResponseEntity<>(error.getMessage(), HttpStatus.CONFLICT);
@@ -38,5 +46,16 @@ public class ExceptionAdvice {
   @ExceptionHandler(OAuthLoginException.class)
   public ResponseEntity<String> oAuthLoginException(OAuthLoginException error) {
     return new ResponseEntity<>(error.getMessage(), HttpStatus.BAD_REQUEST);
+  }
+
+  @ExceptionHandler(ChatRoomNotFoundException.class)
+  public ResponseEntity<String> chatRoomNotFoundException(ChatRoomNotFoundException error) {
+    return new ResponseEntity<>(error.getMessage(), HttpStatus.NOT_FOUND);
+  }
+
+  @ExceptionHandler(UserNotParticipantInChatRoomException.class)
+  public ResponseEntity<String> userNotParticipantInChatRoomException(
+      UserNotParticipantInChatRoomException error) {
+    return new ResponseEntity<>(error.getMessage(), HttpStatus.FORBIDDEN);
   }
 }

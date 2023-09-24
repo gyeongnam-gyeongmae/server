@@ -46,6 +46,7 @@ configurations {
 
 java {
     sourceCompatibility = javaVersion
+    targetCompatibility = javaVersion
     withSourcesJar()
 }
 
@@ -67,6 +68,10 @@ dependencies {
     implementation("org.springframework.boot:spring-boot-starter-web")
     implementation("org.springframework.boot:spring-boot-starter-security")
     implementation("org.springframework.boot:spring-boot-starter-validation")
+    implementation("org.springframework.boot:spring-boot-starter-data-redis")
+    implementation("org.springframework.boot:spring-boot-configuration-processor")
+    implementation("org.springframework.boot:spring-boot-starter-websocket")
+    implementation("org.webjars:stomp-websocket:2.3.3-1")
     implementation("org.springframework.session:spring-session-data-redis")
     implementation("org.springframework.restdocs:spring-restdocs-mockmvc")
     implementation("com.fasterxml.jackson.datatype:jackson-datatype-jsr310")
@@ -74,7 +79,7 @@ dependencies {
     implementation("org.springdoc:springdoc-openapi-ui:1.6.9")
     implementation("org.projectlombok:lombok")
     implementation("com.googlecode.json-simple:json-simple:1.1.1")
-    implementation("org.json:json:20200518")
+    implementation("org.json:json:20230227")
 //    implementation("org.springframework.session:spring-session-core")
 //    implementation("org.springframework.session:spring-session-jdbc")
     compile("io.lettuce:lettuce-core:6.2.6.RELEASE")
