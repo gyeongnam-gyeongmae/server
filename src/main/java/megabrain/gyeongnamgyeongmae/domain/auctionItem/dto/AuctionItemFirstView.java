@@ -20,7 +20,7 @@ import megabrain.gyeongnamgyeongmae.domain.user.domain.entity.Address;
 public class AuctionItemFirstView {
 
     private Long id;
-    private String nickname;
+//    private String nickname;
 
     private String name;
 
@@ -42,17 +42,20 @@ public class AuctionItemFirstView {
 
     private String image_url;
 
+    private Long comment_count;
+
     @Builder
     public static AuctionItemFirstView of(AuctionItem auctionItem, Image image) {
         return AuctionItemFirstView.builder()
                 .id(auctionItem.getId())
-                .nickname(auctionItem.getUser().getNickname())
+//                .nickname(auctionItem.getUser().getNickname())
                 .name(auctionItem.getName())
                 .address(auctionItem.getUser().getAddress())
                 .like_count(auctionItem.getLike_count())
                 .view_count(auctionItem.getView_count())
                 .price(auctionItem.getPrice())
                 .closedTime(auctionItem.getClosedTime())
+                .comment_count(auctionItem.getComment_count())
 //                .auctionItemStatus(auctionItem.getItemStatus())
                 .status(auctionItem.getStatus())
                 .now_price(20000L)

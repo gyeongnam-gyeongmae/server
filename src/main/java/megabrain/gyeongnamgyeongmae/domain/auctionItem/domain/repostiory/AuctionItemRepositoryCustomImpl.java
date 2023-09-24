@@ -61,9 +61,9 @@ public class AuctionItemRepositoryCustomImpl implements AuctionItemRepositoryCus
                         keywordStatus,
                         sellBuilder);
 
-        if (searchAuctionItemSortedRequest.getNick_name() != null) {
-            query.where(auctionItem.user.nickname.in(searchAuctionItemSortedRequest.getNick_name()));
-        }
+//        if (searchAuctionItemSortedRequest.getNick_name() != null) {
+//            query.where(auctionItem.user.nickname.in(searchAuctionItemSortedRequest.getNick_name()));
+//        }
 
         Long page = searchAuctionItemSortedRequest.getPage();
         int itemsPerPage = 10;
