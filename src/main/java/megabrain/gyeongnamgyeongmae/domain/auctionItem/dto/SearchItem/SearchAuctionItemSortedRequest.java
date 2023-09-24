@@ -68,9 +68,9 @@ public class SearchAuctionItemSortedRequest {
 
     public void applySearchPrice(List<OrderSpecifier<?>> order, QAuctionItem item) {
         if (this.search_price) {
-            order.add(item.price.desc());
-        } else {
             order.add(item.price.asc());
+        } else {
+            order.add(item.price.desc());
         }
     }
 
