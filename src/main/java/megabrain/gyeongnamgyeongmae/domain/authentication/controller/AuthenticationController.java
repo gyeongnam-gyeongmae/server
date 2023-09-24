@@ -2,6 +2,8 @@ package megabrain.gyeongnamgyeongmae.domain.authentication.controller;
 
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;
+import io.swagger.v3.oas.annotations.responses.ApiResponse;
+import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import javax.validation.Valid;
 import lombok.RequiredArgsConstructor;
@@ -66,6 +68,11 @@ public class AuthenticationController {
   @Operation(
       summary = "프로필 조회 요청",
       description = "쿠키에 존재하는 세션 키를 사용하여 현재 로그인되어있는 회원의 프로필 정보를 조회합니다.")
+  @ApiResponses(
+      value = {
+        @ApiResponse(responseCode = "200", description = "회원 정보 반환"),
+        @ApiResponse(responseCode = "401", description = "세션 로그인 필요"),
+      })
   public ResponseEntity<User> getMyProfile() {
     User logedInUser = this.authenticationService.getLoginUser();
     return new ResponseEntity<>(logedInUser, HttpStatus.OK);

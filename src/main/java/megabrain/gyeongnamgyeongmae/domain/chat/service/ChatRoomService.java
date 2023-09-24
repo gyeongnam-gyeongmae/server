@@ -4,8 +4,10 @@ import java.util.List;
 import lombok.RequiredArgsConstructor;
 import megabrain.gyeongnamgyeongmae.domain.auctionItem.domain.entity.AuctionItem;
 import megabrain.gyeongnamgyeongmae.domain.auctionItem.domain.repostiory.AuctionItemRepository;
+import megabrain.gyeongnamgyeongmae.domain.auctionItem.exception.AuctionNotFoundException;
 import megabrain.gyeongnamgyeongmae.domain.chat.domain.entity.ChatRoom;
 import megabrain.gyeongnamgyeongmae.domain.chat.domain.repository.ChatRoomRepository;
+import megabrain.gyeongnamgyeongmae.domain.chat.exception.ChatRoomNotFoundException;
 import megabrain.gyeongnamgyeongmae.domain.user.domain.entity.User;
 import megabrain.gyeongnamgyeongmae.domain.user.domain.repository.UserRepository;
 import megabrain.gyeongnamgyeongmae.domain.user.exception.UserNotFoundException;
@@ -24,7 +26,7 @@ public class ChatRoomService implements ChatRoomServiceInterface {
   @Transactional
   public void createChatRoom(Long auctionId, Long sellerId, Long buyerId) {
     AuctionItem auction =
-        auctionItemRepository.findById(auctionId).orElseThrow(RuntimeException::new);
+        auctionItemRepository.findById(auctionId).orElseThrow(AuctionNotFoundException::new);
     User seller = userRepository.findById(sellerId).orElseThrow(UserNotFoundException::new);
     User buyer = userRepository.findById(buyerId).orElseThrow(UserNotFoundException::new);
 
@@ -33,7 +35,7 @@ public class ChatRoomService implements ChatRoomServiceInterface {
 
   @Override
   public List<ChatRoom> getJoinChatRoomByUserId(Long userId) {
-    return this.chatRoomRepository.getChatRoomsByParticipantId(userId);
+    return chatRoomRepository.getChatRoomsByParticipantId(userId);
   }
 
   @Override
@@ -43,7 +45,7 @@ public class ChatRoomService implements ChatRoomServiceInterface {
 
   @Override
   public ChatRoom getChatRoomById(Long id) {
-    return null;
+    return chatRoomRepository.findById(id).orElseThrow(ChatRoomNotFoundException::new);
   }
 
   @Override
