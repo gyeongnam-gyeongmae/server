@@ -7,7 +7,6 @@ import javax.validation.constraints.NotEmpty;
 import lombok.RequiredArgsConstructor;
 import megabrain.gyeongnamgyeongmae.domain.authentication.service.AuthenticationServiceInterface;
 import megabrain.gyeongnamgyeongmae.domain.user.dto.UserAddressCreateRequest;
-import megabrain.gyeongnamgyeongmae.domain.user.exception.InvalidateCoordinate;
 import megabrain.gyeongnamgyeongmae.domain.user.service.UserService;
 import megabrain.gyeongnamgyeongmae.global.anotation.LoginRequired;
 import org.springframework.http.HttpStatus;
@@ -37,12 +36,6 @@ public class UserController {
       })
   public ResponseEntity<HttpStatus> setAddress(
       @RequestBody @NotEmpty UserAddressCreateRequest userAddressCreateRequest) {
-    if (userAddressCreateRequest.getLatitude() < 0
-        || userAddressCreateRequest.getLatitude() > 90
-        || userAddressCreateRequest.getLongitude() < 0
-        || userAddressCreateRequest.getLongitude() > 180) {
-      throw new InvalidateCoordinate("좌표가 올바르지 않습니다.");
-    }
 
     userService.setAddress(
         authenticationService.getLoginUser().getId(),
