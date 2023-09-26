@@ -6,6 +6,7 @@ import lombok.NoArgsConstructor;
 import megabrain.gyeongnamgyeongmae.global.BaseTimeEntity;
 
 @Getter
+@Setter
 @Entity
 @Table(name = "users")
 @NoArgsConstructor(access = AccessLevel.PROTECTED)

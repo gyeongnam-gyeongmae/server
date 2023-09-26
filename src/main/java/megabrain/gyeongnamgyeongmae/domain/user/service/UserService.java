@@ -9,4 +9,6 @@ public interface UserService {
   User findUserById(Long Id);
 
   Long getIdByAuthVendorUserId(String authVendorUserId);
+
+  void setAddress(Long userId, Float latitude, Float longitude);
 }

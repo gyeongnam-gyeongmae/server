@@ -1,2 +1,4 @@
 kakao:
   profile-uri: https://kapi.kakao.com/v2/user/me
+  transcoord-uri: https://dapi.kakao.com/v2/local/geo/coord2address.json
+  rest-api-key: ${KAKAO_REST_API_KEY}
