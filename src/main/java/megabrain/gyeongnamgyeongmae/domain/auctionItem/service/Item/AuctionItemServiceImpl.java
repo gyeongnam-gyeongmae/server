@@ -4,7 +4,6 @@ import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Objects;
 import java.util.stream.Collectors;
-
 import lombok.RequiredArgsConstructor;
 import megabrain.gyeongnamgyeongmae.domain.auctionItem.domain.entity.AuctionItem;
 import megabrain.gyeongnamgyeongmae.domain.auctionItem.domain.entity.AuctionItemLike;
@@ -15,6 +14,7 @@ import megabrain.gyeongnamgyeongmae.domain.auctionItem.dto.AuctionItemLikeReques
 import megabrain.gyeongnamgyeongmae.domain.auctionItem.dto.AuctionItemResponse;
 import megabrain.gyeongnamgyeongmae.domain.auctionItem.dto.CreateAuctionItemRequest;
 import megabrain.gyeongnamgyeongmae.domain.auctionItem.dto.UpdateAuctionItemRequest;
+import megabrain.gyeongnamgyeongmae.domain.auctionItem.exception.AuctionNotFoundException;
 import megabrain.gyeongnamgyeongmae.domain.category.domain.entity.Category;
 import megabrain.gyeongnamgyeongmae.domain.category.domain.repository.CategoryRepository;
 import megabrain.gyeongnamgyeongmae.domain.category.service.CategoryService;
@@ -22,6 +22,7 @@ import megabrain.gyeongnamgyeongmae.domain.image.domain.entity.Image;
 import megabrain.gyeongnamgyeongmae.domain.image.domain.repository.ImageRepository;
 import megabrain.gyeongnamgyeongmae.domain.user.domain.entity.User;
 import megabrain.gyeongnamgyeongmae.domain.user.domain.repository.UserRepository;
+import megabrain.gyeongnamgyeongmae.domain.user.exception.UserNotFoundException;
 import megabrain.gyeongnamgyeongmae.domain.user.service.UserService;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -45,7 +46,7 @@ public class AuctionItemServiceImpl implements AuctionItemService {
     User userEntity =
         userRepository
             .findById(createAuctionItemRequest.getUserId())
-            .orElseThrow(RuntimeException::new);
+            .orElseThrow(UserNotFoundException::new);
     Category categoryEntity =
         categoryService.findCategoryByName(createAuctionItemRequest.getCategory());
     AuctionItem auctionItem = createAuctionItemRequest.toEntity();
@@ -57,19 +58,20 @@ public class AuctionItemServiceImpl implements AuctionItemService {
   @Override
   @Transactional
   public AuctionItemResponse findAuctionItemById(Long id) {
-    AuctionItem auctionItem = auctionItemRepository.findById(id).orElseThrow(RuntimeException::new);
+    AuctionItem auctionItem =
+        auctionItemRepository.findById(id).orElseThrow(AuctionNotFoundException::new);
     List<Image> images = imageRepository.findImageByAuctionItemId(id);
     auctionItem.checkShowAuctionItem(auctionItem);
     updateAuctionItemViewCount(auctionItem);
     AuctionItemResponse auctionItemResponse = AuctionItemResponse.of(auctionItem);
-    if (!images.isEmpty()){
+    if (!images.isEmpty()) {
       List<String> imageUrls = images.stream().map(this::makeImageUrl).collect(Collectors.toList());
-        auctionItemResponse.setImages(imageUrls);
+      auctionItemResponse.setImages(imageUrls);
     }
     return auctionItemResponse;
   }
 
-  private String makeImageUrl(Image image){
+  private String makeImageUrl(Image image) {
     return image.getImageUrl();
   }
 
@@ -85,6 +87,7 @@ public class AuctionItemServiceImpl implements AuctionItemService {
     checkClosedTime(upDateAuctionItemRequest.getClosedTime());
     Category categoryEntity =
         categoryService.findCategoryByName(upDateAuctionItemRequest.getCategory());
+    // TODO: 유저 정보를 가져오는 부분을 리팩토링 해야함
     AuctionItem auctionItem = auctionItemRepository.findById(id).orElseThrow(RuntimeException::new);
 
     if (!(Objects.equals(auctionItem.getUser().getId(), upDateAuctionItemRequest.getUserId()))) {

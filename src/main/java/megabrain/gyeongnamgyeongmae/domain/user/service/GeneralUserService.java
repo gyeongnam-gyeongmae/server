@@ -3,6 +3,7 @@ package megabrain.gyeongnamgyeongmae.domain.user.service;
 import lombok.RequiredArgsConstructor;
 import megabrain.gyeongnamgyeongmae.domain.user.domain.entity.User;
 import megabrain.gyeongnamgyeongmae.domain.user.domain.repository.UserRepository;
+import megabrain.gyeongnamgyeongmae.domain.user.exception.UserNotFoundException;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -20,7 +21,7 @@ public class GeneralUserService implements UserService {
 
   @Override
   public User findUserById(Long Id) {
-    return userRepository.findById(Id).orElseThrow(RuntimeException::new);
+    return userRepository.findById(Id).orElseThrow(UserNotFoundException::new);
   }
 
   @Override

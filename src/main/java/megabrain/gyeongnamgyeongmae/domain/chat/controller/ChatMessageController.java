@@ -18,10 +18,12 @@ import megabrain.gyeongnamgyeongmae.global.anotation.LoginRequired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 @RequiredArgsConstructor
-@RestController("/chat-rooms")
+@RestController
+@RequestMapping("/chat-rooms")
 @Tag(name = "채팅 메시지 API", description = "채팅 메시지 API")
 public class ChatMessageController {
   private final AuthenticationServiceInterface authenticationService;

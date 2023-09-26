@@ -7,6 +7,6 @@ import lombok.Setter;
 @Getter
 @Setter
 public class ChatParticipantId implements Serializable {
-  private Long chatRoomId;
-  private Long userId;
+  private Long chatRoom;
+  private Long user;
 }

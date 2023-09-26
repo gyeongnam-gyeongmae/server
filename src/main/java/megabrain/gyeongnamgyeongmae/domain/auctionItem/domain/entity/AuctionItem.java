@@ -20,7 +20,7 @@ public class AuctionItem extends BaseTimeEntity {
   @Column(name = "auction_id")
   private Long id;
 
-  @Column(name = "removed")
+  @Column(name = "removed", nullable = false, columnDefinition = "boolean default false")
   private boolean removed = false;
 
   @ManyToOne(fetch = FetchType.LAZY)
