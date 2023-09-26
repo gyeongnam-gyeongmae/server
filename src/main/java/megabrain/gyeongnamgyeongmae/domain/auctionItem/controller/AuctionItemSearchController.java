@@ -20,16 +20,16 @@ import org.springframework.web.bind.annotation.RestController;
 @RequiredArgsConstructor
 public class AuctionItemSearchController {
 
-    private final AuctionItemService auctionItemService;
-    private final AuctionItemRepository AuctionItemRepository;
-    private final AuctionItemSearchService auctionItemSearchService;
+  private final AuctionItemService auctionItemService;
+  private final AuctionItemRepository AuctionItemRepository;
+  private final AuctionItemSearchService auctionItemSearchService;
 
-    @Operation(summary = "Search AuctionItem", description = "경매품 검색하기")
-    @GetMapping("")
-    public ResponseEntity<AuctionItemSearchResponse> findItemCategory(
-            @ModelAttribute SearchAuctionItemSortedRequest searchAuctionItemSortedRequest) {
-        AuctionItemSearchResponse result =
-                this.auctionItemSearchService.findAuctionItemByRequest(searchAuctionItemSortedRequest);
-        return ResponseEntity.ok(result);
-    }
+  @Operation(summary = "Search AuctionItem", description = "경매품 검색하기")
+  @GetMapping("")
+  public ResponseEntity<AuctionItemSearchResponse> findItemCategory(
+      @ModelAttribute SearchAuctionItemSortedRequest searchAuctionItemSortedRequest) {
+    AuctionItemSearchResponse result =
+        this.auctionItemSearchService.findAuctionItemByRequest(searchAuctionItemSortedRequest);
+    return ResponseEntity.ok(result);
+  }
 }

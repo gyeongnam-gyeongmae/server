@@ -1,5 +1,6 @@
 package megabrain.gyeongnamgyeongmae.domain.user.service;
 
+import java.util.List;
 import lombok.RequiredArgsConstructor;
 import megabrain.gyeongnamgyeongmae.domain.user.domain.entity.User;
 import megabrain.gyeongnamgyeongmae.domain.user.domain.repository.UserRepository;
@@ -26,5 +27,10 @@ public class GeneralUserService implements UserService {
   @Override
   public Long getIdByAuthVendorUserId(String authVendorUserId) {
     return this.userRepository.getIdByAuthVendorUserId(authVendorUserId);
+  }
+
+  @Override
+  public List<User> findAllUser() {
+    return userRepository.findAll();
   }
 }
