@@ -17,7 +17,7 @@ public class UserController {
 
   private final UserService userService;
 
-  @Operation(summary = "Post AuctionItem", description = "경매품 올리기")
+  @Operation(summary = "유저 전체조회", description = "유저 모두를 조회합니다")
   @GetMapping("")
   public ResponseEntity<List<User>> findAllUser() {
     List<User> users = userService.findAllUser();
