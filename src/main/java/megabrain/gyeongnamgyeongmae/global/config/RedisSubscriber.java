@@ -29,6 +29,6 @@ public class RedisSubscriber implements MessageListener {
   }
 
   private String getSendTopic(Long id) {
-    return String.format("/topic/room/%d", id);
+    return String.format("/subscribe/chat-rooms/%d", id);
   }
 }

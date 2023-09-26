@@ -9,6 +9,7 @@ import megabrain.gyeongnamgyeongmae.domain.user.domain.entity.User;
 import megabrain.gyeongnamgyeongmae.domain.user.service.UserService;
 import org.springframework.messaging.handler.annotation.DestinationVariable;
 import org.springframework.messaging.handler.annotation.MessageMapping;
+import org.springframework.messaging.simp.SimpMessageSendingOperations;
 import org.springframework.stereotype.Controller;
 
 @RequiredArgsConstructor
@@ -17,6 +18,8 @@ public class ChatSocketController {
   private final UserService userService;
   private final ChatMessageServiceInterface chatMessageService;
   private final ChatRoomServiceInterface chatRoomService;
+
+  private final SimpMessageSendingOperations simpMessageSendingOperations;
 
   /*
     /subscribe/chat-rooms/{id}  구독자는 해당 URI를 구독하여 메시지를 받습니다.
