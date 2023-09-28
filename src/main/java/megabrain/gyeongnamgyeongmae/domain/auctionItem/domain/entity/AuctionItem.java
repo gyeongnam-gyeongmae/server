@@ -150,8 +150,6 @@ public class AuctionItem extends BaseTimeEntity {
     this.name = upDateAuctionItemRequest.getName();
     this.price = upDateAuctionItemRequest.getPrice();
     this.content = upDateAuctionItemRequest.getContent();
-    this.itemStatus = upDateAuctionItemRequest.getItemStatus();
     this.closedTime = upDateAuctionItemRequest.getClosedTime();
-    this.status = upDateAuctionItemRequest.getAuctionStatus();
   }
 }
