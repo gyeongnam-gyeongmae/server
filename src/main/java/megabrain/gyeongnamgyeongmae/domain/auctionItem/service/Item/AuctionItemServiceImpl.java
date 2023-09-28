@@ -2,7 +2,6 @@ package megabrain.gyeongnamgyeongmae.domain.auctionItem.service.Item;
 
 import java.time.LocalDateTime;
 import java.util.List;
-import java.util.Objects;
 import lombok.RequiredArgsConstructor;
 import megabrain.gyeongnamgyeongmae.domain.auctionItem.domain.entity.AuctionItem;
 import megabrain.gyeongnamgyeongmae.domain.auctionItem.domain.entity.AuctionItemLike;
@@ -14,7 +13,6 @@ import megabrain.gyeongnamgyeongmae.domain.auctionItem.dto.AuctionItemResponse;
 import megabrain.gyeongnamgyeongmae.domain.auctionItem.dto.CreateAuctionItemRequest;
 import megabrain.gyeongnamgyeongmae.domain.auctionItem.dto.UpdateAuctionItemRequest;
 import megabrain.gyeongnamgyeongmae.domain.auctionItem.exception.AuctionNotFoundException;
-import megabrain.gyeongnamgyeongmae.domain.category.domain.entity.Category;
 import megabrain.gyeongnamgyeongmae.domain.category.service.CategoryService;
 import megabrain.gyeongnamgyeongmae.domain.image.domain.repository.ImageRepository;
 import megabrain.gyeongnamgyeongmae.domain.user.domain.entity.User;
@@ -64,17 +62,12 @@ public class AuctionItemServiceImpl implements AuctionItemService {
   @Transactional
   public void updateAuctionItem(UpdateAuctionItemRequest upDateAuctionItemRequest, Long id) {
     checkClosedTime(upDateAuctionItemRequest.getClosedTime());
-    Category categoryEntity =
-        categoryService.findCategoryByName(upDateAuctionItemRequest.getCategory());
-    // TODO: 유저 정보를 가져오는 부분을 리팩토링 해야함
-    AuctionItem auctionItem = auctionItemRepository.findById(id).orElseThrow(RuntimeException::new);
-
-    if (!(Objects.equals(auctionItem.getUser().getId(), upDateAuctionItemRequest.getUserId()))) {
-      throw new RuntimeException("잘못된 회원입니다 ");
-    }
+    AuctionItem auctionItem = findAuctionItemById(id);
     auctionItem.checkShowAuctionItem(auctionItem);
+    auctionItem.setUser(userService.findUserById(upDateAuctionItemRequest.getUserId()));
+    auctionItem.setCategory(
+        categoryService.findCategoryByName(upDateAuctionItemRequest.getCategory()));
     auctionItem.updateAuctionItem(upDateAuctionItemRequest);
-    auctionItem.setCategory(categoryEntity);
     auctionItemRepository.save(auctionItem);
   }
 

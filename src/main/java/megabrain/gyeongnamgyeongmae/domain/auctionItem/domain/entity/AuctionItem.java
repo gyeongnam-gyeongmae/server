@@ -7,6 +7,7 @@ import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import megabrain.gyeongnamgyeongmae.domain.auctionItem.dto.UpdateAuctionItemRequest;
+import megabrain.gyeongnamgyeongmae.domain.auctionItem.exception.AuctionNotFoundException;
 import megabrain.gyeongnamgyeongmae.domain.category.domain.entity.Category;
 import megabrain.gyeongnamgyeongmae.domain.user.domain.entity.User;
 import megabrain.gyeongnamgyeongmae.global.BaseTimeEntity;
@@ -157,7 +158,7 @@ public class AuctionItem extends BaseTimeEntity {
 
   public void checkShowAuctionItem(AuctionItem auctionItem) {
     if (this.removed) {
-      throw new RuntimeException("삭제된 상품입니다.");
+      throw new AuctionNotFoundException("삭제된 경매품입니다.");
     }
   }
 

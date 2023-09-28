@@ -64,8 +64,8 @@ public class AuctionItemController {
   @ApiResponses(
       value = {
         @ApiResponse(responseCode = "200", description = "경매품 수정 성공"),
-        @ApiResponse(responseCode = "404", description = "경매품을 찾을 수 없음"),
-        @ApiResponse(responseCode = "500", description = "경매품 수정 실패")
+        @ApiResponse(responseCode = "404", description = "올바르지 않은 값을 입력"),
+        @ApiResponse(responseCode = "500", description = "경매품 수정 실패, 올바르지 않은 값을 입력")
       })
   public ResponseEntity<HttpStatus> updateAuctionItemById(
       @PathVariable Long id,
