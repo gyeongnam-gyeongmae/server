@@ -5,6 +5,7 @@ import lombok.RequiredArgsConstructor;
 import megabrain.gyeongnamgyeongmae.domain.authentication.exception.OAuthLoginException;
 import megabrain.gyeongnamgyeongmae.domain.authentication.exception.OAuthVendorNotFoundException;
 import megabrain.gyeongnamgyeongmae.domain.authentication.exception.UnAuthenticatedException;
+import megabrain.gyeongnamgyeongmae.domain.category.exception.CategoryNotFoundException;
 import megabrain.gyeongnamgyeongmae.domain.chat.exception.ChatRoomNotFoundException;
 import megabrain.gyeongnamgyeongmae.domain.chat.exception.UserNotParticipantInChatRoomException;
 import megabrain.gyeongnamgyeongmae.domain.chat.service.RedisMessageBrokerService;
@@ -69,5 +70,10 @@ public class ExceptionAdvice {
   public ResponseEntity<String> messageUserNotFoundException(UserNotFoundException e) {
     redisMessageBrokerService.throwError(e);
     return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+  }
+
+  @ExceptionHandler(CategoryNotFoundException.class)
+  public ResponseEntity<String> categoryNotFoundException(CategoryNotFoundException error) {
+    return new ResponseEntity<>(error.getMessage(), HttpStatus.NOT_FOUND);
   }
 }
