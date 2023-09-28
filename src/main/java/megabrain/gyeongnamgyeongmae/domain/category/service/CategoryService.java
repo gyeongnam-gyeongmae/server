@@ -8,7 +8,7 @@ import org.springframework.stereotype.Service;
 
 @Service
 @RequiredArgsConstructor
-public class CategoryService implements ICategoryService {
+public class CategoryService implements CategoryServiceInterface {
 
   private final CategoryRepository categoryRepository;
 
