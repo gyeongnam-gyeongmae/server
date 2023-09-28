@@ -89,8 +89,14 @@ public class AuctionItemController {
     return ResponseEntity.status(HttpStatus.OK).build();
   }
 
-  @Operation(summary = "경매품 좋아요", description = "경매품 관심")
   @PostMapping("{id}/like")
+  @Operation(summary = "경매품 좋아요(찜)", description = "경매품을 관심목록에 추가하거나 해제합니다.")
+  @ApiResponses(
+          value = {
+                  @ApiResponse(responseCode = "200", description = "경매품 좋아요, 경매품 좋아요 취소 성공"),
+                  @ApiResponse(responseCode = "404", description = "경매품을 찾을 수 없음"),
+                  @ApiResponse(responseCode = "410", description = "삭제된 경매품 입니다"),
+          })
   public ResponseEntity<HttpStatus> likeAuctionItemById(
       @PathVariable Long id, @RequestBody AuctionItemLikeRequest auctionItemLikeRequest) {
     this.auctionItemService.likeAuctionItemById(id, auctionItemLikeRequest);
