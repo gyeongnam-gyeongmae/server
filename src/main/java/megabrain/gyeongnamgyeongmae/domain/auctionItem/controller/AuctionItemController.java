@@ -4,14 +4,16 @@ import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import io.swagger.v3.oas.annotations.tags.Tag;
+import java.util.List;
 import javax.validation.Valid;
 import lombok.RequiredArgsConstructor;
+import megabrain.gyeongnamgyeongmae.domain.auctionItem.domain.entity.AuctionItem;
 import megabrain.gyeongnamgyeongmae.domain.auctionItem.dto.AuctionItemLikeRequest;
 import megabrain.gyeongnamgyeongmae.domain.auctionItem.dto.AuctionItemResponse;
 import megabrain.gyeongnamgyeongmae.domain.auctionItem.dto.CreateAuctionItemRequest;
 import megabrain.gyeongnamgyeongmae.domain.auctionItem.dto.UpdateAuctionItemRequest;
 import megabrain.gyeongnamgyeongmae.domain.auctionItem.service.Item.AuctionItemService;
-import megabrain.gyeongnamgyeongmae.domain.user.service.UserService;
+import megabrain.gyeongnamgyeongmae.domain.image.Service.ImageService;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -23,7 +25,7 @@ import org.springframework.web.bind.annotation.*;
 public class AuctionItemController {
 
   private final AuctionItemService auctionItemService;
-  private final UserService userService;
+  private final ImageService imageService;
 
   @PostMapping("")
   @Operation(summary = "경매품 게시글 생성", description = "경매품의 정보를 업로드 합니다.")
@@ -35,14 +37,23 @@ public class AuctionItemController {
       })
   public ResponseEntity<HttpStatus> createAuctionItem(
       @RequestBody @Valid CreateAuctionItemRequest createAuctionItemRequest) {
-    this.auctionItemService.createAuctionItem(createAuctionItemRequest);
+    auctionItemService.createAuctionItem(createAuctionItemRequest);
     return ResponseEntity.status(HttpStatus.CREATED).build();
   }
 
-  @Operation(summary = "Show AuctionItem", description = "경매품 상세보기")
   @GetMapping("{id}")
+  @Operation(summary = "경매품 상세보기", description = "경매품에 대한 자세한 정보를 봅니다. id에 해당하는 게시글의 번호를 입력하면됩니다.")
+  @ApiResponses(
+      value = {
+        @ApiResponse(responseCode = "200", description = "경매품 조회 성공"),
+        @ApiResponse(responseCode = "404", description = "경매품을 찾을 수 없음"),
+        @ApiResponse(responseCode = "500", description = "경매품을 찾을 수 없음")
+      })
   public ResponseEntity<AuctionItemResponse> findAuctionItemById(@PathVariable Long id) {
-    AuctionItemResponse auctionItemResponse = auctionItemService.findAuctionItemById(id);
+    AuctionItem auctionItem = auctionItemService.findAuctionItemById(id);
+    List<String> imageUrls = imageService.findImageByAuctionItemIdBackUrls(id);
+    AuctionItemResponse auctionItemResponse =
+        auctionItemService.auctionItemResponse(auctionItem, imageUrls);
     return ResponseEntity.ok(auctionItemResponse);
   }
 
