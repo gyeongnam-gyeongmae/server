@@ -57,12 +57,20 @@ public class AuctionItemController {
     return ResponseEntity.ok(auctionItemResponse);
   }
 
-  @Operation(summary = "Update AuctionItem", description = "경매품 수정하기")
-  @PutMapping("{id}")
+  @PatchMapping("{id}")
+  @Operation(
+      summary = "경매품 수정하기",
+      description = "게시된 경매품에 대해서 수정합니다. 수정뒤에도 최소 24시간뒤에 경매를 종료할수 있습니다.")
+  @ApiResponses(
+      value = {
+        @ApiResponse(responseCode = "200", description = "경매품 수정 성공"),
+        @ApiResponse(responseCode = "404", description = "경매품을 찾을 수 없음"),
+        @ApiResponse(responseCode = "500", description = "경매품 수정 실패")
+      })
   public ResponseEntity<HttpStatus> updateAuctionItemById(
       @PathVariable Long id,
       @RequestBody @Valid UpdateAuctionItemRequest upDateAuctionItemRequest) {
-    this.auctionItemService.updateAuctionItem(upDateAuctionItemRequest, id);
+    auctionItemService.updateAuctionItem(upDateAuctionItemRequest, id);
     return ResponseEntity.status(HttpStatus.OK).build();
   }
 
