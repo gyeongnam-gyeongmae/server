@@ -9,7 +9,7 @@ public interface ChatRoomRepository extends JpaRepository<ChatRoom, Long> {
   @Query(
       value =
           "SELECT room FROM ChatRoom room "
-              + "JOIN ChatParticipant user ON room.id = user.chatRoomId "
-              + "WHERE user.userId = ?1")
+              + "JOIN ChatParticipant user ON room.id = user.chatRoom.id "
+              + "WHERE user.user.id  = ?1")
   List<ChatRoom> getChatRoomsByParticipantId(Long userId);
 }

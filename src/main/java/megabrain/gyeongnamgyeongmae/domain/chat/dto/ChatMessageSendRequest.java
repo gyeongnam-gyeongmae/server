@@ -12,4 +12,11 @@ public class ChatMessageSendRequest {
   private Long userId;
   private String content;
   private MessageTypeEnum messageType;
+
+  ChatMessageSendRequest() {}
+
+  public static ChatMessageSendRequest of(
+      Long userId, String content, MessageTypeEnum messageType) {
+    return new ChatMessageSendRequest(userId, content, messageType);
+  }
 }

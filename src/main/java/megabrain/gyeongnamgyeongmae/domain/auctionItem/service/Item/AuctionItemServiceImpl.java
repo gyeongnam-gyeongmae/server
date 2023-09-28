@@ -1,5 +1,9 @@
 package megabrain.gyeongnamgyeongmae.domain.auctionItem.service.Item;
 
+import java.time.LocalDateTime;
+import java.util.List;
+import java.util.Objects;
+import java.util.stream.Collectors;
 import lombok.RequiredArgsConstructor;
 import megabrain.gyeongnamgyeongmae.domain.auctionItem.domain.entity.AuctionItem;
 import megabrain.gyeongnamgyeongmae.domain.auctionItem.domain.entity.AuctionItemLike;
@@ -18,6 +22,7 @@ import megabrain.gyeongnamgyeongmae.domain.image.domain.entity.Image;
 import megabrain.gyeongnamgyeongmae.domain.image.domain.repository.ImageRepository;
 import megabrain.gyeongnamgyeongmae.domain.user.domain.entity.User;
 import megabrain.gyeongnamgyeongmae.domain.user.domain.repository.UserRepository;
+import megabrain.gyeongnamgyeongmae.domain.user.exception.UserNotFoundException;
 import megabrain.gyeongnamgyeongmae.domain.user.service.UserService;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -30,6 +35,7 @@ import java.util.stream.Collectors;
 @Service
 @RequiredArgsConstructor
 public class AuctionItemServiceImpl implements AuctionItemService {
+
 
     private final AuctionItemRepository auctionItemRepository;
     private final AuctionItemLikeRepository auctionItemLikeRepository;
@@ -73,6 +79,7 @@ public class AuctionItemServiceImpl implements AuctionItemService {
     @Transactional
     public void updateAuctionItemViewCount(AuctionItem auctionItem) {
         auctionItem.plusViewCount();
+
     }
 
     @Override

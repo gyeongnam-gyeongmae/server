@@ -1,6 +1,7 @@
 package megabrain.gyeongnamgyeongmae.domain.chat.controller;
 
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import megabrain.gyeongnamgyeongmae.domain.chat.domain.entity.ChatRoom;
 import megabrain.gyeongnamgyeongmae.domain.chat.dto.ChatMessageSendRequest;
 import megabrain.gyeongnamgyeongmae.domain.chat.service.ChatMessageServiceInterface;
@@ -13,6 +14,7 @@ import org.springframework.stereotype.Controller;
 
 @RequiredArgsConstructor
 @Controller
+@Slf4j
 public class ChatSocketController {
   private final UserService userService;
   private final ChatMessageServiceInterface chatMessageService;
@@ -22,11 +24,10 @@ public class ChatSocketController {
     /subscribe/chat-rooms/{id}  구독자는 해당 URI를 구독하여 메시지를 받습니다.
     /publish/chat-rooms/{id}    송신자는 해당 URI에 메시지를 보내면 해당 채팅방를 구독 중인 모든 구독자에게 메시지를 전달합니다.
   */
+
   @MessageMapping("/chat-rooms/{id}")
   public void sendMessage(@DestinationVariable Long id, ChatMessageSendRequest message) {
-
-    User user = userService.findUserById(id);
-    if (user == null) return;
+    User user = userService.findUserById(message.getUserId());
 
     ChatRoom chatRoom = chatRoomService.getChatRoomById(id);
     if (chatRoom == null) return;

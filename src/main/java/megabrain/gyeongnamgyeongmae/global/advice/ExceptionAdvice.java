@@ -1,21 +1,26 @@
 package megabrain.gyeongnamgyeongmae.global.advice;
 
 import java.util.Objects;
+import lombok.RequiredArgsConstructor;
 import megabrain.gyeongnamgyeongmae.domain.authentication.exception.OAuthLoginException;
 import megabrain.gyeongnamgyeongmae.domain.authentication.exception.OAuthVendorNotFoundException;
 import megabrain.gyeongnamgyeongmae.domain.authentication.exception.UnAuthenticatedException;
 import megabrain.gyeongnamgyeongmae.domain.chat.exception.ChatRoomNotFoundException;
 import megabrain.gyeongnamgyeongmae.domain.chat.exception.UserNotParticipantInChatRoomException;
+import megabrain.gyeongnamgyeongmae.domain.chat.service.RedisMessageBrokerService;
 import megabrain.gyeongnamgyeongmae.domain.user.exception.DuplicateAuthVendorUserId;
 import megabrain.gyeongnamgyeongmae.domain.user.exception.UserNotFoundException;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.messaging.handler.annotation.MessageExceptionHandler;
 import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
 
 @RestControllerAdvice
+@RequiredArgsConstructor
 public class ExceptionAdvice {
+  private final RedisMessageBrokerService redisMessageBrokerService;
 
   @ExceptionHandler(MethodArgumentNotValidException.class)
   public ResponseEntity<String> validationNotValidException(MethodArgumentNotValidException e) {
@@ -57,5 +62,12 @@ public class ExceptionAdvice {
   public ResponseEntity<String> userNotParticipantInChatRoomException(
       UserNotParticipantInChatRoomException error) {
     return new ResponseEntity<>(error.getMessage(), HttpStatus.FORBIDDEN);
+  }
+
+  // 소켓 메세지 에러
+  @MessageExceptionHandler(UserNotFoundException.class)
+  public ResponseEntity<String> messageUserNotFoundException(UserNotFoundException e) {
+    redisMessageBrokerService.throwError(e);
+    return new ResponseEntity<>(HttpStatus.NOT_FOUND);
   }
 }
