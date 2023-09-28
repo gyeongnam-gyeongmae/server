@@ -34,9 +34,8 @@ public class AuctionItemServiceImpl implements AuctionItemService {
   public void createAuctionItem(CreateAuctionItemRequest createAuctionItemRequest) {
     checkClosedTime(createAuctionItemRequest.getClosedTime());
     AuctionItem auctionItem = createAuctionItemRequest.toEntity();
-    auctionItem.setUser(userService.findUserById(createAuctionItemRequest.getUserId()));
-    auctionItem.setCategory(
-        categoryService.findCategoryByName(createAuctionItemRequest.getCategory()));
+    setAuctionItemProperties(
+        auctionItem, createAuctionItemRequest.getUserId(), createAuctionItemRequest.getCategory());
     auctionItemRepository.save(auctionItem);
   }
 
@@ -63,11 +62,22 @@ public class AuctionItemServiceImpl implements AuctionItemService {
     checkClosedTime(upDateAuctionItemRequest.getClosedTime());
     AuctionItem auctionItem = findAuctionItemById(id);
     auctionItem.checkShowAuctionItem(auctionItem);
-    auctionItem.setUser(userService.findUserById(upDateAuctionItemRequest.getUserId()));
-    auctionItem.setCategory(
-        categoryService.findCategoryByName(upDateAuctionItemRequest.getCategory()));
+    sellerCheck(auctionItem, upDateAuctionItemRequest.getUserId());
+    setAuctionItemProperties(
+        auctionItem, upDateAuctionItemRequest.getUserId(), upDateAuctionItemRequest.getCategory());
     auctionItem.updateAuctionItem(upDateAuctionItemRequest);
     auctionItemRepository.save(auctionItem);
+  }
+
+  private void sellerCheck(AuctionItem auctionItem, Long userId) {
+    if (!auctionItem.getUser().getId().equals(userId)) {
+      throw new AuctionNotFoundException("작성자만 수정할 수 있습니다.");
+    }
+  }
+
+  private void setAuctionItemProperties(AuctionItem auctionItem, Long userId, String categoryName) {
+    auctionItem.setUser(userService.findUserById(userId));
+    auctionItem.setCategory(categoryService.findCategoryByName(categoryName));
   }
 
   private void checkClosedTime(LocalDateTime closedTime) {
