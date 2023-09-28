@@ -55,6 +55,15 @@ public class AuthenticationController {
     return ResponseEntity.status(HttpStatus.CREATED).build();
   }
 
+  @PostMapping("{id}/session")
+  @Operation(summary = "유저 아이디로 세션 획득(테스트용)", description = "유저 아이디로 세션 획득(테스트용)")
+  public ResponseEntity<HttpStatus> getSession(@PathVariable("id") Long userId) {
+
+    this.authenticationService.login(userId);
+
+    return ResponseEntity.status(HttpStatus.CREATED).build();
+  }
+
   @LoginRequired
   @PostMapping("logout")
   @Operation(summary = "로그아웃 요청", description = "로그아웃을 요청합니다.")

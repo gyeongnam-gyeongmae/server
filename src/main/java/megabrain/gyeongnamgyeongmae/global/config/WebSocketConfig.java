@@ -22,7 +22,7 @@ public class WebSocketConfig implements WebSocketMessageBrokerConfigurer {
   // STOMP(Simple Text Oriented Message Protocol): 웹소켓을 통해 메시지를 전달하기 위한 프로토콜
   @Override
   public void registerStompEndpoints(StompEndpointRegistry registry) {
-    // websocket을   사용할수 있는 endpoint를 등록합니다.
+    // websocket을 사용할수 있는 endpoint를 등록합니다.
     // sock.js를 통하여 낮은 버전의 브라우저에서도 websocket이 동작할수 있게 합니다.
     registry.addEndpoint("/connect").setAllowedOrigins("*");
     registry.addEndpoint("/connect").setAllowedOrigins("*").withSockJS();

@@ -16,6 +16,10 @@ public class RedisMessageBrokerService {
     redisTemplate.convertAndSend(getTopic(), response);
   }
 
+  public void throwError(RuntimeException e) {
+    redisTemplate.convertAndSend(getTopic(), e);
+  }
+
   public String getTopic() {
     return channelTopic.getTopic();
   }
