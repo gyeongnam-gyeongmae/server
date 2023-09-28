@@ -2,18 +2,23 @@ package megabrain.gyeongnamgyeongmae.domain.auctionItem.domain.entity;
 
 import java.time.LocalDateTime;
 import javax.persistence.*;
-import lombok.*;
+import lombok.AccessLevel;
+import lombok.Builder;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
 import megabrain.gyeongnamgyeongmae.domain.auctionItem.dto.UpdateAuctionItemRequest;
 import megabrain.gyeongnamgyeongmae.domain.category.domain.entity.Category;
 import megabrain.gyeongnamgyeongmae.domain.user.domain.entity.User;
 import megabrain.gyeongnamgyeongmae.global.BaseTimeEntity;
 
 @Getter
-@Setter
 @Entity
 @Table(name = "AuctionItem")
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 public class AuctionItem extends BaseTimeEntity {
+
+  @Column(name = "close_at")
+  protected LocalDateTime closedTime;
 
   @Id
   @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -42,9 +47,6 @@ public class AuctionItem extends BaseTimeEntity {
   @ManyToOne(fetch = FetchType.LAZY)
   @JoinColumn(name = "category_id")
   private Category category;
-
-  @Column(name = "close_at")
-  protected LocalDateTime closedTime;
 
   @Column(name = "like_count")
   private Long like_count = 0L;
@@ -119,6 +121,34 @@ public class AuctionItem extends BaseTimeEntity {
     this.user = user;
     this.createdAt = createdAt;
     this.updatedAt = updatedAt;
+  }
+
+  public void setUser(User user) {
+    this.user = user;
+  }
+
+  public void setCategory(Category category) {
+    this.category = category;
+  }
+
+  public void minusLikeCount() {
+    this.like_count -= 1;
+  }
+
+  public void plusLikeCount() {
+    this.like_count += 1;
+  }
+
+  public void plusViewCount() {
+    this.view_count += 1;
+  }
+
+  public void plusCommentCount() {
+    this.comment_count += 1;
+  }
+
+  public void minusCommentCount() {
+    this.comment_count -= 1;
   }
 
   public void removeAuctionItem(AuctionItem auctionItem) {

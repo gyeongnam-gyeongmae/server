@@ -65,7 +65,7 @@ public class AuctionItemCommentServiceImpl implements AuctionItemCommentService 
             .parent(parentComment)
             .build();
     this.auctionItemCommentRepository.save(comment);
-    auctionItem.setComment_count(auctionItem.getComment_count() + 1L);
+    auctionItem.plusCommentCount();
     this.auctionItemRepository.save(auctionItem);
   }
 

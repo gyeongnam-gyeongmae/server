@@ -2,7 +2,6 @@ package megabrain.gyeongnamgyeongmae.domain.image.Controller;
 
 
 import io.swagger.v3.oas.annotations.Operation;
-
 import lombok.RequiredArgsConstructor;
 import megabrain.gyeongnamgyeongmae.domain.image.Service.ImageService;
 import org.springframework.http.HttpStatus;

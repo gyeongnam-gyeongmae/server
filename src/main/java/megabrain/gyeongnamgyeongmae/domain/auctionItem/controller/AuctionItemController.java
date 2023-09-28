@@ -1,6 +1,8 @@
 package megabrain.gyeongnamgyeongmae.domain.auctionItem.controller;
 
 import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.responses.ApiResponse;
+import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import javax.validation.Valid;
 import lombok.RequiredArgsConstructor;
@@ -9,7 +11,6 @@ import megabrain.gyeongnamgyeongmae.domain.auctionItem.dto.AuctionItemResponse;
 import megabrain.gyeongnamgyeongmae.domain.auctionItem.dto.CreateAuctionItemRequest;
 import megabrain.gyeongnamgyeongmae.domain.auctionItem.dto.UpdateAuctionItemRequest;
 import megabrain.gyeongnamgyeongmae.domain.auctionItem.service.Item.AuctionItemService;
-import megabrain.gyeongnamgyeongmae.domain.category.service.CategoryService;
 import megabrain.gyeongnamgyeongmae.domain.user.service.UserService;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -22,12 +23,16 @@ import org.springframework.web.bind.annotation.*;
 public class AuctionItemController {
 
   private final AuctionItemService auctionItemService;
-  private final CategoryService categoryService;
   private final UserService userService;
 
-  @Operation(summary = "Post AuctionItem", description = "경매품 올리기")
-  @ResponseStatus(HttpStatus.CREATED)
   @PostMapping("")
+  @Operation(summary = "경매품 게시글 생성", description = "경매품의 정보를 업로드 합니다.")
+  @ApiResponses(
+      value = {
+        @ApiResponse(responseCode = "201", description = "경매품 업로드 성공"),
+        @ApiResponse(responseCode = "404", description = "구매자 혹은 판매자를 찾을 수 없음"),
+        @ApiResponse(responseCode = "500", description = "올바르지 못한 값을 입력")
+      })
   public ResponseEntity<HttpStatus> createAuctionItem(
       @RequestBody @Valid CreateAuctionItemRequest createAuctionItemRequest) {
     this.auctionItemService.createAuctionItem(createAuctionItemRequest);

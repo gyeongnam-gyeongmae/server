@@ -2,6 +2,7 @@ package megabrain.gyeongnamgyeongmae.domain.auctionItem.dto;
 
 import java.time.LocalDateTime;
 import javax.validation.constraints.Min;
+import javax.validation.constraints.NotEmpty;
 import javax.validation.constraints.NotNull;
 import lombok.*;
 import megabrain.gyeongnamgyeongmae.domain.auctionItem.domain.entity.AuctionItem;
@@ -13,17 +14,16 @@ import megabrain.gyeongnamgyeongmae.domain.auctionItem.domain.entity.AuctionItem
 @AllArgsConstructor
 public class CreateAuctionItemRequest {
 
-  @NotNull private String name;
+  @NotNull
+  private String name;
 
   @Min(0)
   @NotNull
   private Long price;
 
-  @NotNull private String category;
+  @NotEmpty private String category;
 
-  @NotNull private String content;
-
-//  @NotNull private AuctionItemStatus status;
+  @NotEmpty private String content;
 
   @NotNull private LocalDateTime closedTime;
 
@@ -34,7 +34,6 @@ public class CreateAuctionItemRequest {
         .name(this.name)
         .price(this.price)
         .content(this.content)
-//        .itemStatus(this.status)
         .closedTime(this.closedTime)
         .build();
   }
