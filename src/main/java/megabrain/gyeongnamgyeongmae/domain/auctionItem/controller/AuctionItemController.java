@@ -76,8 +76,14 @@ public class AuctionItemController {
     return ResponseEntity.status(HttpStatus.OK).build();
   }
 
-  @Operation(summary = "Delete AuctionItem", description = "경매품 삭제하기")
   @DeleteMapping("{id}")
+  @Operation(summary = "경매품 삭제하기", description = "해당 경매품을 삭제합니다")
+  @ApiResponses(
+      value = {
+        @ApiResponse(responseCode = "200", description = "경매품 삭제 성공"),
+        @ApiResponse(responseCode = "404", description = "경매품을 찾을 수 없음"),
+        @ApiResponse(responseCode = "410", description = "이미 삭제된 경매품 입니다"),
+      })
   public ResponseEntity<HttpStatus> deleteAuctionItemById(@PathVariable Long id) {
     this.auctionItemService.deleteAuctionItemById(id);
     return ResponseEntity.status(HttpStatus.OK).build();
