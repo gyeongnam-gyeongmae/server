@@ -47,7 +47,7 @@ public class AuctionItemServiceImpl implements AuctionItemService {
   @Transactional(readOnly = true)
   public AuctionItem findAuctionItemById(Long id) {
     AuctionItem auctionItem =
-        auctionItemRepository.findById(id).orElseThrow(AuctionNotFoundException::new);
+        auctionItemRepository.findById(id).orElseThrow(() -> new AuctionNotFoundException("경매품을 찾을 수 없습니다."));
     auctionItem.checkShowAuctionItem(auctionItem);
     return auctionItem;
   }

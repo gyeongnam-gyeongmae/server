@@ -2,6 +2,8 @@ package megabrain.gyeongnamgyeongmae.global.advice;
 
 import java.util.Objects;
 import lombok.RequiredArgsConstructor;
+import megabrain.gyeongnamgyeongmae.domain.auctionItem.exception.AuctionNotFoundException;
+import megabrain.gyeongnamgyeongmae.domain.auctionItem.exception.AuctionRemovedException;
 import megabrain.gyeongnamgyeongmae.domain.authentication.exception.OAuthLoginException;
 import megabrain.gyeongnamgyeongmae.domain.authentication.exception.OAuthVendorNotFoundException;
 import megabrain.gyeongnamgyeongmae.domain.authentication.exception.UnAuthenticatedException;
@@ -75,5 +77,15 @@ public class ExceptionAdvice {
   @ExceptionHandler(CategoryNotFoundException.class)
   public ResponseEntity<String> categoryNotFoundException(CategoryNotFoundException error) {
     return new ResponseEntity<>(error.getMessage(), HttpStatus.NOT_FOUND);
+  }
+
+  @ExceptionHandler(AuctionNotFoundException.class)
+  public ResponseEntity<String> auctionNotFoundException(AuctionNotFoundException error) {
+    return new ResponseEntity<>(error.getMessage(), HttpStatus.NOT_FOUND);
+  }
+
+  @ExceptionHandler(AuctionRemovedException.class)
+  public ResponseEntity<String> auctionRemovedException(AuctionRemovedException error) {
+    return new ResponseEntity<>(error.getMessage(), HttpStatus.GONE);
   }
 }
