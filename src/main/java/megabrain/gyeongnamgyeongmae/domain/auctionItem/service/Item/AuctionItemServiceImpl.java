@@ -14,7 +14,7 @@ import megabrain.gyeongnamgyeongmae.domain.auctionItem.dto.CreateAuctionItemRequ
 import megabrain.gyeongnamgyeongmae.domain.auctionItem.dto.UpdateAuctionItemRequest;
 import megabrain.gyeongnamgyeongmae.domain.auctionItem.exception.AuctionNotFoundException;
 import megabrain.gyeongnamgyeongmae.domain.auctionItem.exception.AuctionTimeException;
-import megabrain.gyeongnamgyeongmae.domain.category.service.CategoryService;
+import megabrain.gyeongnamgyeongmae.domain.category.service.CategoryServiceInterface;
 import megabrain.gyeongnamgyeongmae.domain.user.domain.entity.User;
 import megabrain.gyeongnamgyeongmae.domain.user.service.UserService;
 import org.springframework.stereotype.Service;
@@ -26,7 +26,7 @@ public class AuctionItemServiceImpl implements AuctionItemService {
 
   private final AuctionItemRepository auctionItemRepository;
   private final AuctionItemLikeRepository auctionItemLikeRepository;
-  private final CategoryService categoryService;
+  private final CategoryServiceInterface categoryService;
   private final UserService userService;
 
   @Override
