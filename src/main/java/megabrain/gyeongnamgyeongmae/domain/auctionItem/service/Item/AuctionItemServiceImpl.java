@@ -13,6 +13,7 @@ import megabrain.gyeongnamgyeongmae.domain.auctionItem.dto.AuctionItemResponse;
 import megabrain.gyeongnamgyeongmae.domain.auctionItem.dto.CreateAuctionItemRequest;
 import megabrain.gyeongnamgyeongmae.domain.auctionItem.dto.UpdateAuctionItemRequest;
 import megabrain.gyeongnamgyeongmae.domain.auctionItem.exception.AuctionNotFoundException;
+import megabrain.gyeongnamgyeongmae.domain.auctionItem.exception.AuctionTimeException;
 import megabrain.gyeongnamgyeongmae.domain.category.service.CategoryService;
 import megabrain.gyeongnamgyeongmae.domain.image.domain.repository.ImageRepository;
 import megabrain.gyeongnamgyeongmae.domain.user.domain.entity.User;
@@ -47,7 +48,9 @@ public class AuctionItemServiceImpl implements AuctionItemService {
   @Transactional(readOnly = true)
   public AuctionItem findAuctionItemById(Long id) {
     AuctionItem auctionItem =
-        auctionItemRepository.findById(id).orElseThrow(() -> new AuctionNotFoundException("경매품을 찾을 수 없습니다."));
+        auctionItemRepository
+            .findById(id)
+            .orElseThrow(() -> new AuctionNotFoundException("경매품을 찾을 수 없습니다."));
     auctionItem.checkShowAuctionItem(auctionItem);
     return auctionItem;
   }
@@ -71,11 +74,9 @@ public class AuctionItemServiceImpl implements AuctionItemService {
     auctionItemRepository.save(auctionItem);
   }
 
-  @Override
-  public void checkClosedTime(LocalDateTime closedTime) {
-    LocalDateTime now = LocalDateTime.now();
-    if (closedTime.isBefore(now.plusHours(24))) {
-      throw new RuntimeException("경매 종료 시간은 현재 시간보다 24시간 이후여야 합니다.");
+  private void checkClosedTime(LocalDateTime closedTime) {
+    if (closedTime.isBefore(LocalDateTime.now().plusHours(24))) {
+      throw new AuctionTimeException("경매 종료 시간은 24시간 이후여야 합니다.");
     }
   }
 
@@ -96,7 +97,6 @@ public class AuctionItemServiceImpl implements AuctionItemService {
         userRepository
             .findById(auctionItemLikeRequest.getUserId())
             .orElseThrow(RuntimeException::new);
-
     AuctionItemLikePK auctionItemLikePK = new AuctionItemLikePK();
     auctionItemLikePK.setAuctionItemId(id);
     auctionItemLikePK.setUserId(auctionItemLikeRequest.getUserId());

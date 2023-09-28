@@ -1,8 +1,6 @@
 package megabrain.gyeongnamgyeongmae.domain.auctionItem.service.Item;
 
-import java.time.LocalDateTime;
 import java.util.List;
-
 import megabrain.gyeongnamgyeongmae.domain.auctionItem.domain.entity.AuctionItem;
 import megabrain.gyeongnamgyeongmae.domain.auctionItem.dto.AuctionItemLikeRequest;
 import megabrain.gyeongnamgyeongmae.domain.auctionItem.dto.AuctionItemResponse;
@@ -18,8 +16,6 @@ public interface AuctionItemService {
   AuctionItemResponse auctionItemResponse(AuctionItem auctionItem, List<String> imageUrls);
 
   void updateAuctionItem(UpdateAuctionItemRequest upDateAuctionItemRequest, Long id);
-
-  void checkClosedTime(LocalDateTime closedTime);
 
   void deleteAuctionItemById(Long id);
 
