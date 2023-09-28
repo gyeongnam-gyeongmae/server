@@ -82,7 +82,8 @@ public class AuctionItemServiceImpl implements AuctionItemService {
   @Override
   @Transactional
   public void deleteAuctionItemById(Long id) {
-    AuctionItem auctionItem = auctionItemRepository.findById(id).orElseThrow(RuntimeException::new);
+    AuctionItem auctionItem = findAuctionItemById(id);
+    auctionItem.checkShowAuctionItem(auctionItem);
     auctionItem.removeAuctionItem(auctionItem);
     auctionItemRepository.save(auctionItem);
   }

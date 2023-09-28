@@ -85,7 +85,7 @@ public class AuctionItemController {
         @ApiResponse(responseCode = "410", description = "이미 삭제된 경매품 입니다"),
       })
   public ResponseEntity<HttpStatus> deleteAuctionItemById(@PathVariable Long id) {
-    this.auctionItemService.deleteAuctionItemById(id);
+    auctionItemService.deleteAuctionItemById(id);
     return ResponseEntity.status(HttpStatus.OK).build();
   }
 
