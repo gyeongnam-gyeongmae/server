@@ -15,9 +15,7 @@ import megabrain.gyeongnamgyeongmae.domain.auctionItem.dto.UpdateAuctionItemRequ
 import megabrain.gyeongnamgyeongmae.domain.auctionItem.exception.AuctionNotFoundException;
 import megabrain.gyeongnamgyeongmae.domain.auctionItem.exception.AuctionTimeException;
 import megabrain.gyeongnamgyeongmae.domain.category.service.CategoryService;
-import megabrain.gyeongnamgyeongmae.domain.image.domain.repository.ImageRepository;
 import megabrain.gyeongnamgyeongmae.domain.user.domain.entity.User;
-import megabrain.gyeongnamgyeongmae.domain.user.domain.repository.UserRepository;
 import megabrain.gyeongnamgyeongmae.domain.user.service.UserService;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -29,9 +27,7 @@ public class AuctionItemServiceImpl implements AuctionItemService {
   private final AuctionItemRepository auctionItemRepository;
   private final AuctionItemLikeRepository auctionItemLikeRepository;
   private final CategoryService categoryService;
-  private final UserRepository userRepository;
   private final UserService userService;
-  private final ImageRepository imageRepository;
 
   @Override
   @Transactional
@@ -92,32 +88,42 @@ public class AuctionItemServiceImpl implements AuctionItemService {
   @Override
   @Transactional
   public void likeAuctionItemById(Long id, AuctionItemLikeRequest auctionItemLikeRequest) {
-    AuctionItem auctionItem = auctionItemRepository.findById(id).orElseThrow(RuntimeException::new);
-    User user =
-        userRepository
-            .findById(auctionItemLikeRequest.getUserId())
-            .orElseThrow(RuntimeException::new);
-    AuctionItemLikePK auctionItemLikePK = new AuctionItemLikePK();
-    auctionItemLikePK.setAuctionItemId(id);
-    auctionItemLikePK.setUserId(auctionItemLikeRequest.getUserId());
+    AuctionItem auctionItem = findAuctionItemById(id);
+    User user = userService.findUserById(auctionItemLikeRequest.getUserId());
 
-    AuctionItemLike auctionItemLike =
-        auctionItemLikeRepository.findById(auctionItemLikePK).orElse(null);
+    AuctionItemLikePK auctionItemLikePK =
+        new AuctionItemLikePK(id, auctionItemLikeRequest.getUserId());
+
+    AuctionItemLike auctionItemLike = auctionItemLike(auctionItemLikePK);
 
     if (auctionItemLike != null) {
-      auctionItemLikeRepository.delete(auctionItemLike);
+      deleteAuctionItemLike(auctionItemLike);
       auctionItem.minusLikeCount();
-      auctionItemRepository.save(auctionItem);
     } else {
-      auctionItemLike =
-          AuctionItemLike.builder()
-              .id(auctionItemLikePK)
-              .auctionItem(auctionItem)
-              .user(user)
-              .build();
-      auctionItemLikeRepository.save(auctionItemLike);
+      auctionItemLike = createAndSaveAuctionItemLike(auctionItem, user, auctionItemLikePK);
       auctionItem.plusLikeCount();
-      auctionItemRepository.save(auctionItem);
+      saveAuctionItemLike(auctionItemLike);
     }
+    auctionItemRepository.save(auctionItem);
+  }
+
+  private AuctionItemLike createAndSaveAuctionItemLike(
+      AuctionItem auctionItem, User user, AuctionItemLikePK auctionItemLikePK) {
+    AuctionItemLike auctionItemLike =
+        AuctionItemLike.builder().id(auctionItemLikePK).auctionItem(auctionItem).user(user).build();
+    saveAuctionItemLike(auctionItemLike);
+    return auctionItemLike;
+  }
+
+  private void saveAuctionItemLike(AuctionItemLike auctionItemLike) {
+    auctionItemLikeRepository.save(auctionItemLike);
+  }
+
+  private void deleteAuctionItemLike(AuctionItemLike auctionItemLike) {
+    auctionItemLikeRepository.delete(auctionItemLike);
+  }
+
+  private AuctionItemLike auctionItemLike(AuctionItemLikePK auctionItemLikePK) {
+    return auctionItemLikeRepository.findById(auctionItemLikePK).orElse(null);
   }
 }
