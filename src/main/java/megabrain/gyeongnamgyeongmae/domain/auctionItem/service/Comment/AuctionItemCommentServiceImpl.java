@@ -62,7 +62,8 @@ public class AuctionItemCommentServiceImpl implements AuctionItemCommentService 
   @Transactional(readOnly = true)
   public List<AuctionItemCommentParentDto> findAuctionItemCommentById(Long id) {
     auctionItemService.findAuctionItemById(id);
-    List<Comment> commentEntityList = auctionItemCommentRepository.findByAuctionItemCommentByAuctionId(id);
+    List<Comment> commentEntityList =
+        auctionItemCommentRepository.findByAuctionItemCommentByAuctionId(id);
     return commentEntityList.stream()
         .map(AuctionItemCommentParentDto::of)
         .collect(Collectors.toList());
@@ -71,20 +72,10 @@ public class AuctionItemCommentServiceImpl implements AuctionItemCommentService 
   @Transactional
   public void updateAuctionItemComment(
       AuctionItemCommentUpdateRequest auctionItemCommentUpdateRequest) {
-    Comment comment =
-        (Comment)
-            this.auctionItemCommentRepository
-                .findById(auctionItemCommentUpdateRequest.getCommentId())
-                .orElseThrow(
-                    () -> {
-                      return new RuntimeException("댓글을 찾을수 없습니다");
-                    });
-    if (!Objects.equals(comment.getUser().getId(), auctionItemCommentUpdateRequest.getUserId())) {
-      throw new RuntimeException("댓글 작성자가 아닙니다");
-    } else {
-      comment.setContent(auctionItemCommentUpdateRequest.getContent());
-      this.auctionItemCommentRepository.save(comment);
-    }
+    Comment comment = findCommentById(auctionItemCommentUpdateRequest.getCommentId());
+    userService.findUserById(auctionItemCommentUpdateRequest.getUserId());
+    comment.setContent(auctionItemCommentUpdateRequest.getContent());
+    auctionItemCommentRepository.save(comment);
   }
 
   @Transactional
@@ -101,7 +92,7 @@ public class AuctionItemCommentServiceImpl implements AuctionItemCommentService 
     if (!Objects.equals(comment.getUser().getId(), auctionItemCommentDeleteRequest.getUserId())) {
       throw new RuntimeException("댓글 작성자가 아닙니다");
     } else {
-      comment.setRemoved(true);
+      comment.deleteComment();
       this.auctionItemCommentRepository.save(comment);
     }
   }
