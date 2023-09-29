@@ -32,7 +32,7 @@ public class AuctionItemSearchController {
   public ResponseEntity<AuctionItemSearchResponse> findItemCategory(
       @ModelAttribute SearchAuctionItemSortedRequest searchAuctionItemSortedRequest) {
     AuctionItemSearchResponse result =
-        this.auctionItemSearchService.findAuctionItemByRequest(searchAuctionItemSortedRequest);
+        auctionItemSearchService.findAuctionItemByRequest(searchAuctionItemSortedRequest);
     return ResponseEntity.ok(result);
   }
 }
