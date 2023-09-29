@@ -4,10 +4,10 @@ import java.time.LocalDateTime;
 import java.util.List;
 import java.util.stream.Collectors;
 import lombok.Builder;
-import lombok.Data;
+import lombok.Getter;
 import megabrain.gyeongnamgyeongmae.domain.auctionItem.domain.entity.Comment;
 
-@Data
+@Getter
 @Builder
 public class AuctionItemCommentParentDto {
   private Long id;
