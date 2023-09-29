@@ -23,7 +23,7 @@ public class AuctionItemSearchController {
   private final AuctionItemSearchService auctionItemSearchService;
 
   @GetMapping("")
-  @Operation(summary = "Search AuctionItem", description = "경매품 검색하기")
+  @Operation(summary = "경매품 검색하기", description = "경매품을 찾습니다.")
   @ApiResponses(
       value = {
         @ApiResponse(responseCode = "200", description = "경매품 검색 성공"),
