@@ -61,8 +61,8 @@ public class AuctionItemCommentServiceImpl implements AuctionItemCommentService 
 
   @Transactional(readOnly = true)
   public List<AuctionItemCommentParentDto> findAuctionItemCommentById(Long id) {
-    List<Comment> commentEntityList =
-        this.auctionItemCommentRepository.findByAuctionItemCommentByAuctionId(id);
+    auctionItemService.findAuctionItemById(id);
+    List<Comment> commentEntityList = auctionItemCommentRepository.findByAuctionItemCommentByAuctionId(id);
     return commentEntityList.stream()
         .map(AuctionItemCommentParentDto::of)
         .collect(Collectors.toList());
