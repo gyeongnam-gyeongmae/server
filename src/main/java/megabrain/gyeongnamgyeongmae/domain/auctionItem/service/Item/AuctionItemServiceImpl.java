@@ -50,6 +50,7 @@ public class AuctionItemServiceImpl implements AuctionItemService {
     return auctionItem;
   }
 
+  @Override
   public void saveAuctionItem(AuctionItem auctionItem) {
     auctionItemRepository.save(auctionItem);
   }

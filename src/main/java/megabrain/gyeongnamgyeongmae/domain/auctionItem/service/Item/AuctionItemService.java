@@ -20,4 +20,6 @@ public interface AuctionItemService {
   void deleteAuctionItemById(Long id);
 
   void likeAuctionItemById(Long id, AuctionItemLikeRequest auctionItemLikeRequest);
+
+  void saveAuctionItem(AuctionItem auctionItem);
 }

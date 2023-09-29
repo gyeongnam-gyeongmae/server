@@ -7,15 +7,13 @@ import lombok.RequiredArgsConstructor;
 import megabrain.gyeongnamgyeongmae.domain.auctionItem.domain.entity.AuctionItem;
 import megabrain.gyeongnamgyeongmae.domain.auctionItem.domain.entity.Comment;
 import megabrain.gyeongnamgyeongmae.domain.auctionItem.domain.repostiory.AuctionItemCommentRepository;
-import megabrain.gyeongnamgyeongmae.domain.auctionItem.domain.repostiory.AuctionItemRepository;
 import megabrain.gyeongnamgyeongmae.domain.auctionItem.dto.AuctionItemCommentDeleteRequest;
 import megabrain.gyeongnamgyeongmae.domain.auctionItem.dto.AuctionItemCommentRequest;
 import megabrain.gyeongnamgyeongmae.domain.auctionItem.dto.AuctionItemCommentUpdateRequest;
 import megabrain.gyeongnamgyeongmae.domain.auctionItem.dto.Comment.AuctionItemCommentParentDto;
 import megabrain.gyeongnamgyeongmae.domain.auctionItem.exception.CommentNotFoundException;
-import megabrain.gyeongnamgyeongmae.domain.auctionItem.service.Item.AuctionItemServiceImpl;
+import megabrain.gyeongnamgyeongmae.domain.auctionItem.service.Item.AuctionItemService;
 import megabrain.gyeongnamgyeongmae.domain.user.domain.entity.User;
-import megabrain.gyeongnamgyeongmae.domain.user.domain.repository.UserRepository;
 import megabrain.gyeongnamgyeongmae.domain.user.service.UserServiceInterface;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -25,10 +23,8 @@ import org.springframework.transaction.annotation.Transactional;
 public class AuctionItemCommentServiceImpl implements AuctionItemCommentService {
 
   private final AuctionItemCommentRepository auctionItemCommentRepository;
-  private final UserRepository userRepository;
-  private final AuctionItemRepository auctionItemRepository;
   private final UserServiceInterface userService;
-  private final AuctionItemServiceImpl auctionItemService;
+  private final AuctionItemService auctionItemService;
 
   @Transactional
   public void createAuctionItemComment(
