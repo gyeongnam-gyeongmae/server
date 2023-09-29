@@ -1,6 +1,8 @@
 package megabrain.gyeongnamgyeongmae.domain.auctionItem.controller;
 
 import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.responses.ApiResponse;
+import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.RequiredArgsConstructor;
 import megabrain.gyeongnamgyeongmae.domain.auctionItem.dto.SearchItem.AuctionItemSearchResponse;
@@ -20,8 +22,13 @@ public class AuctionItemSearchController {
 
   private final AuctionItemSearchService auctionItemSearchService;
 
-  @Operation(summary = "Search AuctionItem", description = "경매품 검색하기")
   @GetMapping("")
+  @Operation(summary = "Search AuctionItem", description = "경매품 검색하기")
+  @ApiResponses(
+      value = {
+        @ApiResponse(responseCode = "200", description = "경매품 검색 성공"),
+        @ApiResponse(responseCode = "500", description = "게시글을 찾지 못했습니다(서버 오류)"),
+      })
   public ResponseEntity<AuctionItemSearchResponse> findItemCategory(
       @ModelAttribute SearchAuctionItemSortedRequest searchAuctionItemSortedRequest) {
     AuctionItemSearchResponse result =
