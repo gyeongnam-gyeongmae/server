@@ -1,7 +1,6 @@
 package megabrain.gyeongnamgyeongmae.domain.auctionItem.service.Comment;
 
 import java.util.List;
-import java.util.Objects;
 import java.util.stream.Collectors;
 import lombok.RequiredArgsConstructor;
 import megabrain.gyeongnamgyeongmae.domain.auctionItem.domain.entity.AuctionItem;
@@ -81,19 +80,9 @@ public class AuctionItemCommentServiceImpl implements AuctionItemCommentService 
   @Transactional
   public void deleteAuctionItemComment(
       AuctionItemCommentDeleteRequest auctionItemCommentDeleteRequest) {
-    Comment comment =
-        (Comment)
-            this.auctionItemCommentRepository
-                .findById(auctionItemCommentDeleteRequest.getCommentId())
-                .orElseThrow(
-                    () -> {
-                      return new RuntimeException("댓글을 찾을수 없습니다");
-                    });
-    if (!Objects.equals(comment.getUser().getId(), auctionItemCommentDeleteRequest.getUserId())) {
-      throw new RuntimeException("댓글 작성자가 아닙니다");
-    } else {
-      comment.deleteComment();
-      this.auctionItemCommentRepository.save(comment);
-    }
+    Comment comment = findCommentById(auctionItemCommentDeleteRequest.getCommentId());
+    userService.findUserById(auctionItemCommentDeleteRequest.getUserId());
+    comment.deleteComment();
+    auctionItemCommentRepository.save(comment);
   }
 }
