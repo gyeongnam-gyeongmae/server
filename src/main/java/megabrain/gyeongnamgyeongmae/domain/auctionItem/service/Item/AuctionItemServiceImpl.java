@@ -16,7 +16,7 @@ import megabrain.gyeongnamgyeongmae.domain.auctionItem.exception.AuctionNotFound
 import megabrain.gyeongnamgyeongmae.domain.auctionItem.exception.AuctionTimeException;
 import megabrain.gyeongnamgyeongmae.domain.category.service.CategoryServiceInterface;
 import megabrain.gyeongnamgyeongmae.domain.user.domain.entity.User;
-import megabrain.gyeongnamgyeongmae.domain.user.service.UserService;
+import megabrain.gyeongnamgyeongmae.domain.user.service.UserServiceInterface;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -27,7 +27,7 @@ public class AuctionItemServiceImpl implements AuctionItemService {
   private final AuctionItemRepository auctionItemRepository;
   private final AuctionItemLikeRepository auctionItemLikeRepository;
   private final CategoryServiceInterface categoryService;
-  private final UserService userService;
+  private final UserServiceInterface userService;
 
   @Override
   @Transactional
@@ -48,6 +48,10 @@ public class AuctionItemServiceImpl implements AuctionItemService {
             .orElseThrow(() -> new AuctionNotFoundException("경매품을 찾을 수 없습니다."));
     auctionItem.checkShowAuctionItem(auctionItem);
     return auctionItem;
+  }
+
+  public void saveAuctionItem(AuctionItem auctionItem) {
+    auctionItemRepository.save(auctionItem);
   }
 
   @Override

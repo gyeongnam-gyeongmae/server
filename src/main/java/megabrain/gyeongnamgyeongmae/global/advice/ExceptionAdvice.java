@@ -5,6 +5,7 @@ import lombok.RequiredArgsConstructor;
 import megabrain.gyeongnamgyeongmae.domain.auctionItem.exception.AuctionNotFoundException;
 import megabrain.gyeongnamgyeongmae.domain.auctionItem.exception.AuctionRemovedException;
 import megabrain.gyeongnamgyeongmae.domain.auctionItem.exception.AuctionTimeException;
+import megabrain.gyeongnamgyeongmae.domain.auctionItem.exception.CommentNotFoundException;
 import megabrain.gyeongnamgyeongmae.domain.authentication.exception.OAuthLoginException;
 import megabrain.gyeongnamgyeongmae.domain.authentication.exception.OAuthVendorNotFoundException;
 import megabrain.gyeongnamgyeongmae.domain.authentication.exception.UnAuthenticatedException;
@@ -93,5 +94,10 @@ public class ExceptionAdvice {
   @ExceptionHandler(AuctionTimeException.class)
   public ResponseEntity<String> auctionTimeException(AuctionTimeException error) {
     return new ResponseEntity<>(error.getMessage(), HttpStatus.BAD_REQUEST);
+  }
+
+  @ExceptionHandler(CommentNotFoundException.class)
+  public ResponseEntity<String> commentNotFoundException(CommentNotFoundException error) {
+    return new ResponseEntity<>(error.getMessage(), HttpStatus.NOT_FOUND);
   }
 }

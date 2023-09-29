@@ -12,8 +12,11 @@ import megabrain.gyeongnamgyeongmae.domain.auctionItem.dto.AuctionItemCommentDel
 import megabrain.gyeongnamgyeongmae.domain.auctionItem.dto.AuctionItemCommentRequest;
 import megabrain.gyeongnamgyeongmae.domain.auctionItem.dto.AuctionItemCommentUpdateRequest;
 import megabrain.gyeongnamgyeongmae.domain.auctionItem.dto.Comment.AuctionItemCommentParentDto;
+import megabrain.gyeongnamgyeongmae.domain.auctionItem.exception.CommentNotFoundException;
+import megabrain.gyeongnamgyeongmae.domain.auctionItem.service.Item.AuctionItemServiceImpl;
 import megabrain.gyeongnamgyeongmae.domain.user.domain.entity.User;
 import megabrain.gyeongnamgyeongmae.domain.user.domain.repository.UserRepository;
+import megabrain.gyeongnamgyeongmae.domain.user.service.UserServiceInterface;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -24,49 +27,40 @@ public class AuctionItemCommentServiceImpl implements AuctionItemCommentService 
   private final AuctionItemCommentRepository auctionItemCommentRepository;
   private final UserRepository userRepository;
   private final AuctionItemRepository auctionItemRepository;
+  private final UserServiceInterface userService;
+  private final AuctionItemServiceImpl auctionItemService;
 
   @Transactional
   public void createAuctionItemComment(
       AuctionItemCommentRequest auctionItemCommentRequest, Long id) {
-    User user =
-        (User)
-            this.userRepository
-                .findById(auctionItemCommentRequest.getUserId())
-                .orElseThrow(
-                    () -> {
-                      return new RuntimeException("유저를 찾을수 없습니다");
-                    });
-    AuctionItem auctionItem =
-        (AuctionItem)
-            this.auctionItemRepository
-                .findById(id)
-                .orElseThrow(
-                    () -> {
-                      return new RuntimeException("경매품을 찾을수 없습니다");
-                    });
-    Comment parentComment = null;
-    Long parentCommentId = auctionItemCommentRequest.getParentCommentId();
-    if (parentCommentId >= 1L) {
-      parentComment =
-          (Comment)
-              this.auctionItemCommentRepository
-                  .findById(parentCommentId)
-                  .orElseThrow(
-                      () -> {
-                        return new RuntimeException("부모 댓글을 찾을수 없습니다");
-                      });
-    }
 
-    Comment comment =
-        Comment.builder()
-            .content(auctionItemCommentRequest.getContent())
-            .user(user)
-            .auctionItem(auctionItem)
-            .parent(parentComment)
-            .build();
-    this.auctionItemCommentRepository.save(comment);
+    User user = userService.findUserById(auctionItemCommentRequest.getUserId());
+    AuctionItem auctionItem = auctionItemService.findAuctionItemById(id);
+
+    Comment parentComment =
+        auctionItemCommentRequest.getParentCommentId() != null
+                && auctionItemCommentRequest.getParentCommentId() >= 1L
+            ? findCommentById(auctionItemCommentRequest.getParentCommentId())
+            : null;
+
+    Comment comment = auctionItemCommentRequest.toEntity();
+    comment.setUser(user);
+    comment.setAuctionItem(auctionItem);
+    comment.setParent(parentComment);
+
     auctionItem.plusCommentCount();
-    this.auctionItemRepository.save(auctionItem);
+    saveComment(comment);
+    auctionItemService.saveAuctionItem(auctionItem);
+  }
+
+  public void saveComment(Comment comment) {
+    auctionItemCommentRepository.save(comment);
+  }
+
+  private Comment findCommentById(Long id) {
+    return auctionItemCommentRepository
+        .findById(id)
+        .orElseThrow(() -> new CommentNotFoundException("댓글을 찾을 수 없습니다."));
   }
 
   @Transactional(readOnly = true)

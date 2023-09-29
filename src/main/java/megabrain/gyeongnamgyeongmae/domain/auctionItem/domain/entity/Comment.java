@@ -51,6 +51,14 @@ public class Comment extends BaseTimeEntity {
   }
 
   @Builder
+  public Comment(String content, User user, Comment parent, List<Comment> children) {
+    this.content = content;
+    this.user = user;
+    this.parent = parent;
+    this.children = children;
+  }
+
+  @Builder
   public Comment(
       String content,
       AuctionItem auctionItem,
@@ -65,4 +73,17 @@ public class Comment extends BaseTimeEntity {
     this.children = children;
     this.like_count = like_count;
   }
+
+  public void setAuctionItem(AuctionItem auctionItem) {
+    this.auctionItem = auctionItem;
+  }
+
+  public void setUser(User user) {
+    this.user = user;
+  }
+
+  public void setParent(Comment parent) {
+    this.parent = parent;
+  }
+
 }
