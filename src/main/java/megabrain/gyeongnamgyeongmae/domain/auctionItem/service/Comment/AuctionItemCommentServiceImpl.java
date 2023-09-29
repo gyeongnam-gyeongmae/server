@@ -27,11 +27,11 @@ public class AuctionItemCommentServiceImpl implements AuctionItemCommentService 
 
   @Transactional
   public void createAuctionItemComment(
-      AuctionItemCommentRequest auctionItemCommentRequest, Long id, Long userId) {
+      AuctionItemCommentRequest auctionItemCommentRequest, Long id) {
     User user =
         (User)
             this.userRepository
-                .findById(userId)
+                .findById(auctionItemCommentRequest.getUserId())
                 .orElseThrow(
                     () -> {
                       return new RuntimeException("유저를 찾을수 없습니다");

@@ -8,8 +8,7 @@ import megabrain.gyeongnamgyeongmae.domain.auctionItem.dto.Comment.AuctionItemCo
 
 public interface AuctionItemCommentService {
 
-  void createAuctionItemComment(
-      AuctionItemCommentRequest auctionItemCommentRequest, Long id, Long userId);
+  void createAuctionItemComment(AuctionItemCommentRequest auctionItemCommentRequest, Long id);
 
   List<AuctionItemCommentParentDto> findAuctionItemCommentById(Long id);
 
