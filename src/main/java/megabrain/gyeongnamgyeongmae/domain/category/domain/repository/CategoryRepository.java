@@ -5,5 +5,5 @@ import megabrain.gyeongnamgyeongmae.domain.category.domain.entity.Category;
 import org.springframework.data.jpa.repository.JpaRepository;
 
 public interface CategoryRepository extends JpaRepository<Category, Long> {
-  public Optional<Category> findCategoryByName(String Name);
+  Optional<Category> findCategoryByName(String Name);
 }
