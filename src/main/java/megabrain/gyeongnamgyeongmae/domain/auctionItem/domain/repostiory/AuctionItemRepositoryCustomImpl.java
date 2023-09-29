@@ -7,7 +7,7 @@ import com.querydsl.jpa.impl.JPAQueryFactory;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
-import javax.persistence.EntityManager;
+import lombok.RequiredArgsConstructor;
 import megabrain.gyeongnamgyeongmae.domain.auctionItem.domain.entity.AuctionItem;
 import megabrain.gyeongnamgyeongmae.domain.auctionItem.domain.entity.QAuctionItem;
 import megabrain.gyeongnamgyeongmae.domain.auctionItem.dto.AuctionItemFirstView;
@@ -17,16 +17,12 @@ import megabrain.gyeongnamgyeongmae.domain.auctionItem.dto.SearchItem.SearchAuct
 import megabrain.gyeongnamgyeongmae.domain.category.domain.entity.QCategory;
 import megabrain.gyeongnamgyeongmae.domain.image.domain.repository.ImageRepository;
 
+@RequiredArgsConstructor
 public class AuctionItemRepositoryCustomImpl implements AuctionItemRepositoryCustom {
 
   public final JPAQueryFactory queryFactory;
 
-  public final ImageRepository imageRepository;
-
-  public AuctionItemRepositoryCustomImpl(EntityManager em, ImageRepository imageRepository) {
-    this.queryFactory = new JPAQueryFactory(em);
-    this.imageRepository = imageRepository;
-  }
+  private final ImageRepository imageRepository;
 
   public AuctionItemSearchResponse searchAuctionItemPage(
       SearchAuctionItemSortedRequest searchAuctionItemSortedRequest) {
@@ -35,29 +31,23 @@ public class AuctionItemRepositoryCustomImpl implements AuctionItemRepositoryCus
     QCategory category = QCategory.category;
 
     List<OrderSpecifier<?>> orderSpecifiers = new ArrayList<>();
-    BooleanBuilder statusBuilder = new BooleanBuilder();
-    BooleanBuilder sellBuilder = new BooleanBuilder();
     BooleanBuilder keywordStatus = new BooleanBuilder();
     BooleanBuilder categoryStatus = new BooleanBuilder();
+    BooleanBuilder sellStatus = new BooleanBuilder();
 
-    searchAuctionItemSortedRequest.applySearchCategory(categoryStatus, auctionItem);
-    searchAuctionItemSortedRequest.applyKeyWordStatus(keywordStatus, auctionItem);
     searchAuctionItemSortedRequest.applySearchPrice(orderSpecifiers, auctionItem);
     searchAuctionItemSortedRequest.applySearchLike(orderSpecifiers, auctionItem);
     searchAuctionItemSortedRequest.applySearchTime(orderSpecifiers, auctionItem);
-    searchAuctionItemSortedRequest.applySearchTime(orderSpecifiers, auctionItem);
-    searchAuctionItemSortedRequest.applySearchClosed(sellBuilder, auctionItem);
+
+    searchAuctionItemSortedRequest.applySearchCategory(categoryStatus, auctionItem);
+    searchAuctionItemSortedRequest.applyKeyWordStatus(keywordStatus, auctionItem);
+    searchAuctionItemSortedRequest.applySearchClosed(sellStatus, auctionItem);
 
     JPAQuery<AuctionItem> query =
         queryFactory
             .selectFrom(auctionItem)
             .innerJoin(auctionItem.category, category)
-            .where(
-                auctionItem.removed.eq(false),
-                categoryStatus,
-                statusBuilder,
-                keywordStatus,
-                sellBuilder);
+            .where(auctionItem.removed.eq(false), categoryStatus, keywordStatus, sellStatus);
 
     Long page = searchAuctionItemSortedRequest.getPage();
     Long itemsPerPage = 10L;
@@ -69,25 +59,29 @@ public class AuctionItemRepositoryCustomImpl implements AuctionItemRepositoryCus
             .limit(itemsPerPage)
             .fetch();
 
+    long totalItems = query.fetch().size();
+
     AuctionItemPaginationDto paginationInfo = new AuctionItemPaginationDto();
     paginationInfo.setCurrentPage(page);
     paginationInfo.setItemCount((long) results.size());
     paginationInfo.setItemsPerPage(itemsPerPage);
-    paginationInfo.setTotalItems((long) query.fetch().size());
-    paginationInfo.setTotalPages(((long) query.fetch().size() + itemsPerPage - 1) / itemsPerPage);
+    paginationInfo.setTotalItems(totalItems);
+    paginationInfo.setTotalPages((totalItems + itemsPerPage - 1) / itemsPerPage);
 
-    List<AuctionItemFirstView> auctionItemFirstViews =
-        results.stream()
-            .map(
-                result ->
-                    AuctionItemFirstView.of(
-                        result, imageRepository.findFirstImageByAuctionItemId(result.getId())))
-            .collect(Collectors.toList());
+    List<AuctionItemFirstView> auctionItemFirstViews = convertResultsToViews(results);
 
-    AuctionItemSearchResponse auctionItemSearchResponse = new AuctionItemSearchResponse();
-    auctionItemSearchResponse.setAuctionItemPaginationDto(paginationInfo);
-    auctionItemSearchResponse.setAuctionItemFirstViewPage(auctionItemFirstViews);
+    return AuctionItemSearchResponse.builder()
+        .auctionItemFirstViewPage(auctionItemFirstViews)
+        .auctionItemPaginationDto(paginationInfo)
+        .build();
+  }
 
-    return auctionItemSearchResponse;
+  private List<AuctionItemFirstView> convertResultsToViews(List<AuctionItem> results) {
+    return results.stream()
+        .map(
+            result ->
+                AuctionItemFirstView.of(
+                    result, imageRepository.findFirstImageByAuctionItemId(result.getId())))
+        .collect(Collectors.toList());
   }
 }

@@ -12,4 +12,6 @@ public interface ImageService {
   List<Image> findImageByAuctionItemId(Long id);
 
   List<String> findImageByAuctionItemIdBackUrls(Long id);
+
+//  Image findFirstImageByAuctionItemId(Long id);
 }

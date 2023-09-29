@@ -52,7 +52,8 @@ public class AuctionItemCommentServiceImpl implements AuctionItemCommentService 
     auctionItemCommentRepository.save(comment);
   }
 
-  private Comment findCommentById(Long id) {
+  @Override
+  public Comment findCommentById(Long id) {
     return auctionItemCommentRepository
         .findById(id)
         .orElseThrow(() -> new CommentNotFoundException("댓글을 찾을 수 없습니다."));

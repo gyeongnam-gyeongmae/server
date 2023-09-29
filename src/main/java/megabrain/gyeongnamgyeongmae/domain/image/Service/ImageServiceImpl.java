@@ -8,8 +8,7 @@ import java.util.stream.Collectors;
 import lombok.RequiredArgsConstructor;
 import megabrain.gyeongnamgyeongmae.domain.auctionItem.domain.entity.AuctionItem;
 import megabrain.gyeongnamgyeongmae.domain.auctionItem.domain.entity.Comment;
-import megabrain.gyeongnamgyeongmae.domain.auctionItem.domain.repostiory.AuctionItemCommentRepository;
-import megabrain.gyeongnamgyeongmae.domain.auctionItem.domain.repostiory.AuctionItemRepository;
+import megabrain.gyeongnamgyeongmae.domain.auctionItem.service.Item.AuctionItemService;
 import megabrain.gyeongnamgyeongmae.domain.image.domain.entity.Image;
 import megabrain.gyeongnamgyeongmae.domain.image.domain.repository.ImageRepository;
 import megabrain.gyeongnamgyeongmae.domain.image.dto.FileType;
@@ -22,8 +21,7 @@ public class ImageServiceImpl implements ImageService {
 
   private final ImageRepository imageRepository;
   private final AwsS3Service awsS3Service;
-  private final AuctionItemRepository auctionItemRepository;
-  private final AuctionItemCommentRepository commentRepository;
+  private final AuctionItemService auctionItemService;
 
   @Override
   public void uploadImage(List<MultipartFile> images, String from, Long id) throws IOException {
@@ -33,9 +31,9 @@ public class ImageServiceImpl implements ImageService {
     if (whereFrom.equals("AuctionItem")) {
       auctionItem = checkIsRealIdAuctionItem(id);
     }
-    if (whereFrom.equals("Comment")) {
-      comment = checkIsRealIdComment(id);
-    }
+//    if (whereFrom.equals("Comment")) {
+//      comment = checkIsRealIdComment(id);
+//    }
     upload(images, whereFrom, auctionItem, comment);
   }
 
@@ -43,6 +41,11 @@ public class ImageServiceImpl implements ImageService {
   public List<Image> findImageByAuctionItemId(Long id) {
     return imageRepository.findImageByAuctionItemId(id);
   }
+
+//  @Override
+//  public Image findFirstImageByAuctionItemId(Long id) {
+//    return imageRepository.findFirstImageByAuctionItemId(id);
+//  }
 
   @Override
   public List<String> findImageByAuctionItemIdBackUrls(Long id) {
@@ -54,11 +57,7 @@ public class ImageServiceImpl implements ImageService {
   }
 
   private AuctionItem checkIsRealIdAuctionItem(Long id) {
-    return auctionItemRepository.findById(id).orElseThrow(() -> new RuntimeException("존재하지 않는 경매"));
-  }
-
-  private Comment checkIsRealIdComment(Long id) {
-    return commentRepository.findById(id).orElseThrow(() -> new RuntimeException("존재하지 않는 댓글"));
+    return auctionItemService.findAuctionItemById(id);
   }
 
   private void upload(

@@ -1,6 +1,7 @@
 package megabrain.gyeongnamgyeongmae.domain.auctionItem.service.Comment;
 
 import java.util.List;
+import megabrain.gyeongnamgyeongmae.domain.auctionItem.domain.entity.Comment;
 import megabrain.gyeongnamgyeongmae.domain.auctionItem.dto.AuctionItemCommentDeleteRequest;
 import megabrain.gyeongnamgyeongmae.domain.auctionItem.dto.AuctionItemCommentRequest;
 import megabrain.gyeongnamgyeongmae.domain.auctionItem.dto.AuctionItemCommentUpdateRequest;
@@ -11,6 +12,8 @@ public interface AuctionItemCommentService {
   void createAuctionItemComment(AuctionItemCommentRequest auctionItemCommentRequest, Long id);
 
   List<AuctionItemCommentParentDto> findAuctionItemCommentById(Long id);
+
+  Comment findCommentById(Long id);
 
   void updateAuctionItemComment(AuctionItemCommentUpdateRequest auctionItemCommentUpdateRequest);
 
