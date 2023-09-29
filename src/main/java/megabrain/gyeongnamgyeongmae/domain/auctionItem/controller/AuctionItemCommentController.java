@@ -53,7 +53,7 @@ public class AuctionItemCommentController {
   }
 
   @PatchMapping({""})
-  @Operation(summary = "경매품 댓글 수정", description = "게시된 댓글에 대해 수정하기")
+  @Operation(summary = "작성된 댓글 수정", description = "게시된 댓글에 대해 수정하기")
   @ApiResponses(
       value = {
         @ApiResponse(responseCode = "201", description = "댓글 작성 성공"),
@@ -67,7 +67,7 @@ public class AuctionItemCommentController {
   }
 
   @DeleteMapping({""})
-  @Operation(summary = "경매품 댓글 삭제", description = "게시된 댓글에 대해 삭제하기")
+  @Operation(summary = "작성된 댓글 삭제", description = "게시된 댓글에 대해 삭제하기")
   @ApiResponses(
       value = {
         @ApiResponse(responseCode = "201", description = "댓글 작성 성공"),
