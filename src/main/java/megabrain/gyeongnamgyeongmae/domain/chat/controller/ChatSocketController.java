@@ -7,7 +7,7 @@ import megabrain.gyeongnamgyeongmae.domain.chat.dto.ChatMessageSendRequest;
 import megabrain.gyeongnamgyeongmae.domain.chat.service.ChatMessageServiceInterface;
 import megabrain.gyeongnamgyeongmae.domain.chat.service.ChatRoomServiceInterface;
 import megabrain.gyeongnamgyeongmae.domain.user.domain.entity.User;
-import megabrain.gyeongnamgyeongmae.domain.user.service.UserService;
+import megabrain.gyeongnamgyeongmae.domain.user.service.UserServiceInterface;
 import org.springframework.messaging.handler.annotation.DestinationVariable;
 import org.springframework.messaging.handler.annotation.MessageMapping;
 import org.springframework.stereotype.Controller;
@@ -16,7 +16,7 @@ import org.springframework.stereotype.Controller;
 @Controller
 @Slf4j
 public class ChatSocketController {
-  private final UserService userService;
+  private final UserServiceInterface userService;
   private final ChatMessageServiceInterface chatMessageService;
   private final ChatRoomServiceInterface chatRoomService;
 

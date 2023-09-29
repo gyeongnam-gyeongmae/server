@@ -10,7 +10,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 @Service
 @RequiredArgsConstructor
-public class GeneralUserService implements UserService {
+public class GeneralUserService implements UserServiceInterface {
 
   private final UserRepository userRepository;
 

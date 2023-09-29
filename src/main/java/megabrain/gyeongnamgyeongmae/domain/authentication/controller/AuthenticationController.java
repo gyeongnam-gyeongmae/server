@@ -12,7 +12,7 @@ import megabrain.gyeongnamgyeongmae.domain.authentication.dto.PhoneAuthenticatio
 import megabrain.gyeongnamgyeongmae.domain.authentication.dto.UserRegisterRequest;
 import megabrain.gyeongnamgyeongmae.domain.authentication.service.AuthenticationServiceInterface;
 import megabrain.gyeongnamgyeongmae.domain.user.domain.entity.User;
-import megabrain.gyeongnamgyeongmae.domain.user.service.UserService;
+import megabrain.gyeongnamgyeongmae.domain.user.service.UserServiceInterface;
 import megabrain.gyeongnamgyeongmae.global.anotation.LoginRequired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -24,7 +24,7 @@ import org.springframework.web.bind.annotation.*;
 @RequestMapping("api/authentications")
 public class AuthenticationController {
   private final AuthenticationServiceInterface authenticationService;
-  private final UserService userService;
+  private final UserServiceInterface userService;
 
   @PostMapping("register/{auth-vendor}")
   @Operation(summary = "회원가입/로그인 요청", description = "회원의 OAuth 회원가입/로그인을 요청합니다.")
