@@ -33,8 +33,7 @@ public class ChatRoom extends BaseTimeEntity {
   }
 
   public void addParticipants(ChatParticipant user) {
-    ChatParticipant chatParticipant = ChatParticipant.from(user.getUser());
-    participants.add(chatParticipant);
+    participants.add(user);
   }
 
   public static ChatRoom of(AuctionItem auction) {
