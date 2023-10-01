@@ -1,5 +1,6 @@
 package megabrain.gyeongnamgyeongmae.domain.user.controller;
 
+import io.swagger.v3.oas.annotations.ExternalDocumentation;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.responses.ApiResponses;
@@ -26,7 +27,13 @@ public class UserController {
 
   @PostMapping("address")
   @LoginRequired
-  @Operation(summary = "주소 등록", description = "")
+  @Operation(
+      summary = "주소 등록",
+      description = "카카오 API를 활용하여 좌표를 주소로 변환하여 등록합니다.",
+      externalDocs =
+          @ExternalDocumentation(
+              description = "좌표를 주소로 변환하는 방법은 다음 링크를 참고하세요.",
+              url = "https://developers.kakao.com/docs/latest/ko/local/dev-guide#coord-to-address"))
   @ApiResponses(
       value = {
         @ApiResponse(responseCode = "201", description = "주소 등록 성공"),
@@ -44,10 +51,4 @@ public class UserController {
 
     return ResponseEntity.status(HttpStatus.CREATED).build();
   }
-
-  //  @GetMapping("/address")
-  //  @LoginRequired
-  //  public AddressResponse getAddress() {
-  //    return new AddressResponse(userService.getAddress());
-  //  }
 }
