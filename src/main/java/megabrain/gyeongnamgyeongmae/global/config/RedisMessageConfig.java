@@ -9,7 +9,7 @@ import org.springframework.stereotype.Component;
 @Component
 public class RedisMessageConfig {
 
-  private String host = "localhost";
+  private String host = "gg-redis";
 
   private int port = 6379;
 }
