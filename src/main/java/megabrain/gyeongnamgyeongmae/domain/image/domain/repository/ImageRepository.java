@@ -8,13 +8,17 @@ import org.springframework.stereotype.Repository;
 
 @Repository
 public interface ImageRepository extends JpaRepository<Image, Long> {
-  // TODO: 중복제거 쿼리 제거, 네이티브 쿼리 제거, 삭제된 이미지 안들고오게 처리
-  @Query(value = "SELECT DISTINCT * FROM images where auction_id = :id", nativeQuery = true)
+  // TODO: 네이티브 쿼리 제거
+  @Query(
+      value = "SELECT * FROM images where auction_id = :id AND removed = FALSE",
+      nativeQuery = true)
   List<Image> findImageByAuctionItemId(Long id);
 
   @Query(
       value =
-          "SELECT DISTINCT * FROM images where auction_id = :id ORDER BY created_at ASC LIMIT 1",
+          "SELECT  * FROM images where auction_id = :id AND removed = FALSE ORDER BY created_at ASC LIMIT 1 ",
       nativeQuery = true)
   Image findFirstImageByAuctionItemId(Long id);
 }
+
+// DISTINCT
