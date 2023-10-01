@@ -39,7 +39,7 @@ public class AuctionItem extends BaseTimeEntity {
   @Column(name = "item_status")
   private AuctionItemStatus itemStatus;
 
-  @ManyToOne(fetch = FetchType.LAZY)
+  @ManyToOne(fetch = FetchType.EAGER, targetEntity = Category.class)
   @JoinColumn(name = "category_id")
   private Category category;
 

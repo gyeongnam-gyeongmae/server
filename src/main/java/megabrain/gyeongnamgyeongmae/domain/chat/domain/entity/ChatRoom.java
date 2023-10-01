@@ -1,5 +1,6 @@
 package megabrain.gyeongnamgyeongmae.domain.chat.domain.entity;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import java.util.ArrayList;
 import java.util.List;
 import javax.persistence.*;
@@ -24,6 +25,7 @@ public class ChatRoom extends BaseTimeEntity {
   private AuctionItem auction;
 
   @OneToMany(mappedBy = "chatRoom", cascade = CascadeType.ALL)
+  @JsonIgnore // 순환참조를 무시하기 위하여 사용
   private List<ChatParticipant> participants = new ArrayList<>();
 
   private ChatRoom(AuctionItem auction) {
