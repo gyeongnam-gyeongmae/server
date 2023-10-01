@@ -13,7 +13,7 @@ import megabrain.gyeongnamgyeongmae.domain.auctionItem.dto.AuctionItemResponse;
 import megabrain.gyeongnamgyeongmae.domain.auctionItem.dto.CreateAuctionItemRequest;
 import megabrain.gyeongnamgyeongmae.domain.auctionItem.dto.UpdateAuctionItemRequest;
 import megabrain.gyeongnamgyeongmae.domain.auctionItem.service.Item.AuctionItemService;
-import megabrain.gyeongnamgyeongmae.domain.image.Service.ImageService;
+import megabrain.gyeongnamgyeongmae.domain.image.Service.FindImageServiceInterface;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -25,7 +25,7 @@ import org.springframework.web.bind.annotation.*;
 public class AuctionItemController {
 
   private final AuctionItemService auctionItemService;
-  private final ImageService imageService;
+  private final FindImageServiceInterface findImageService;
 
   @PostMapping("")
   @Operation(summary = "경매품 게시글 생성", description = "경매품의 정보를 업로드 합니다.")
@@ -52,7 +52,7 @@ public class AuctionItemController {
       })
   public ResponseEntity<AuctionItemResponse> findAuctionItemById(@PathVariable Long id) {
     AuctionItem auctionItem = auctionItemService.findAuctionItemById(id);
-    List<String> imageUrls = imageService.findImageByAuctionItemIdBackUrls(id);
+    List<String> imageUrls = findImageService.findImageByAuctionItemIdBackUrls(id);
     AuctionItemResponse auctionItemResponse =
         auctionItemService.auctionItemResponse(auctionItem, imageUrls);
     return ResponseEntity.ok(auctionItemResponse);

@@ -1,10 +1,8 @@
 package megabrain.gyeongnamgyeongmae.domain.image.Service;
 
 import java.io.IOException;
-import java.util.Collections;
 import java.util.List;
 import java.util.UUID;
-import java.util.stream.Collectors;
 import lombok.RequiredArgsConstructor;
 import megabrain.gyeongnamgyeongmae.domain.auctionItem.domain.entity.AuctionItem;
 import megabrain.gyeongnamgyeongmae.domain.auctionItem.domain.entity.Comment;
@@ -40,16 +38,10 @@ public class ImageServiceImpl implements ImageService {
       default:
         throw new ImageTypeException("업로드 타입이 잘못됬습니다 : " + from.name());
     }
-
   }
 
   private AuctionItem checkIsRealIdAuctionItem(Long id) {
     return auctionItemService.findAuctionItemById(id);
-  }
-
-  @Override
-  public List<Image> findImageByAuctionItemId(Long id) {
-    return imageRepository.findImageByAuctionItemId(id);
   }
 
   //  @Override
@@ -83,18 +75,8 @@ public class ImageServiceImpl implements ImageService {
       imageRepository.save(image);
     }
   }
+
   private String uploadFileName(String from, String fileExtension) {
     return from + "/" + (UUID.randomUUID().toString().replace("-", "") + "." + fileExtension);
   }
-
-  @Override
-  public List<String> findImageByAuctionItemIdBackUrls(Long id) {
-    List<Image> images = findImageByAuctionItemId(id);
-    if (images == null || images.isEmpty()) {
-      return Collections.emptyList();
-    }
-    return images.stream().map(Image::getImageUrl).collect(Collectors.toList());
-  }
-  // 분리 필요
-
 }
