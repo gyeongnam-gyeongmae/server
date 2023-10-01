@@ -10,9 +10,12 @@ import megabrain.gyeongnamgyeongmae.domain.auctionItem.domain.entity.AuctionItem
 import megabrain.gyeongnamgyeongmae.domain.auctionItem.domain.entity.Comment;
 import megabrain.gyeongnamgyeongmae.domain.auctionItem.service.Item.AuctionItemService;
 import megabrain.gyeongnamgyeongmae.domain.image.domain.entity.Image;
+import megabrain.gyeongnamgyeongmae.domain.image.domain.entity.UploadType;
 import megabrain.gyeongnamgyeongmae.domain.image.domain.repository.ImageRepository;
 import megabrain.gyeongnamgyeongmae.domain.image.dto.FileType;
+import megabrain.gyeongnamgyeongmae.domain.image.exception.ImageTypeException;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
 
 @Service
@@ -24,17 +27,24 @@ public class ImageServiceImpl implements ImageService {
   private final AuctionItemService auctionItemService;
 
   @Override
-  public void uploadImage(List<MultipartFile> images, String from, Long id) throws IOException {
-    String whereFrom = checkImageUploadFind(from);
-    AuctionItem auctionItem = null;
-    Comment comment = null;
-    if (whereFrom.equals("AuctionItem")) {
-      auctionItem = checkIsRealIdAuctionItem(id);
+  @Transactional
+  public void uploadImage(List<MultipartFile> images, UploadType from, Long id) throws IOException {
+
+    switch (from) {
+      case AuctionItem:
+        upload(images, from.name(), checkIsRealIdAuctionItem(id), null);
+        break;
+        //      case Profile:
+        //        upload(images, from.name(), null, chekcIsRealIdProfile(id));
+        //        break;
+      default:
+        throw new ImageTypeException("업로드 타입이 잘못됬습니다 : " + from.name());
     }
-//    if (whereFrom.equals("Comment")) {
-//      comment = checkIsRealIdComment(id);
-//    }
-    upload(images, whereFrom, auctionItem, comment);
+
+  }
+
+  private AuctionItem checkIsRealIdAuctionItem(Long id) {
+    return auctionItemService.findAuctionItemById(id);
   }
 
   @Override
@@ -42,23 +52,10 @@ public class ImageServiceImpl implements ImageService {
     return imageRepository.findImageByAuctionItemId(id);
   }
 
-//  @Override
-//  public Image findFirstImageByAuctionItemId(Long id) {
-//    return imageRepository.findFirstImageByAuctionItemId(id);
-//  }
-
-  @Override
-  public List<String> findImageByAuctionItemIdBackUrls(Long id) {
-    List<Image> images = findImageByAuctionItemId(id);
-    if (images == null || images.isEmpty()) {
-      return Collections.emptyList();
-    }
-    return images.stream().map(Image::getImageUrl).collect(Collectors.toList());
-  }
-
-  private AuctionItem checkIsRealIdAuctionItem(Long id) {
-    return auctionItemService.findAuctionItemById(id);
-  }
+  //  @Override
+  //  public Image findFirstImageByAuctionItemId(Long id) {
+  //    return imageRepository.findFirstImageByAuctionItemId(id);
+  //  }
 
   private void upload(
       List<MultipartFile> images, String from, AuctionItem auctionItem, Comment comment)
@@ -86,21 +83,18 @@ public class ImageServiceImpl implements ImageService {
       imageRepository.save(image);
     }
   }
-
   private String uploadFileName(String from, String fileExtension) {
     return from + "/" + (UUID.randomUUID().toString().replace("-", "") + "." + fileExtension);
   }
 
-  private String checkImageUploadFind(String from) {
-    if (from.equals("Profile")) {
-      return "Profile";
+  @Override
+  public List<String> findImageByAuctionItemIdBackUrls(Long id) {
+    List<Image> images = findImageByAuctionItemId(id);
+    if (images == null || images.isEmpty()) {
+      return Collections.emptyList();
     }
-    if (from.equals("AuctionItem")) {
-      return "AuctionItem";
-    }
-    if (from.equals("Comment")) {
-      return "Comment";
-    }
-    throw new RuntimeException("이미지 파라미터 잘못");
+    return images.stream().map(Image::getImageUrl).collect(Collectors.toList());
   }
+  // 분리 필요
+
 }

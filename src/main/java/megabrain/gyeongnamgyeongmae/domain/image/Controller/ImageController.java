@@ -7,6 +7,7 @@ import java.io.IOException;
 import java.util.List;
 import lombok.RequiredArgsConstructor;
 import megabrain.gyeongnamgyeongmae.domain.image.Service.ImageService;
+import megabrain.gyeongnamgyeongmae.domain.image.domain.entity.UploadType;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
@@ -23,15 +24,18 @@ public class ImageController {
   @PostMapping(
       value = "/upload",
       consumes = {MediaType.MULTIPART_FORM_DATA_VALUE})
-  @Operation(summary = "이미지 업로드 ", description = "이미지 업로드, from : AuctionItem, id : AuctionItem id 를 입력하시면 됩니다.")
+  @Operation(
+      summary = "이미지 업로드 ",
+      description = "이미지 업로드, from : AuctionItem, id : AuctionItem id 를 입력하시면 됩니다.")
   @ApiResponses(
       value = {
-        @ApiResponse(responseCode = "201", description = "이미지 업로드 성공"),
+        @ApiResponse(responseCode = "200", description = "이미지 업로드 성공"),
         @ApiResponse(responseCode = "404", description = "이미지 업로드 실패"),
+        @ApiResponse(responseCode = "500", description = "이미지 업로드 실패")
       })
   public ResponseEntity<HttpStatus> uploadImage(
       @RequestPart("file") List<MultipartFile> files,
-      @PathVariable String from,
+      @PathVariable UploadType from,
       @PathVariable Long id)
       throws IOException {
     imageService.uploadImage(files, from, id);

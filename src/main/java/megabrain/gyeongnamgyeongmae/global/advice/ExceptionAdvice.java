@@ -13,6 +13,7 @@ import megabrain.gyeongnamgyeongmae.domain.category.exception.CategoryNotFoundEx
 import megabrain.gyeongnamgyeongmae.domain.chat.exception.ChatRoomNotFoundException;
 import megabrain.gyeongnamgyeongmae.domain.chat.exception.UserNotParticipantInChatRoomException;
 import megabrain.gyeongnamgyeongmae.domain.chat.service.RedisMessageBrokerService;
+import megabrain.gyeongnamgyeongmae.domain.image.exception.ImageTypeException;
 import megabrain.gyeongnamgyeongmae.domain.user.exception.DuplicateAuthVendorUserId;
 import megabrain.gyeongnamgyeongmae.domain.user.exception.UserNotFoundException;
 import org.springframework.http.HttpStatus;
@@ -99,5 +100,10 @@ public class ExceptionAdvice {
   @ExceptionHandler(CommentNotFoundException.class)
   public ResponseEntity<String> commentNotFoundException(CommentNotFoundException error) {
     return new ResponseEntity<>(error.getMessage(), HttpStatus.NOT_FOUND);
+  }
+
+  @ExceptionHandler(ImageTypeException.class)
+  public ResponseEntity<String> imageTypeException(ImageTypeException error) {
+    return new ResponseEntity<>(error.getMessage(), HttpStatus.BAD_REQUEST);
   }
 }
