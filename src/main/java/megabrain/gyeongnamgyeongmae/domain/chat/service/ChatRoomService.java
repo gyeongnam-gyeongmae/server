@@ -34,8 +34,8 @@ public class ChatRoomService implements ChatRoomServiceInterface {
     User seller = userService.findUserById(sellerId);
     User buyer = userService.findUserById(buyerId);
 
-    ChatParticipant sellerParticipant = ChatParticipant.from(seller);
-    ChatParticipant buyerParticipant = ChatParticipant.from(buyer);
+    ChatParticipant sellerParticipant = ChatParticipant.of(seller, chatRoom);
+    ChatParticipant buyerParticipant = ChatParticipant.of(buyer, chatRoom);
 
     chatRoom.addParticipants(sellerParticipant);
     chatRoom.addParticipants(buyerParticipant);
