@@ -30,7 +30,7 @@ public class ImageController {
   @ApiResponses(
       value = {
         @ApiResponse(responseCode = "200", description = "이미지 업로드 성공"),
-        @ApiResponse(responseCode = "404", description = "이미지 업로드 실패"),
+        @ApiResponse(responseCode = "400", description = "이미지 업로드 실패"),
         @ApiResponse(responseCode = "500", description = "이미지 업로드 실패")
       })
   public ResponseEntity<HttpStatus> uploadImage(

@@ -14,6 +14,7 @@ import megabrain.gyeongnamgyeongmae.domain.chat.exception.ChatRoomNotFoundExcept
 import megabrain.gyeongnamgyeongmae.domain.chat.exception.UserNotParticipantInChatRoomException;
 import megabrain.gyeongnamgyeongmae.domain.chat.service.RedisMessageBrokerService;
 import megabrain.gyeongnamgyeongmae.domain.image.exception.ImageTypeException;
+import megabrain.gyeongnamgyeongmae.domain.image.exception.ImageUploadException;
 import megabrain.gyeongnamgyeongmae.domain.user.exception.DuplicateAuthVendorUserId;
 import megabrain.gyeongnamgyeongmae.domain.user.exception.UserNotFoundException;
 import org.springframework.http.HttpStatus;
@@ -104,6 +105,11 @@ public class ExceptionAdvice {
 
   @ExceptionHandler(ImageTypeException.class)
   public ResponseEntity<String> imageTypeException(ImageTypeException error) {
+    return new ResponseEntity<>(error.getMessage(), HttpStatus.BAD_REQUEST);
+  }
+
+  @ExceptionHandler(ImageUploadException.class)
+  public ResponseEntity<String> handleImageUploadException(ImageUploadException error) {
     return new ResponseEntity<>(error.getMessage(), HttpStatus.BAD_REQUEST);
   }
 }

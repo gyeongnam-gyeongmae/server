@@ -6,6 +6,8 @@ import com.amazonaws.services.s3.model.CannedAccessControlList;
 import com.amazonaws.services.s3.model.ObjectMetadata;
 import com.amazonaws.services.s3.model.PutObjectRequest;
 import java.io.IOException;
+
+import megabrain.gyeongnamgyeongmae.domain.image.exception.ImageUploadException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
@@ -33,7 +35,7 @@ public class AwsS3Service {
                     .withCannedAcl(CannedAccessControlList.PublicRead));
         } catch (SdkClientException e) {
             e.printStackTrace();
-            System.out.println("업로드 실패: " + e.getMessage());
+            throw new ImageUploadException("업로드 실패: " + e.getMessage(), e);
         }
 
         amazonS3.getUrl(bucket, filename);
