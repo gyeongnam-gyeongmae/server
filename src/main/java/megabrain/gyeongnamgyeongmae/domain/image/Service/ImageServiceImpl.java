@@ -10,7 +10,6 @@ import megabrain.gyeongnamgyeongmae.domain.auctionItem.service.Item.AuctionItemS
 import megabrain.gyeongnamgyeongmae.domain.image.domain.entity.Image;
 import megabrain.gyeongnamgyeongmae.domain.image.domain.entity.UploadType;
 import megabrain.gyeongnamgyeongmae.domain.image.domain.repository.ImageRepository;
-import megabrain.gyeongnamgyeongmae.domain.image.dto.FileType;
 import megabrain.gyeongnamgyeongmae.domain.image.exception.ImageTypeException;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -32,9 +31,6 @@ public class ImageServiceImpl implements ImageService {
       case AuctionItem:
         upload(images, from.name(), checkIsRealIdAuctionItem(id), null);
         break;
-        //      case Profile:
-        //        upload(images, from.name(), null, chekcIsRealIdProfile(id));
-        //        break;
       default:
         throw new ImageTypeException("업로드 타입이 잘못됬습니다 : " + from.name());
     }
@@ -44,39 +40,48 @@ public class ImageServiceImpl implements ImageService {
     return auctionItemService.findAuctionItemById(id);
   }
 
-  //  @Override
-  //  public Image findFirstImageByAuctionItemId(Long id) {
-  //    return imageRepository.findFirstImageByAuctionItemId(id);
-  //  }
-
   private void upload(
       List<MultipartFile> images, String from, AuctionItem auctionItem, Comment comment)
       throws IOException {
     for (MultipartFile file : images) {
-      String originalFilename = file.getOriginalFilename();
-
-      if (originalFilename == null) {
-        throw new RuntimeException("파일 확장자 없음");
-      }
-
-      String fileExtension = originalFilename.substring(originalFilename.lastIndexOf(".") + 1);
-
-      if (!FileType.isValid(fileExtension)) {
-        throw new RuntimeException("이미지 파일 아님");
-      }
+      String originalFilename = getOriginalFilename(file);
+      String fileExtension = getFileExtension(originalFilename);
+      validateFiles(fileExtension);
 
       String fileName = uploadFileName(from, fileExtension);
       awsS3Service.upload(file, fileName);
 
       String fileShow = "https://d231cnlxdxmjew.cloudfront.net/" + fileName;
-      Image image = Image.builder().imageFrom(from).name(originalFilename).url(fileShow).build();
-      image.setAuctionItem(auctionItem);
-      image.setComment(comment);
-      imageRepository.save(image);
+      saveImage(from, originalFilename, fileShow, auctionItem);
+    }
+  }
+
+  private String getOriginalFilename(MultipartFile file) {
+    String originalFilename = file.getOriginalFilename();
+    if (originalFilename == null) {
+      throw new ImageTypeException("파일 확장자 없음");
+    }
+    return originalFilename;
+  }
+
+  private String getFileExtension(String originalFilename) {
+    return originalFilename.substring(originalFilename.lastIndexOf(".") + 1);
+  }
+
+  private void validateFiles(String files) {
+    if (files == null || files.isEmpty()) {
+      throw new ImageTypeException("이미지 파일이 아님");
     }
   }
 
   private String uploadFileName(String from, String fileExtension) {
     return from + "/" + (UUID.randomUUID().toString().replace("-", "") + "." + fileExtension);
+  }
+
+  private void saveImage(
+      String from, String originalFilename, String fileShowUrl, AuctionItem auctionItem) {
+    Image image = Image.builder().imageFrom(from).name(originalFilename).url(fileShowUrl).build();
+    image.setAuctionItem(auctionItem);
+    imageRepository.save(image);
   }
 }

@@ -14,7 +14,6 @@ import javax.persistence.*;
 @Entity
 @Table(name = "Image")
 @Getter
-@Setter
 public class Image extends BaseTimeEntity {
 
     @Id
@@ -37,6 +36,10 @@ public class Image extends BaseTimeEntity {
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name ="comment_id")
     private Comment comment;
+
+    public void setAuctionItem(AuctionItem auctionItem) {
+        this.auctionItem = auctionItem;
+    }
 
     @Builder
     public Image(String name, String url, String imageFrom) {
