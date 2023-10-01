@@ -11,6 +11,7 @@ import megabrain.gyeongnamgyeongmae.domain.image.domain.entity.Image;
 import megabrain.gyeongnamgyeongmae.domain.image.domain.entity.UploadType;
 import megabrain.gyeongnamgyeongmae.domain.image.domain.repository.ImageRepository;
 import megabrain.gyeongnamgyeongmae.domain.image.exception.ImageTypeException;
+import megabrain.gyeongnamgyeongmae.domain.image.dto.FileType;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
@@ -46,7 +47,7 @@ public class ImageServiceImpl implements ImageService {
     for (MultipartFile file : images) {
       String originalFilename = getOriginalFilename(file);
       String fileExtension = getFileExtension(originalFilename);
-      validateFiles(fileExtension);
+      validateFileExtension(fileExtension);
 
       String fileName = uploadFileName(from, fileExtension);
       awsS3Service.upload(file, fileName);
@@ -68,8 +69,9 @@ public class ImageServiceImpl implements ImageService {
     return originalFilename.substring(originalFilename.lastIndexOf(".") + 1);
   }
 
-  private void validateFiles(String files) {
-    if (files == null || files.isEmpty()) {
+  private void validateFileExtension(String filename) {
+    String extension = getFileExtension(filename);
+    if (!FileType.isValid(extension)) {
       throw new ImageTypeException("이미지 파일이 아님");
     }
   }
