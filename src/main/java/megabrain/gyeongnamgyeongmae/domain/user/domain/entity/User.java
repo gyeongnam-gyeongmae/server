@@ -6,6 +6,8 @@ import lombok.NoArgsConstructor;
 import megabrain.gyeongnamgyeongmae.domain.image.domain.entity.Image;
 import megabrain.gyeongnamgyeongmae.global.BaseTimeEntity;
 
+import java.util.List;
+
 @Getter
 @Entity
 @Table(name = "users")
@@ -30,8 +32,8 @@ public class User extends BaseTimeEntity {
 
   @Embedded private Address address;
 
-  @OneToOne(mappedBy = "user")
-  private Image image;
+  @OneToMany(mappedBy = "user")
+  private List<Image> images;
 
   @Builder
   public User(String phoneNumber, String authVendorUserId, String nickname) {

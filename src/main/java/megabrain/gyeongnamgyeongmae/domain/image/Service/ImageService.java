@@ -93,9 +93,9 @@ public class ImageService implements ImageServiceInterface {
   }
 
   private void saveImage(Image image, User user) {
-    Image findImage = user.getImage();
-    if (findImage != null) {
-      findImage.setRemoved();
+    List<Image> images = user.getImages();
+    if (images != null) {
+      images.forEach(Image::setRemoved);
     }
     image.setUser(user);
     imageRepository.save(image);

@@ -31,7 +31,7 @@ public class Image extends BaseTimeEntity {
   @Column(name = "removed")
   private boolean removed;
 
-  @OneToOne(fetch = FetchType.LAZY)
+  @ManyToOne(fetch = FetchType.LAZY)
   @JoinColumn(name = "user_id")
   private User user;
 
