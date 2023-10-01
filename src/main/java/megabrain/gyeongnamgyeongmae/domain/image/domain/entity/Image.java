@@ -5,12 +5,12 @@ import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import megabrain.gyeongnamgyeongmae.domain.auctionItem.domain.entity.AuctionItem;
-import megabrain.gyeongnamgyeongmae.domain.auctionItem.domain.entity.Comment;
+import megabrain.gyeongnamgyeongmae.domain.user.domain.entity.User;
 import megabrain.gyeongnamgyeongmae.global.BaseTimeEntity;
 
 @NoArgsConstructor
 @Entity
-@Table(name = "Image")
+@Table(name = "images")
 @Getter
 public class Image extends BaseTimeEntity {
 
@@ -31,18 +31,27 @@ public class Image extends BaseTimeEntity {
   @Column(name = "removed")
   private boolean removed;
 
-  @ManyToOne(fetch = FetchType.LAZY)
-  @JoinColumn(name = "comment_id")
-  private Comment comment;
+  @OneToOne(fetch = FetchType.LAZY)
+  @JoinColumn(name = "user_id")
+  private User user;
 
   @Builder
   public Image(String name, String url, String imageFrom) {
     this.imageName = name;
     this.imageUrl = url;
     this.imageFrom = imageFrom;
+    removed = false;
   }
 
   public void setAuctionItem(AuctionItem auctionItem) {
     this.auctionItem = auctionItem;
+  }
+
+  public void setUser(User user) {
+    this.user = user;
+  }
+
+  public void setRemoved() {
+    this.removed = true;
   }
 }

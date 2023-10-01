@@ -7,7 +7,7 @@ import io.swagger.v3.oas.annotations.tags.Tag;
 import java.io.IOException;
 import java.util.List;
 import lombok.RequiredArgsConstructor;
-import megabrain.gyeongnamgyeongmae.domain.image.Service.ImageService;
+import megabrain.gyeongnamgyeongmae.domain.image.Service.ImageServiceInterface;
 import megabrain.gyeongnamgyeongmae.domain.image.dto.UploadType;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
@@ -21,7 +21,7 @@ import org.springframework.web.multipart.MultipartFile;
 @RequestMapping("api/{from}/{id}/images/")
 public class ImageController {
 
-  private final ImageService imageService;
+  private final ImageServiceInterface imageService;
 
   @PostMapping(
       value = "/upload",
