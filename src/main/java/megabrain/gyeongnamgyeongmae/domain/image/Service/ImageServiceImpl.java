@@ -8,10 +8,10 @@ import megabrain.gyeongnamgyeongmae.domain.auctionItem.domain.entity.AuctionItem
 import megabrain.gyeongnamgyeongmae.domain.auctionItem.domain.entity.Comment;
 import megabrain.gyeongnamgyeongmae.domain.auctionItem.service.Item.AuctionItemService;
 import megabrain.gyeongnamgyeongmae.domain.image.domain.entity.Image;
-import megabrain.gyeongnamgyeongmae.domain.image.domain.entity.UploadType;
 import megabrain.gyeongnamgyeongmae.domain.image.domain.repository.ImageRepository;
-import megabrain.gyeongnamgyeongmae.domain.image.exception.ImageTypeException;
 import megabrain.gyeongnamgyeongmae.domain.image.dto.FileType;
+import megabrain.gyeongnamgyeongmae.domain.image.dto.UploadType;
+import megabrain.gyeongnamgyeongmae.domain.image.exception.ImageTypeException;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
