@@ -4,5 +4,5 @@ import java.util.List;
 
 public interface FindImageServiceInterface {
 
-    List<String> findImageByAuctionItemIdBackUrls(Long id);
+  List<String> findImageByAuctionItemIdBackUrls(Long id);
 }

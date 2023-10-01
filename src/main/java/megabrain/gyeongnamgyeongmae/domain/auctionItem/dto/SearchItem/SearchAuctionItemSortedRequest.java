@@ -10,7 +10,6 @@ import megabrain.gyeongnamgyeongmae.domain.auctionItem.domain.entity.QAuctionIte
 
 @Data
 public class SearchAuctionItemSortedRequest {
-  // TODO: dto 수정 요구
 
   private String keyword;
 

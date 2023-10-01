@@ -14,7 +14,9 @@ public class CategoryService implements CategoryServiceInterface {
 
   @Override
   public Category findCategoryByName(String categoryName) {
-    return categoryRepository.findCategoryByName(categoryName).orElseThrow(()-> new CategoryNotFoundException("카테고리를 찾을수 없습니다"));
+    return categoryRepository
+        .findCategoryByName(categoryName)
+        .orElseThrow(() -> new CategoryNotFoundException("카테고리를 찾을수 없습니다"));
   }
 
   @Override

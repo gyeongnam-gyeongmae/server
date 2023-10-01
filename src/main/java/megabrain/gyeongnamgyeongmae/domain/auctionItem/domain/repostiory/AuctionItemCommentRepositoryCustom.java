@@ -1,9 +1,8 @@
 package megabrain.gyeongnamgyeongmae.domain.auctionItem.domain.repostiory;
 
+import java.util.List;
 import megabrain.gyeongnamgyeongmae.domain.auctionItem.domain.entity.Comment;
 
-import java.util.List;
-
 public interface AuctionItemCommentRepositoryCustom {
-    List<Comment> findByAuctionItemCommentByAuctionId(Long id);
+  List<Comment> findByAuctionItemCommentByAuctionId(Long id);
 }

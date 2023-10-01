@@ -6,7 +6,6 @@ import javax.validation.constraints.NotEmpty;
 import javax.validation.constraints.NotNull;
 import lombok.*;
 import megabrain.gyeongnamgyeongmae.domain.auctionItem.domain.entity.AuctionItem;
-import megabrain.gyeongnamgyeongmae.domain.auctionItem.domain.entity.AuctionItemStatus;
 
 @Builder
 @Getter
@@ -14,8 +13,7 @@ import megabrain.gyeongnamgyeongmae.domain.auctionItem.domain.entity.AuctionItem
 @AllArgsConstructor
 public class CreateAuctionItemRequest {
 
-  @NotNull
-  private String name;
+  @NotNull private String name;
 
   @Min(0)
   @NotNull

@@ -92,5 +92,4 @@ public class Comment extends BaseTimeEntity {
   public void deleteComment() {
     this.removed = true;
   }
-
 }
