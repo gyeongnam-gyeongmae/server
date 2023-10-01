@@ -8,6 +8,4 @@ import org.springframework.web.multipart.MultipartFile;
 public interface ImageService {
 
   void uploadImage(List<MultipartFile> images, UploadType from, Long id) throws IOException;
-
-  //  Image findFirstImageByAuctionItemId(Long id);
 }
