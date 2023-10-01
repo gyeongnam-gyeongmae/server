@@ -26,4 +26,9 @@ public class FindImageService implements FindImageServiceInterface {
   private List<Image> findImageByAuctionItemId(Long id) {
     return imageRepository.findImageByAuctionItemId(id);
   }
+
+  @Override
+  public Image findFirstImageByAuctionItemId(Long id) {
+    return imageRepository.findFirstImageByAuctionItemId(id);
+  }
 }

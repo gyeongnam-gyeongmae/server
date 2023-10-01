@@ -15,14 +15,14 @@ import megabrain.gyeongnamgyeongmae.domain.auctionItem.dto.SearchItem.AuctionIte
 import megabrain.gyeongnamgyeongmae.domain.auctionItem.dto.SearchItem.AuctionItemSearchResponse;
 import megabrain.gyeongnamgyeongmae.domain.auctionItem.dto.SearchItem.SearchAuctionItemSortedRequest;
 import megabrain.gyeongnamgyeongmae.domain.category.domain.entity.QCategory;
-import megabrain.gyeongnamgyeongmae.domain.image.domain.repository.ImageRepository;
+import megabrain.gyeongnamgyeongmae.domain.image.Service.FindImageServiceInterface;
 
 @RequiredArgsConstructor
 public class AuctionItemRepositoryCustomImpl implements AuctionItemRepositoryCustom {
 
   public final JPAQueryFactory queryFactory;
 
-  private final ImageRepository imageRepository;
+  public final FindImageServiceInterface findImageService;
 
   public AuctionItemSearchResponse searchAuctionItemPage(
       SearchAuctionItemSortedRequest searchAuctionItemSortedRequest) {
@@ -81,7 +81,7 @@ public class AuctionItemRepositoryCustomImpl implements AuctionItemRepositoryCus
         .map(
             result ->
                 AuctionItemFirstView.of(
-                    result, imageRepository.findFirstImageByAuctionItemId(result.getId())))
+                    result, findImageService.findFirstImageByAuctionItemId(result.getId())))
         .collect(Collectors.toList());
   }
 }
