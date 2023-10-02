@@ -7,7 +7,6 @@ import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.RequiredArgsConstructor;
 import megabrain.gyeongnamgyeongmae.domain.auctionItem.dto.SearchItem.AuctionItemSearchResponse;
 import megabrain.gyeongnamgyeongmae.domain.auctionItem.dto.SearchItem.SearchAuctionItemSortedRequest;
-import megabrain.gyeongnamgyeongmae.domain.auctionItem.service.Item.AuctionItemService;
 import megabrain.gyeongnamgyeongmae.domain.auctionItem.service.Search.AuctionItemSearchService;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -21,15 +20,19 @@ import org.springframework.web.bind.annotation.RestController;
 @RequiredArgsConstructor
 public class AuctionItemSearchController {
 
-    private final AuctionItemService auctionItemService;
     private final AuctionItemSearchService auctionItemSearchService;
 
-    @Operation(summary = "Search AuctionItem", description = "경매품 검색하기")
     @GetMapping("")
+    @Operation(summary = "경매품 검색하기", description = "경매품을 찾습니다.")
+    @ApiResponses(
+            value = {
+                    @ApiResponse(responseCode = "200", description = "경매품 검색 성공"),
+                    @ApiResponse(responseCode = "500", description = "게시글을 찾지 못했습니다(서버 오류)"),
+            })
     public ResponseEntity<AuctionItemSearchResponse> findItemCategory(
             @ModelAttribute SearchAuctionItemSortedRequest searchAuctionItemSortedRequest) {
         AuctionItemSearchResponse result =
-                this.auctionItemSearchService.findAuctionItemByRequest(searchAuctionItemSortedRequest);
+                auctionItemSearchService.findAuctionItemByRequest(searchAuctionItemSortedRequest);
         return ResponseEntity.ok(result);
     }
 }

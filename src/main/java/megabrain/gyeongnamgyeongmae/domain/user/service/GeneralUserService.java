@@ -18,6 +18,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.MultiValueMap;
 import org.springframework.web.client.RestTemplate;
+import megabrain.gyeongnamgyeongmae.domain.user.exception.UserNotFoundException;
 
 @Service
 @RequiredArgsConstructor
