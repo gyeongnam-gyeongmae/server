@@ -3,7 +3,10 @@ package megabrain.gyeongnamgyeongmae.domain.user.domain.entity;
 import javax.persistence.*;
 import lombok.*;
 import lombok.NoArgsConstructor;
+import megabrain.gyeongnamgyeongmae.domain.image.domain.entity.Image;
 import megabrain.gyeongnamgyeongmae.global.BaseTimeEntity;
+
+import java.util.List;
 
 @Getter
 @Entity
@@ -28,6 +31,9 @@ public class User extends BaseTimeEntity {
   private String introduce;
 
   @Embedded private Address address;
+
+  @OneToMany(mappedBy = "user")
+  private List<Image> images;
 
   @Builder
   public User(String phoneNumber, String authVendorUserId, String nickname) {

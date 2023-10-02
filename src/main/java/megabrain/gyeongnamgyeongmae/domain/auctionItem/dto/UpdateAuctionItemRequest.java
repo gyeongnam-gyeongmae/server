@@ -5,8 +5,6 @@ import javax.validation.constraints.Min;
 import javax.validation.constraints.NotEmpty;
 import javax.validation.constraints.NotNull;
 import lombok.*;
-import megabrain.gyeongnamgyeongmae.domain.auctionItem.domain.entity.AuctionItemStatus;
-import megabrain.gyeongnamgyeongmae.domain.auctionItem.domain.entity.AuctionStatus;
 
 @Getter
 @Setter
@@ -25,9 +23,5 @@ public class UpdateAuctionItemRequest {
 
   @NotEmpty private String content;
 
-  @NotNull private AuctionItemStatus itemStatus;
-
   @NotNull private LocalDateTime closedTime;
-
-  @NotNull private AuctionStatus auctionStatus;
 }

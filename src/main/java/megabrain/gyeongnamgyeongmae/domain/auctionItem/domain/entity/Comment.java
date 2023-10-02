@@ -8,9 +8,8 @@ import megabrain.gyeongnamgyeongmae.domain.user.domain.entity.User;
 import megabrain.gyeongnamgyeongmae.global.BaseTimeEntity;
 
 @Getter
-@Setter
 @Entity
-@Table(name = "comment")
+@Table(name = "comments")
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 public class Comment extends BaseTimeEntity {
 
@@ -51,6 +50,14 @@ public class Comment extends BaseTimeEntity {
   }
 
   @Builder
+  public Comment(String content, User user, Comment parent, List<Comment> children) {
+    this.content = content;
+    this.user = user;
+    this.parent = parent;
+    this.children = children;
+  }
+
+  @Builder
   public Comment(
       String content,
       AuctionItem auctionItem,
@@ -64,5 +71,25 @@ public class Comment extends BaseTimeEntity {
     this.parent = parent;
     this.children = children;
     this.like_count = like_count;
+  }
+
+  public void setAuctionItem(AuctionItem auctionItem) {
+    this.auctionItem = auctionItem;
+  }
+
+  public void setUser(User user) {
+    this.user = user;
+  }
+
+  public void setParent(Comment parent) {
+    this.parent = parent;
+  }
+
+  public void setContent(String content) {
+    this.content = content;
+  }
+
+  public void deleteComment() {
+    this.removed = true;
   }
 }

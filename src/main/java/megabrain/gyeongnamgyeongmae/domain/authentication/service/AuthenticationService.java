@@ -8,7 +8,7 @@ import megabrain.gyeongnamgyeongmae.domain.authentication.domain.entity.OAuthVen
 import megabrain.gyeongnamgyeongmae.domain.authentication.exception.OAuthVendorNotFoundException;
 import megabrain.gyeongnamgyeongmae.domain.user.domain.entity.User;
 import megabrain.gyeongnamgyeongmae.domain.user.domain.repository.UserRepository;
-import megabrain.gyeongnamgyeongmae.domain.user.service.UserService;
+import megabrain.gyeongnamgyeongmae.domain.user.service.UserServiceInterface;
 import org.springframework.stereotype.Service;
 
 @Service
@@ -17,7 +17,7 @@ public class AuthenticationService implements AuthenticationServiceInterface {
 
   private final List<OAuthLogin> oAuthLogins;
   private final UserRepository userRepository;
-  private final UserService userService;
+  private final UserServiceInterface userService;
   private final HttpSession httpSession;
   public static final String USER_ID = "USER_ID";
 

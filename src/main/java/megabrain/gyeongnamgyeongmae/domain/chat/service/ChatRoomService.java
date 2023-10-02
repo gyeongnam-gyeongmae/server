@@ -11,7 +11,7 @@ import megabrain.gyeongnamgyeongmae.domain.chat.domain.repository.ChatParticipan
 import megabrain.gyeongnamgyeongmae.domain.chat.domain.repository.ChatRoomRepository;
 import megabrain.gyeongnamgyeongmae.domain.chat.exception.ChatRoomNotFoundException;
 import megabrain.gyeongnamgyeongmae.domain.user.domain.entity.User;
-import megabrain.gyeongnamgyeongmae.domain.user.service.UserService;
+import megabrain.gyeongnamgyeongmae.domain.user.service.UserServiceInterface;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -19,7 +19,7 @@ import org.springframework.transaction.annotation.Transactional;
 @RequiredArgsConstructor
 public class ChatRoomService implements ChatRoomServiceInterface {
 
-  private final UserService userService;
+  private final UserServiceInterface userService;
   private final AuctionItemRepository auctionItemRepository;
   private final ChatRoomRepository chatRoomRepository;
   private final ChatParticipantRepository chatParticipantRepository;

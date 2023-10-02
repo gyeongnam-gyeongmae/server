@@ -2,8 +2,6 @@ package megabrain.gyeongnamgyeongmae.domain.auctionItem.service.Item;
 
 import java.time.LocalDateTime;
 import java.util.List;
-import java.util.Objects;
-import java.util.stream.Collectors;
 import lombok.RequiredArgsConstructor;
 import megabrain.gyeongnamgyeongmae.domain.auctionItem.domain.entity.AuctionItem;
 import megabrain.gyeongnamgyeongmae.domain.auctionItem.domain.entity.AuctionItemLike;
@@ -15,15 +13,10 @@ import megabrain.gyeongnamgyeongmae.domain.auctionItem.dto.AuctionItemResponse;
 import megabrain.gyeongnamgyeongmae.domain.auctionItem.dto.CreateAuctionItemRequest;
 import megabrain.gyeongnamgyeongmae.domain.auctionItem.dto.UpdateAuctionItemRequest;
 import megabrain.gyeongnamgyeongmae.domain.auctionItem.exception.AuctionNotFoundException;
-import megabrain.gyeongnamgyeongmae.domain.category.domain.entity.Category;
-import megabrain.gyeongnamgyeongmae.domain.category.domain.repository.CategoryRepository;
-import megabrain.gyeongnamgyeongmae.domain.category.service.CategoryService;
-import megabrain.gyeongnamgyeongmae.domain.image.domain.entity.Image;
-import megabrain.gyeongnamgyeongmae.domain.image.domain.repository.ImageRepository;
+import megabrain.gyeongnamgyeongmae.domain.auctionItem.exception.AuctionTimeException;
+import megabrain.gyeongnamgyeongmae.domain.category.service.CategoryServiceInterface;
 import megabrain.gyeongnamgyeongmae.domain.user.domain.entity.User;
-import megabrain.gyeongnamgyeongmae.domain.user.domain.repository.UserRepository;
-import megabrain.gyeongnamgyeongmae.domain.user.exception.UserNotFoundException;
-import megabrain.gyeongnamgyeongmae.domain.user.service.UserService;
+import megabrain.gyeongnamgyeongmae.domain.user.service.UserServiceInterface;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -33,85 +26,76 @@ public class AuctionItemServiceImpl implements AuctionItemService {
 
   private final AuctionItemRepository auctionItemRepository;
   private final AuctionItemLikeRepository auctionItemLikeRepository;
-  private final CategoryService categoryService;
-  private final UserRepository userRepository;
-  private final CategoryRepository categoryRepository;
-  private final UserService userService;
-  private final ImageRepository imageRepository;
+  private final CategoryServiceInterface categoryService;
+  private final UserServiceInterface userService;
 
   @Override
   @Transactional
   public void createAuctionItem(CreateAuctionItemRequest createAuctionItemRequest) {
     checkClosedTime(createAuctionItemRequest.getClosedTime());
-    User userEntity =
-        userRepository
-            .findById(createAuctionItemRequest.getUserId())
-            .orElseThrow(UserNotFoundException::new);
-    Category categoryEntity =
-        categoryService.findCategoryByName(createAuctionItemRequest.getCategory());
     AuctionItem auctionItem = createAuctionItemRequest.toEntity();
-    auctionItem.setUser(userEntity);
-    auctionItem.setCategory(categoryEntity);
+    setAuctionItemProperties(
+        auctionItem, createAuctionItemRequest.getUserId(), createAuctionItemRequest.getCategory());
     auctionItemRepository.save(auctionItem);
   }
 
   @Override
-  @Transactional
-  public AuctionItemResponse findAuctionItemById(Long id) {
+  @Transactional(readOnly = true)
+  public AuctionItem findAuctionItemById(Long id) {
     AuctionItem auctionItem =
-        auctionItemRepository.findById(id).orElseThrow(AuctionNotFoundException::new);
-    List<Image> images = imageRepository.findImageByAuctionItemId(id);
+        auctionItemRepository
+            .findById(id)
+            .orElseThrow(() -> new AuctionNotFoundException("경매품을 찾을 수 없습니다."));
     auctionItem.checkShowAuctionItem(auctionItem);
-    updateAuctionItemViewCount(auctionItem);
-    AuctionItemResponse auctionItemResponse = AuctionItemResponse.of(auctionItem);
-    if (!images.isEmpty()) {
-      List<String> imageUrls = images.stream().map(this::makeImageUrl).collect(Collectors.toList());
-      auctionItemResponse.setImages(imageUrls);
-    }
-    return auctionItemResponse;
-  }
-
-  private String makeImageUrl(Image image) {
-    return image.getImageUrl();
+    return auctionItem;
   }
 
   @Override
-  public void updateAuctionItemViewCount(AuctionItem auctionItem) {
-    auctionItem.setView_count(auctionItem.getView_count() + 1);
+  public void saveAuctionItem(AuctionItem auctionItem) {
     auctionItemRepository.save(auctionItem);
+  }
+
+  @Override
+  public AuctionItemResponse auctionItemResponse(AuctionItem auctionItem, List<String> imageUrls) {
+    auctionItem.plusViewCount();
+    return AuctionItemResponse.of(auctionItem, imageUrls);
   }
 
   @Override
   @Transactional
   public void updateAuctionItem(UpdateAuctionItemRequest upDateAuctionItemRequest, Long id) {
     checkClosedTime(upDateAuctionItemRequest.getClosedTime());
-    Category categoryEntity =
-        categoryService.findCategoryByName(upDateAuctionItemRequest.getCategory());
-    // TODO: 유저 정보를 가져오는 부분을 리팩토링 해야함
-    AuctionItem auctionItem = auctionItemRepository.findById(id).orElseThrow(RuntimeException::new);
-
-    if (!(Objects.equals(auctionItem.getUser().getId(), upDateAuctionItemRequest.getUserId()))) {
-      throw new RuntimeException("잘못된 회원입니다 ");
-    }
-
+    AuctionItem auctionItem = findAuctionItemById(id);
     auctionItem.checkShowAuctionItem(auctionItem);
+    sellerCheck(auctionItem, upDateAuctionItemRequest.getUserId());
+    setAuctionItemProperties(
+        auctionItem, upDateAuctionItemRequest.getUserId(), upDateAuctionItemRequest.getCategory());
     auctionItem.updateAuctionItem(upDateAuctionItemRequest);
-    auctionItem.setCategory(categoryEntity);
     auctionItemRepository.save(auctionItem);
   }
 
-  @Override
-  public void checkClosedTime(LocalDateTime closedTime) {
-    LocalDateTime now = LocalDateTime.now();
-    if (closedTime.isBefore(now.plusHours(24))) {
-      throw new RuntimeException("경매 종료 시간은 현재 시간보다 24시간 이후여야 합니다.");
+  private void sellerCheck(AuctionItem auctionItem, Long userId) {
+    if (!auctionItem.getUser().getId().equals(userId)) {
+      throw new AuctionNotFoundException("작성자만 수정할 수 있습니다.");
+    }
+  }
+
+  private void setAuctionItemProperties(AuctionItem auctionItem, Long userId, String categoryName) {
+    auctionItem.setUser(userService.findUserById(userId));
+    auctionItem.setCategory(categoryService.findCategoryByName(categoryName));
+  }
+
+  private void checkClosedTime(LocalDateTime closedTime) {
+    if (closedTime.isBefore(LocalDateTime.now().plusHours(24))) {
+      throw new AuctionTimeException("경매 종료 시간은 24시간 이후여야 합니다.");
     }
   }
 
   @Override
   @Transactional
   public void deleteAuctionItemById(Long id) {
-    AuctionItem auctionItem = auctionItemRepository.findById(id).orElseThrow(RuntimeException::new);
+    AuctionItem auctionItem = findAuctionItemById(id);
+    auctionItem.checkShowAuctionItem(auctionItem);
     auctionItem.removeAuctionItem(auctionItem);
     auctionItemRepository.save(auctionItem);
   }
@@ -119,33 +103,42 @@ public class AuctionItemServiceImpl implements AuctionItemService {
   @Override
   @Transactional
   public void likeAuctionItemById(Long id, AuctionItemLikeRequest auctionItemLikeRequest) {
-    AuctionItem auctionItem = auctionItemRepository.findById(id).orElseThrow(RuntimeException::new);
-    User user =
-        userRepository
-            .findById(auctionItemLikeRequest.getUserId())
-            .orElseThrow(RuntimeException::new);
+    AuctionItem auctionItem = findAuctionItemById(id);
+    User user = userService.findUserById(auctionItemLikeRequest.getUserId());
 
-    AuctionItemLikePK auctionItemLikePK = new AuctionItemLikePK();
-    auctionItemLikePK.setAuctionItemId(id);
-    auctionItemLikePK.setUserId(auctionItemLikeRequest.getUserId());
+    AuctionItemLikePK auctionItemLikePK =
+        new AuctionItemLikePK(id, auctionItemLikeRequest.getUserId());
 
-    AuctionItemLike auctionItemLike =
-        auctionItemLikeRepository.findById(auctionItemLikePK).orElse(null);
+    AuctionItemLike auctionItemLike = auctionItemLike(auctionItemLikePK);
 
     if (auctionItemLike != null) {
-      auctionItemLikeRepository.delete(auctionItemLike);
-      auctionItem.setLike_count(auctionItem.getLike_count() - 1);
-      auctionItemRepository.save(auctionItem);
+      deleteAuctionItemLike(auctionItemLike);
+      auctionItem.minusLikeCount();
     } else {
-      auctionItemLike =
-          AuctionItemLike.builder()
-              .id(auctionItemLikePK)
-              .auctionItem(auctionItem)
-              .user(user)
-              .build();
-      auctionItemLikeRepository.save(auctionItemLike);
-      auctionItem.setLike_count(auctionItem.getLike_count() + 1);
-      auctionItemRepository.save(auctionItem);
+      auctionItemLike = createAndSaveAuctionItemLike(auctionItem, user, auctionItemLikePK);
+      auctionItem.plusLikeCount();
+      saveAuctionItemLike(auctionItemLike);
     }
+    auctionItemRepository.save(auctionItem);
+  }
+
+  private AuctionItemLike createAndSaveAuctionItemLike(
+      AuctionItem auctionItem, User user, AuctionItemLikePK auctionItemLikePK) {
+    AuctionItemLike auctionItemLike =
+        AuctionItemLike.builder().id(auctionItemLikePK).auctionItem(auctionItem).user(user).build();
+    saveAuctionItemLike(auctionItemLike);
+    return auctionItemLike;
+  }
+
+  private void saveAuctionItemLike(AuctionItemLike auctionItemLike) {
+    auctionItemLikeRepository.save(auctionItemLike);
+  }
+
+  private void deleteAuctionItemLike(AuctionItemLike auctionItemLike) {
+    auctionItemLikeRepository.delete(auctionItemLike);
+  }
+
+  private AuctionItemLike auctionItemLike(AuctionItemLikePK auctionItemLikePK) {
+    return auctionItemLikeRepository.findById(auctionItemLikePK).orElse(null);
   }
 }
