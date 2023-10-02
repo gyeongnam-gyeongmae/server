@@ -28,6 +28,10 @@ public class ChatRoom extends BaseTimeEntity {
   @JsonIgnore // 순환참조를 무시하기 위하여 사용
   private List<ChatParticipant> participants = new ArrayList<>();
 
+  @OneToMany(mappedBy = "room", cascade = CascadeType.ALL)
+  @JsonIgnore // 순환참조를 무시하기 위하여 사용
+  private List<ChatMessage> messages = new ArrayList<>();
+
   private ChatRoom(AuctionItem auction) {
     this.auction = auction;
   }
