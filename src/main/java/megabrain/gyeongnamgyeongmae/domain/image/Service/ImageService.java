@@ -6,7 +6,7 @@ import java.util.UUID;
 import java.util.function.Consumer;
 import lombok.RequiredArgsConstructor;
 import megabrain.gyeongnamgyeongmae.domain.auctionItem.domain.entity.AuctionItem;
-import megabrain.gyeongnamgyeongmae.domain.auctionItem.service.Item.AuctionItemService;
+import megabrain.gyeongnamgyeongmae.domain.auctionItem.service.Item.AuctionItemServiceInterface;
 import megabrain.gyeongnamgyeongmae.domain.image.domain.entity.Image;
 import megabrain.gyeongnamgyeongmae.domain.image.domain.repository.ImageRepository;
 import megabrain.gyeongnamgyeongmae.domain.image.dto.FileType;
@@ -24,7 +24,7 @@ public class ImageService implements ImageServiceInterface {
 
   private final ImageRepository imageRepository;
   private final AwsS3Service awsS3Service;
-  private final AuctionItemService auctionItemService;
+  private final AuctionItemServiceInterface auctionItemService;
   private final UserServiceInterface userService;
 
   @Override

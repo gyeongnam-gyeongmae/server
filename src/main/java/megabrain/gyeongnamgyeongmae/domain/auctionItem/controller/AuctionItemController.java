@@ -12,7 +12,7 @@ import megabrain.gyeongnamgyeongmae.domain.auctionItem.dto.AuctionItemLikeReques
 import megabrain.gyeongnamgyeongmae.domain.auctionItem.dto.AuctionItemResponse;
 import megabrain.gyeongnamgyeongmae.domain.auctionItem.dto.CreateAuctionItemRequest;
 import megabrain.gyeongnamgyeongmae.domain.auctionItem.dto.UpdateAuctionItemRequest;
-import megabrain.gyeongnamgyeongmae.domain.auctionItem.service.Item.AuctionItemService;
+import megabrain.gyeongnamgyeongmae.domain.auctionItem.service.Item.AuctionItemServiceInterface;
 import megabrain.gyeongnamgyeongmae.domain.image.Service.FindImageServiceInterface;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -24,7 +24,7 @@ import org.springframework.web.bind.annotation.*;
 @RequiredArgsConstructor
 public class AuctionItemController {
 
-  private final AuctionItemService auctionItemService;
+  private final AuctionItemServiceInterface auctionItemService;
   private final FindImageServiceInterface findImageService;
 
   @PostMapping("")

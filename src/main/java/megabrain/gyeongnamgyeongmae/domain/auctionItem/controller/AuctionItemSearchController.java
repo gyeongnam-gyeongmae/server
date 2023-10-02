@@ -7,7 +7,7 @@ import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.RequiredArgsConstructor;
 import megabrain.gyeongnamgyeongmae.domain.auctionItem.dto.SearchItem.AuctionItemSearchResponse;
 import megabrain.gyeongnamgyeongmae.domain.auctionItem.dto.SearchItem.SearchAuctionItemSortedRequest;
-import megabrain.gyeongnamgyeongmae.domain.auctionItem.service.Search.AuctionItemSearchService;
+import megabrain.gyeongnamgyeongmae.domain.auctionItem.service.Search.AuctionItemSearchInterface;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
@@ -20,7 +20,7 @@ import org.springframework.web.bind.annotation.RestController;
 @RequiredArgsConstructor
 public class AuctionItemSearchController {
 
-  private final AuctionItemSearchService auctionItemSearchService;
+  private final AuctionItemSearchInterface auctionItemSearchService;
 
   @GetMapping("")
   @Operation(summary = "경매품 검색하기", description = "경매품을 찾습니다.")

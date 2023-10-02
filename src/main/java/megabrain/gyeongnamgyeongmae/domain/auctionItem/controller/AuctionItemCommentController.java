@@ -10,7 +10,7 @@ import megabrain.gyeongnamgyeongmae.domain.auctionItem.dto.AuctionItemCommentDel
 import megabrain.gyeongnamgyeongmae.domain.auctionItem.dto.AuctionItemCommentRequest;
 import megabrain.gyeongnamgyeongmae.domain.auctionItem.dto.AuctionItemCommentUpdateRequest;
 import megabrain.gyeongnamgyeongmae.domain.auctionItem.dto.Comment.AuctionItemCommentParentDto;
-import megabrain.gyeongnamgyeongmae.domain.auctionItem.service.Comment.AuctionItemCommentService;
+import megabrain.gyeongnamgyeongmae.domain.auctionItem.service.Comment.AuctionItemCommentServiceInterface;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -21,7 +21,7 @@ import org.springframework.web.bind.annotation.*;
 @RequiredArgsConstructor
 public class AuctionItemCommentController {
 
-  private final AuctionItemCommentService auctionItemCommentService;
+  private final AuctionItemCommentServiceInterface auctionItemCommentService;
 
   @PostMapping({"{id}"})
   @Operation(summary = "게시된 경매품에 댓글 작성하기 ", description = "경매품에 대해 댓글을 작성합니다.")
