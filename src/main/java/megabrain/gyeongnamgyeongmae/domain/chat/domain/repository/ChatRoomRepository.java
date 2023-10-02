@@ -9,7 +9,9 @@ public interface ChatRoomRepository extends JpaRepository<ChatRoom, Long> {
   @Query(
       value =
           "SELECT room FROM ChatRoom room "
+              + "JOIN FETCH ChatMessage message ON room.id = message.room.id "
               + "JOIN ChatParticipant user ON room.id = user.chatRoom.id "
-              + "WHERE user.user.id  = ?1")
+              + "WHERE message.createdAt = (SELECT MAX(message.createdAt) FROM ChatMessage message WHERE message.room.id = room.id) AND user.user.id  = ?1 "
+              + "ORDER BY message.createdAt DESC")
   List<ChatRoom> getChatRoomsByParticipantId(Long userId);
 }
