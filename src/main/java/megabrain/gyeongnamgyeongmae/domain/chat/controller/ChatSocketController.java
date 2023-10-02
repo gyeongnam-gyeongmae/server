@@ -2,7 +2,9 @@ package megabrain.gyeongnamgyeongmae.domain.chat.controller;
 
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import megabrain.gyeongnamgyeongmae.domain.chat.domain.entity.ChatMessage;
 import megabrain.gyeongnamgyeongmae.domain.chat.domain.entity.ChatRoom;
+import megabrain.gyeongnamgyeongmae.domain.chat.dto.ChatMessageResponse;
 import megabrain.gyeongnamgyeongmae.domain.chat.dto.ChatMessageSendRequest;
 import megabrain.gyeongnamgyeongmae.domain.chat.service.ChatMessageServiceInterface;
 import megabrain.gyeongnamgyeongmae.domain.chat.service.ChatRoomServiceInterface;
@@ -10,6 +12,7 @@ import megabrain.gyeongnamgyeongmae.domain.user.domain.entity.User;
 import megabrain.gyeongnamgyeongmae.domain.user.service.UserService;
 import org.springframework.messaging.handler.annotation.DestinationVariable;
 import org.springframework.messaging.handler.annotation.MessageMapping;
+import org.springframework.messaging.handler.annotation.SendTo;
 import org.springframework.stereotype.Controller;
 
 @RequiredArgsConstructor
@@ -26,14 +29,18 @@ public class ChatSocketController {
   */
 
   @MessageMapping("/chat-rooms/{id}")
-  public void sendMessage(@DestinationVariable Long id, ChatMessageSendRequest message) {
+  @SendTo("/subscribe/chat-rooms/{id}")
+  public ChatMessageResponse sendMessage(
+      @DestinationVariable Long id, ChatMessageSendRequest message) {
     User user = userService.findUserById(message.getUserId());
 
     ChatRoom chatRoom = chatRoomService.getChatRoomById(id);
-    if (chatRoom == null) return;
 
     chatRoomService.IsUserParticipantInChatRoom(user.getId(), chatRoom);
 
-    chatMessageService.saveMessage(message.getContent(), message.getMessageType(), chatRoom, user);
+    ChatMessage chatMessage =
+        chatMessageService.saveMessage(
+            message.getContent(), message.getMessageType(), chatRoom, user);
+    return ChatMessageResponse.of(chatMessage);
   }
 }

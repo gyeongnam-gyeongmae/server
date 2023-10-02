@@ -25,9 +25,10 @@ public class ChatMessageMessageService implements ChatMessageServiceInterface {
   }
 
   @Override
-  public void saveMessage(String content, MessageTypeEnum type, ChatRoom room, User user) {
-    chatMessageRepository.save(ChatMessage.of(content, type, room, user));
+  public ChatMessage saveMessage(String content, MessageTypeEnum type, ChatRoom room, User user) {
+    ChatMessage chatMessage = chatMessageRepository.save(ChatMessage.of(content, type, room, user));
     redisMessageBrokerService.sender(
         RecentChatMessageResponse.of(ChatMessage.of(content, type, room, user)));
+    return chatMessage;
   }
 }

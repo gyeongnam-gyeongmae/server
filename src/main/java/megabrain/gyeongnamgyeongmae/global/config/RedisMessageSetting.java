@@ -14,7 +14,6 @@ import org.springframework.data.redis.connection.RedisStandaloneConfiguration;
 import org.springframework.data.redis.connection.lettuce.LettuceConnectionFactory;
 import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.data.redis.listener.ChannelTopic;
-import org.springframework.data.redis.listener.RedisMessageListenerContainer;
 import org.springframework.data.redis.serializer.GenericJackson2JsonRedisSerializer;
 import org.springframework.data.redis.serializer.StringRedisSerializer;
 
@@ -33,14 +32,14 @@ public class RedisMessageSetting {
     return new LettuceConnectionFactory(configuration);
   }
 
-  @Bean
-  public RedisMessageListenerContainer redisMessageListenerContainer(
-      RedisConnectionFactory redisConnectionFactory, RedisSubscriber redisSubscriber) {
-    RedisMessageListenerContainer container = new RedisMessageListenerContainer();
-    container.setConnectionFactory(redisConnectionFactory);
-    container.addMessageListener(redisSubscriber, channelTopic());
-    return container;
-  }
+  //  @Bean
+  //  public RedisMessageListenerContainer redisMessageListenerContainer(
+  //      RedisConnectionFactory redisConnectionFactory, RedisSubscriber redisSubscriber) {
+  //    RedisMessageListenerContainer container = new RedisMessageListenerContainer();
+  //    container.setConnectionFactory(redisConnectionFactory);
+  //    container.addMessageListener(redisSubscriber, channelTopic());
+  //    return container;
+  //  }
 
   @Bean
   public RedisTemplate<String, RecentChatMessageResponse> redisMessageTemplate(
