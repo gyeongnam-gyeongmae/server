@@ -4,7 +4,6 @@ import java.time.LocalDateTime;
 import java.util.List;
 import lombok.*;
 import megabrain.gyeongnamgyeongmae.domain.auctionItem.domain.entity.AuctionItem;
-import megabrain.gyeongnamgyeongmae.domain.auctionItem.domain.entity.AuctionItemStatus;
 import megabrain.gyeongnamgyeongmae.domain.auctionItem.domain.entity.AuctionStatus;
 import megabrain.gyeongnamgyeongmae.domain.user.domain.entity.Address;
 
@@ -20,7 +19,6 @@ public class AuctionItemResponse {
 
   private String nickname;
   private Long price;
-  private AuctionItemStatus itemStatus;
   private AuctionStatus auctionStatus;
 
   private LocalDateTime createdTime;
@@ -43,7 +41,6 @@ public class AuctionItemResponse {
         .nickname(auctionItem.getUser().getNickname())
         .name(auctionItem.getName())
         .price(auctionItem.getPrice())
-        .itemStatus(auctionItem.getItemStatus())
         .auctionStatus(auctionItem.getStatus())
         .createdTime(auctionItem.getCreatedAt())
         .modifiedTime(auctionItem.getUpdatedAt())

@@ -42,9 +42,6 @@ public class AuctionItem extends BaseTimeEntity {
   @Column(name = "content")
   private String content;
 
-  @Column(name = "item_status")
-  private AuctionItemStatus itemStatus;
-
   @ManyToOne(fetch = FetchType.LAZY)
   @JoinColumn(name = "category_id")
   private Category category;
@@ -62,23 +59,14 @@ public class AuctionItem extends BaseTimeEntity {
   @Column(name = "comment_count")
   private Long comment_count;
 
-  @Column private Long temperature;
-
   @Builder
-  public AuctionItem(
-      Long id,
-      String name,
-      long price,
-      String content,
-      AuctionItemStatus itemStatus,
-      LocalDateTime closedTime) {
+  public AuctionItem(Long id, String name, long price, String content, LocalDateTime closedTime) {
     this.status = AuctionStatus.ONGOING;
     this.comment_count = 0L;
     this.id = id;
     this.name = name;
     this.price = price;
     this.content = content;
-    this.itemStatus = itemStatus;
     this.closedTime = closedTime;
   }
 
@@ -88,7 +76,6 @@ public class AuctionItem extends BaseTimeEntity {
       String name,
       long price,
       String content,
-      AuctionItemStatus itemStatus,
       LocalDateTime closedTime,
       Category category,
       User user,
@@ -100,7 +87,6 @@ public class AuctionItem extends BaseTimeEntity {
     this.name = name;
     this.price = price;
     this.content = content;
-    this.itemStatus = itemStatus;
     this.closedTime = closedTime;
     this.category = category;
     this.user = user;
