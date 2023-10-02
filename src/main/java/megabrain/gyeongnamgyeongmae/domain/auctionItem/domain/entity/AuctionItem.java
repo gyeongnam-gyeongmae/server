@@ -2,26 +2,32 @@ package megabrain.gyeongnamgyeongmae.domain.auctionItem.domain.entity;
 
 import java.time.LocalDateTime;
 import javax.persistence.*;
-import lombok.*;
+import lombok.AccessLevel;
+import lombok.Builder;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
 import megabrain.gyeongnamgyeongmae.domain.auctionItem.dto.UpdateAuctionItemRequest;
+import megabrain.gyeongnamgyeongmae.domain.auctionItem.exception.AuctionRemovedException;
 import megabrain.gyeongnamgyeongmae.domain.category.domain.entity.Category;
 import megabrain.gyeongnamgyeongmae.domain.user.domain.entity.Address;
 import megabrain.gyeongnamgyeongmae.domain.user.domain.entity.User;
 import megabrain.gyeongnamgyeongmae.global.BaseTimeEntity;
 
 @Getter
-@Setter
 @Entity
-@Table(name = "AuctionItem")
+@Table(name = "auction_items")
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 public class AuctionItem extends BaseTimeEntity {
+
+  @Column(name = "close_at")
+  protected LocalDateTime closedTime;
 
   @Id
   @GeneratedValue(strategy = GenerationType.IDENTITY)
   @Column(name = "auction_id")
   private Long id;
 
-  @Column(name = "removed")
+  @Column(name = "removed", nullable = false, columnDefinition = "boolean default false")
   private boolean removed = false;
 
   @ManyToOne(fetch = FetchType.LAZY)
@@ -37,15 +43,9 @@ public class AuctionItem extends BaseTimeEntity {
   @Column(name = "content")
   private String content;
 
-  @Column(name = "item_status")
-  private AuctionItemStatus itemStatus;
-
   @ManyToOne(fetch = FetchType.LAZY)
   @JoinColumn(name = "category_id")
   private Category category;
-
-  @Column(name = "close_at")
-  protected LocalDateTime closedTime;
 
   @Column(name = "like_count")
   private Long like_count = 0L;
@@ -64,40 +64,15 @@ public class AuctionItem extends BaseTimeEntity {
   @Column(name = "comment_count")
   private Long comment_count;
 
-  @Column private Long temperature;
-
   @Builder
-  public AuctionItem(
-      Long id,
-      String name,
-      long price,
-      String content,
-      AuctionItemStatus itemStatus,
-      LocalDateTime closedTime) {
+  public AuctionItem(Long id, String name, long price, String content, LocalDateTime closedTime) {
     this.status = AuctionStatus.ONGOING;
     this.comment_count = 0L;
     this.id = id;
     this.name = name;
     this.price = price;
     this.content = content;
-    this.itemStatus = itemStatus;
     this.closedTime = closedTime;
-  }
-
-  @Builder
-  private AuctionItem(
-      String name,
-      long price,
-      String content,
-      AuctionItemStatus itemStatus,
-      LocalDateTime localDateTime) {
-    this.name = name;
-    this.price = price;
-    this.content = content;
-    this.itemStatus = itemStatus;
-    this.closedTime = localDateTime;
-    this.status = AuctionStatus.ONGOING;
-    this.comment_count = 0L;
   }
 
   @Builder
@@ -106,7 +81,6 @@ public class AuctionItem extends BaseTimeEntity {
       String name,
       long price,
       String content,
-      AuctionItemStatus itemStatus,
       LocalDateTime closedTime,
       Category category,
       User user,
@@ -118,12 +92,39 @@ public class AuctionItem extends BaseTimeEntity {
     this.name = name;
     this.price = price;
     this.content = content;
-    this.itemStatus = itemStatus;
     this.closedTime = closedTime;
     this.category = category;
     this.user = user;
     this.createdAt = createdAt;
     this.updatedAt = updatedAt;
+  }
+
+  public void setUser(User user) {
+    this.user = user;
+  }
+
+  public void setCategory(Category category) {
+    this.category = category;
+  }
+
+  public void minusLikeCount() {
+    this.like_count -= 1;
+  }
+
+  public void plusLikeCount() {
+    this.like_count += 1;
+  }
+
+  public void plusViewCount() {
+    this.view_count += 1;
+  }
+
+  public void plusCommentCount() {
+    this.comment_count += 1;
+  }
+
+  public void minusCommentCount() {
+    this.comment_count -= 1;
   }
 
   public void removeAuctionItem(AuctionItem auctionItem) {
@@ -132,7 +133,7 @@ public class AuctionItem extends BaseTimeEntity {
 
   public void checkShowAuctionItem(AuctionItem auctionItem) {
     if (this.removed) {
-      throw new RuntimeException("삭제된 상품입니다.");
+      throw new AuctionRemovedException("삭제된 경매품 입니다.");
     }
   }
 
@@ -140,8 +141,6 @@ public class AuctionItem extends BaseTimeEntity {
     this.name = upDateAuctionItemRequest.getName();
     this.price = upDateAuctionItemRequest.getPrice();
     this.content = upDateAuctionItemRequest.getContent();
-    this.itemStatus = upDateAuctionItemRequest.getItemStatus();
     this.closedTime = upDateAuctionItemRequest.getClosedTime();
-    this.status = upDateAuctionItemRequest.getAuctionStatus();
   }
 }

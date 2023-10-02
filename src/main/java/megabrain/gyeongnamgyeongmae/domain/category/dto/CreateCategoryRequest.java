@@ -11,7 +11,7 @@ import megabrain.gyeongnamgyeongmae.domain.category.domain.entity.Category;
 @NoArgsConstructor(access = AccessLevel.PRIVATE)
 public class CreateCategoryRequest {
 
-  @NotNull private String name; // 카테고리 이름
+  @NotNull private String name;
 
   @Builder
   public CreateCategoryRequest(String name) {

@@ -1,12 +1,12 @@
 package megabrain.gyeongnamgyeongmae.domain.chat.domain.entity;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import java.util.ArrayList;
 import java.util.List;
 import javax.persistence.*;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import megabrain.gyeongnamgyeongmae.domain.auctionItem.domain.entity.AuctionItem;
-import megabrain.gyeongnamgyeongmae.domain.user.domain.entity.User;
 import megabrain.gyeongnamgyeongmae.global.BaseTimeEntity;
 
 @Getter
@@ -20,25 +20,27 @@ public class ChatRoom extends BaseTimeEntity {
   @Column(name = "chat_room_id")
   private Long id;
 
-  @Column(name = "auction_id", insertable = false, updatable = false)
-  private Long auctionId;
-
   @ManyToOne(targetEntity = AuctionItem.class)
   @JoinColumn(name = "auction_id")
   private AuctionItem auction;
 
-  @OneToMany(mappedBy = "chatRoom")
+  @OneToMany(mappedBy = "chatRoom", cascade = CascadeType.ALL)
+  @JsonIgnore // 순환참조를 무시하기 위하여 사용
   private List<ChatParticipant> participants = new ArrayList<>();
 
-  private ChatRoom(AuctionItem auction, User seller, User buyer) {
+  @OneToMany(mappedBy = "room", cascade = CascadeType.ALL)
+  @JsonIgnore // 순환참조를 무시하기 위하여 사용
+  private List<ChatMessage> messages = new ArrayList<>();
+
+  private ChatRoom(AuctionItem auction) {
     this.auction = auction;
-    List<ChatParticipant> participants = new ArrayList<>();
-    participants.add(ChatParticipant.of(this, seller));
-    participants.add(ChatParticipant.of(this, buyer));
-    this.participants = participants;
   }
 
-  public static ChatRoom of(AuctionItem auction, User seller, User buyer) {
-    return new ChatRoom(auction, seller, buyer);
+  public void addParticipants(ChatParticipant user) {
+    participants.add(user);
+  }
+
+  public static ChatRoom of(AuctionItem auction) {
+    return new ChatRoom(auction);
   }
 }

@@ -5,12 +5,13 @@ import lombok.RequiredArgsConstructor;
 import megabrain.gyeongnamgyeongmae.domain.auctionItem.domain.entity.AuctionItem;
 import megabrain.gyeongnamgyeongmae.domain.auctionItem.domain.repostiory.AuctionItemRepository;
 import megabrain.gyeongnamgyeongmae.domain.auctionItem.exception.AuctionNotFoundException;
+import megabrain.gyeongnamgyeongmae.domain.chat.domain.entity.ChatParticipant;
 import megabrain.gyeongnamgyeongmae.domain.chat.domain.entity.ChatRoom;
+import megabrain.gyeongnamgyeongmae.domain.chat.domain.repository.ChatParticipantRepository;
 import megabrain.gyeongnamgyeongmae.domain.chat.domain.repository.ChatRoomRepository;
 import megabrain.gyeongnamgyeongmae.domain.chat.exception.ChatRoomNotFoundException;
 import megabrain.gyeongnamgyeongmae.domain.user.domain.entity.User;
-import megabrain.gyeongnamgyeongmae.domain.user.domain.repository.UserRepository;
-import megabrain.gyeongnamgyeongmae.domain.user.exception.UserNotFoundException;
+import megabrain.gyeongnamgyeongmae.domain.user.service.UserServiceInterface;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -18,19 +19,28 @@ import org.springframework.transaction.annotation.Transactional;
 @RequiredArgsConstructor
 public class ChatRoomService implements ChatRoomServiceInterface {
 
-  private final UserRepository userRepository;
+  private final UserServiceInterface userService;
   private final AuctionItemRepository auctionItemRepository;
   private final ChatRoomRepository chatRoomRepository;
+  private final ChatParticipantRepository chatParticipantRepository;
 
   @Override
   @Transactional
   public void createChatRoom(Long auctionId, Long sellerId, Long buyerId) {
     AuctionItem auction =
         auctionItemRepository.findById(auctionId).orElseThrow(AuctionNotFoundException::new);
-    User seller = userRepository.findById(sellerId).orElseThrow(UserNotFoundException::new);
-    User buyer = userRepository.findById(buyerId).orElseThrow(UserNotFoundException::new);
+    ChatRoom chatRoom = ChatRoom.of(auction);
 
-    chatRoomRepository.save(ChatRoom.of(auction, seller, buyer));
+    User seller = userService.findUserById(sellerId);
+    User buyer = userService.findUserById(buyerId);
+
+    ChatParticipant sellerParticipant = ChatParticipant.of(seller, chatRoom);
+    ChatParticipant buyerParticipant = ChatParticipant.of(buyer, chatRoom);
+
+    chatRoom.addParticipants(sellerParticipant);
+    chatRoom.addParticipants(buyerParticipant);
+
+    chatRoomRepository.save(chatRoom);
   }
 
   @Override

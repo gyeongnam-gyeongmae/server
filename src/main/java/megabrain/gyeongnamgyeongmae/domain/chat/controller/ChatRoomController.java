@@ -7,7 +7,7 @@ import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import java.util.List;
 import lombok.RequiredArgsConstructor;
-import megabrain.gyeongnamgyeongmae.domain.authentication.service.AuthenticationService;
+import megabrain.gyeongnamgyeongmae.domain.authentication.service.AuthenticationServiceInterface;
 import megabrain.gyeongnamgyeongmae.domain.chat.domain.entity.ChatRoom;
 import megabrain.gyeongnamgyeongmae.domain.chat.service.ChatRoomServiceInterface;
 import megabrain.gyeongnamgyeongmae.global.anotation.LoginRequired;
@@ -22,7 +22,7 @@ import org.springframework.web.bind.annotation.*;
 public class ChatRoomController {
 
   private final ChatRoomServiceInterface chatRoomService;
-  private final AuthenticationService authenticationService;
+  private final AuthenticationServiceInterface authenticationService;
 
   @PostMapping("/{auction-id}")
   @Operation(

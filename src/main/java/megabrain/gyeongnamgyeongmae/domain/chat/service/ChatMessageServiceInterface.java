@@ -9,5 +9,5 @@ import megabrain.gyeongnamgyeongmae.domain.user.domain.entity.User;
 public interface ChatMessageServiceInterface {
   List<ChatMessage> getChatMessageByChatRoomId(Long id);
 
-  void saveMessage(String content, MessageTypeEnum type, ChatRoom room, User user);
+  ChatMessage saveMessage(String content, MessageTypeEnum type, ChatRoom room, User user);
 }

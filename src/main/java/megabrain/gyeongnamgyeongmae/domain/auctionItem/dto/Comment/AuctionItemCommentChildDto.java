@@ -2,11 +2,11 @@ package megabrain.gyeongnamgyeongmae.domain.auctionItem.dto.Comment;
 
 import java.time.LocalDateTime;
 import lombok.Builder;
-import lombok.Data;
+import lombok.Getter;
 import megabrain.gyeongnamgyeongmae.domain.auctionItem.domain.entity.Comment;
 
 @Builder
-@Data
+@Getter
 public class AuctionItemCommentChildDto {
   private Long id;
   private String content;

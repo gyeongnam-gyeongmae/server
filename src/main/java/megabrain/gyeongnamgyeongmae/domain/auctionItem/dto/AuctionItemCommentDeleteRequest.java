@@ -1,13 +1,11 @@
 package megabrain.gyeongnamgyeongmae.domain.auctionItem.dto;
 
+import javax.validation.constraints.NotNull;
 import lombok.Data;
-import lombok.Getter;
-
-import javax.validation.constraints.NotEmpty;
 
 @Data
 public class AuctionItemCommentDeleteRequest {
 
-    private @NotEmpty Long userId;
-    private @NotEmpty Long commentId;
+  @NotNull private Long userId;
+  @NotNull private Long commentId;
 }

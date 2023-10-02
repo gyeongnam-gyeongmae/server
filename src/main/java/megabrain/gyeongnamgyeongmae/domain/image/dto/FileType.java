@@ -11,10 +11,6 @@ public enum FileType {
         this.extension = extension;
     }
 
-    public String getExtension() {
-        return extension;
-    }
-
     public static boolean isValid(String extension) {
         for (FileType imageExtension : FileType.values()) {
             if (imageExtension.getExtension().equalsIgnoreCase(extension)) {
@@ -22,5 +18,9 @@ public enum FileType {
             }
         }
         return false;
+    }
+
+    public String getExtension() {
+        return extension;
     }
 }

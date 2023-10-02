@@ -4,7 +4,7 @@ import com.querydsl.core.BooleanBuilder;
 import com.querydsl.core.types.OrderSpecifier;
 import io.swagger.v3.oas.annotations.media.Schema;
 import java.util.List;
-import javax.validation.constraints.NotEmpty;
+import javax.validation.constraints.NotNull;
 import lombok.*;
 import megabrain.gyeongnamgyeongmae.domain.auctionItem.domain.entity.AuctionStatus;
 import megabrain.gyeongnamgyeongmae.domain.auctionItem.domain.entity.QAuctionItem;
@@ -12,30 +12,28 @@ import megabrain.gyeongnamgyeongmae.domain.auctionItem.domain.entity.QAuctionIte
 @Data
 public class SearchAuctionItemSortedRequest {
 
-  @NotEmpty private String keyword = null;
+    private String keyword;
 
-  @NotEmpty private String category = null;
+    private String category;
 
-  private String nick_name = null;
+    @Schema(name = "city", example = "김해시", description = "유저 프로필 조회 시 반환되는 유저의 거주지역")
+    private String city;
 
-  @Schema(name = "city", example = "김해시", description = "유저 프로필 조회 시 반환되는 유저의 거주지역")
-  private String city;
+    @NotNull private Boolean closed;
 
-  //    @NotEmpty
-  //    private SearchStatus search_status;
+    @NotNull private Boolean search_time;
 
-  @NotEmpty private Boolean closed;
+    @NotNull private Boolean like;
 
-  @NotEmpty private Boolean search_time;
+    @NotNull private Boolean search_price;
 
-  @NotEmpty private Boolean like;
+    @NotNull private Long page;
 
-  @NotEmpty private Boolean search_price;
-
-  //    @NotEmpty
-  //    private Boolean view_count;
-
-  @NotEmpty private Long page;
+  public SearchAuctionItemSortedRequest() {
+    this.closed = Boolean.FALSE;
+    this.search_time = Boolean.FALSE;
+    this.search_price = Boolean.FALSE;
+  }
 
   public void applyKeyWordStatus(BooleanBuilder status, QAuctionItem item) {
     if (this.keyword != null) {
@@ -48,16 +46,6 @@ public class SearchAuctionItemSortedRequest {
       status.and(item.category.name.eq(this.category));
     }
   }
-
-  //    public void applySearchStatus(BooleanBuilder status, QAuctionItem item) {
-  //        if (this.search_status == SearchStatus.NEW) {
-  //            status.and(item.itemStatus.eq(AuctionItemStatus.NEW));
-  //        } else if (this.search_status == SearchStatus.USED) {
-  //            status.and(item.itemStatus.eq(AuctionItemStatus.USED));
-  //        } else {
-  //            status.and(item.itemStatus.in(AuctionItemStatus.NEW, AuctionItemStatus.USED));
-  //        }
-  //    }
 
   public void applySearchPrice(List<OrderSpecifier<?>> order, QAuctionItem item) {
     if (this.search_price) {
@@ -75,14 +63,6 @@ public class SearchAuctionItemSortedRequest {
     }
   }
 
-  //    public void applySearchView(List<OrderSpecifier<?>> order, QAuctionItem item) {
-  //        if (this.view_count) {
-  //            order.add(item.view_count.desc());
-  //        } else {
-  //            order.add(item.view_count.asc());
-  //        }
-  //    }
-
   public void applySearchTime(List<OrderSpecifier<?>> order, QAuctionItem item) {
     if (this.search_time) {
       order.add(item.createdAt.desc());
@@ -98,20 +78,5 @@ public class SearchAuctionItemSortedRequest {
       builder.and(
           item.status.in(AuctionStatus.ONGOING, AuctionStatus.CLOSED, AuctionStatus.BIDDING));
     }
-  }
-
-  public void applySearchCity(BooleanBuilder builder, QAuctionItem item) {
-    if (this.city != null) {
-      builder.and(item.address.city.eq(this.city));
-    }
-  }
-
-  public SearchAuctionItemSortedRequest() {
-    //        this.search_status = SearchStatus.ALL;
-    this.closed = Boolean.FALSE;
-    this.search_time = Boolean.FALSE;
-    //        this.like = Boolean.FALSE;
-    this.search_price = Boolean.FALSE;
-    //        this.view_count = Boolean.FALSE;
   }
 }

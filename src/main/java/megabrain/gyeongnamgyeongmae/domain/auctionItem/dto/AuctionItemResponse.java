@@ -2,10 +2,8 @@ package megabrain.gyeongnamgyeongmae.domain.auctionItem.dto;
 
 import java.time.LocalDateTime;
 import java.util.List;
-
 import lombok.*;
 import megabrain.gyeongnamgyeongmae.domain.auctionItem.domain.entity.AuctionItem;
-import megabrain.gyeongnamgyeongmae.domain.auctionItem.domain.entity.AuctionItemStatus;
 import megabrain.gyeongnamgyeongmae.domain.auctionItem.domain.entity.AuctionStatus;
 import megabrain.gyeongnamgyeongmae.domain.user.domain.entity.Address;
 
@@ -13,7 +11,6 @@ import megabrain.gyeongnamgyeongmae.domain.user.domain.entity.Address;
 @Getter
 @NoArgsConstructor
 @AllArgsConstructor
-@Setter
 public class AuctionItemResponse {
 
   private Long id;
@@ -22,7 +19,6 @@ public class AuctionItemResponse {
 
   private String nickname;
   private Long price;
-  private AuctionItemStatus itemStatus;
   private AuctionStatus auctionStatus;
 
   private LocalDateTime createdTime;
@@ -39,13 +35,12 @@ public class AuctionItemResponse {
 
   private List<String> images;
 
-  public static AuctionItemResponse of(AuctionItem auctionItem) {
+  public static AuctionItemResponse of(AuctionItem auctionItem, List<String> images) {
     return AuctionItemResponse.builder()
         .id(auctionItem.getId())
         .nickname(auctionItem.getUser().getNickname())
         .name(auctionItem.getName())
         .price(auctionItem.getPrice())
-        .itemStatus(auctionItem.getItemStatus())
         .auctionStatus(auctionItem.getStatus())
         .createdTime(auctionItem.getCreatedAt())
         .modifiedTime(auctionItem.getUpdatedAt())
@@ -55,6 +50,7 @@ public class AuctionItemResponse {
         .content(auctionItem.getContent())
         .likeCount(auctionItem.getLike_count())
         .viewCount(auctionItem.getView_count())
+        .images(images)
         .build();
   }
 }

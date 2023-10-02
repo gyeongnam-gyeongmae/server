@@ -4,10 +4,10 @@ import java.time.LocalDateTime;
 import java.util.List;
 import java.util.stream.Collectors;
 import lombok.Builder;
-import lombok.Data;
+import lombok.Getter;
 import megabrain.gyeongnamgyeongmae.domain.auctionItem.domain.entity.Comment;
 
-@Data
+@Getter
 @Builder
 public class AuctionItemCommentParentDto {
   private Long id;
@@ -18,22 +18,6 @@ public class AuctionItemCommentParentDto {
   private LocalDateTime createdAt;
   private LocalDateTime updatedAt;
   private List<AuctionItemCommentChildDto> children;
-
-  public static AuctionItemCommentParentDto of(Comment comment) {
-    return builder()
-        .id(comment.getId())
-        .content(comment.getContent())
-        .userId(comment.getUser().getId())
-        .nickName(comment.getUser().getNickname())
-        .likeCount(comment.getLike_count())
-        .createdAt(comment.getCreatedAt())
-        .updatedAt(comment.getUpdatedAt())
-        .children(
-            comment.getChildren().stream()
-                .map(AuctionItemCommentChildDto::of)
-                .collect(Collectors.toList()))
-        .build();
-  }
 
   public AuctionItemCommentParentDto(
       final Long id,
@@ -52,5 +36,22 @@ public class AuctionItemCommentParentDto {
     this.createdAt = createdAt;
     this.updatedAt = updatedAt;
     this.children = children;
+  }
+
+  public static AuctionItemCommentParentDto of(Comment comment) {
+    return builder()
+        .id(comment.getId())
+        .content(comment.getContent())
+        .userId(comment.getUser().getId())
+        .nickName(comment.getUser().getNickname())
+        .likeCount(comment.getLike_count())
+        .createdAt(comment.getCreatedAt())
+        .updatedAt(comment.getUpdatedAt())
+        .children(
+            comment.getChildren().stream()
+                .filter(childComment -> !childComment.isRemoved())
+                .map(AuctionItemCommentChildDto::of)
+                .collect(Collectors.toList()))
+        .build();
   }
 }

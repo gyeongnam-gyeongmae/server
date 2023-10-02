@@ -1,17 +1,20 @@
 package megabrain.gyeongnamgyeongmae.domain.user.controller;
 
-import io.swagger.v3.oas.annotations.ExternalDocumentation;
 import io.swagger.v3.oas.annotations.Operation;
+import java.util.List;
+import io.swagger.v3.oas.annotations.ExternalDocumentation;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import javax.validation.constraints.NotEmpty;
 import lombok.RequiredArgsConstructor;
+import megabrain.gyeongnamgyeongmae.domain.user.domain.entity.User;
+import megabrain.gyeongnamgyeongmae.domain.user.service.UserServiceInterface;
+import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.GetMapping;
 import megabrain.gyeongnamgyeongmae.domain.authentication.service.AuthenticationServiceInterface;
 import megabrain.gyeongnamgyeongmae.domain.user.dto.UserAddressCreateRequest;
-import megabrain.gyeongnamgyeongmae.domain.user.service.UserService;
 import megabrain.gyeongnamgyeongmae.global.anotation.LoginRequired;
 import org.springframework.http.HttpStatus;
-import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -22,7 +25,7 @@ import org.springframework.web.bind.annotation.RestController;
 @RequestMapping("api/users")
 public class UserController {
 
-  private final UserService userService;
+  private final UserServiceInterface userService;
   private final AuthenticationServiceInterface authenticationService;
 
   @PostMapping("address")
@@ -50,5 +53,12 @@ public class UserController {
         userAddressCreateRequest.getLongitude());
 
     return ResponseEntity.status(HttpStatus.CREATED).build();
+  }
+
+  @Operation(summary = "유저 전체조회", description = "유저 모두를 조회합니다")
+  @GetMapping("")
+  public ResponseEntity<List<User>> findAllUser() {
+    List<User> users = userService.findAllUser();
+    return ResponseEntity.ok(users);
   }
 }

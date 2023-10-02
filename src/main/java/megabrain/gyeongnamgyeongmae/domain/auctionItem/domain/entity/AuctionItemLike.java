@@ -6,22 +6,21 @@ import megabrain.gyeongnamgyeongmae.domain.user.domain.entity.User;
 import megabrain.gyeongnamgyeongmae.global.BaseTimeEntity;
 
 @Getter
-@Setter
 @Entity
-@Table(name = "AuctionItemLike")
+@Table(name = "auction_item_likes")
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 public class AuctionItemLike extends BaseTimeEntity {
 
   @EmbeddedId private AuctionItemLikePK id;
 
-  @MapsId("auctionItemId")
+  @MapsId("auction_id")
   @ManyToOne
-  @JoinColumn(name = "auctionItemId")
+  @JoinColumn(name = "auction_id")
   private AuctionItem auctionItem;
 
-  @MapsId("userId")
+  @MapsId("user_id")
   @ManyToOne
-  @JoinColumn(name = "userId")
+  @JoinColumn(name = "user_id")
   private User user;
 
   @Builder
