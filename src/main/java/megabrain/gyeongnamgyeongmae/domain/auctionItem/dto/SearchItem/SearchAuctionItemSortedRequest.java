@@ -41,6 +41,12 @@ public class SearchAuctionItemSortedRequest {
     }
   }
 
+  public void applyUserCity(BooleanBuilder status, QAuctionItem item) {
+    if (this.city != null) {
+      status.and(item.user.address.city.eq(this.city));
+    }
+  }
+
   public void applySearchCategory(BooleanBuilder status, QAuctionItem item) {
     if (this.category != null) {
       status.and(item.category.name.eq(this.category));
