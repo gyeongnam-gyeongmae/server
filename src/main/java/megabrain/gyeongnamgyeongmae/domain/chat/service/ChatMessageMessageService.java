@@ -21,7 +21,7 @@ public class ChatMessageMessageService implements ChatMessageServiceInterface {
 
   @Override
   public List<ChatMessage> getChatMessageByChatRoomId(Long roomId) {
-    return chatMessageRepository.getChatMessageByRoomIdOrderByCreatedAtAsc(roomId);
+    return chatMessageRepository.getChatMessageByRoomIdOrderByCreatedAtDesc(roomId);
   }
 
   @Override
