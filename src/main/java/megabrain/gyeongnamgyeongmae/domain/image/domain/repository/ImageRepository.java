@@ -8,7 +8,7 @@ import org.springframework.stereotype.Repository;
 
 @Repository
 public interface ImageRepository extends JpaRepository<Image, Long> {
-  // TODO: 네이티브 쿼리 제거
+
   @Query(
       value = "SELECT * FROM images where auction_id = :id AND removed = FALSE",
       nativeQuery = true)
@@ -20,5 +20,3 @@ public interface ImageRepository extends JpaRepository<Image, Long> {
       nativeQuery = true)
   Image findFirstImageByAuctionItemId(Long id);
 }
-
-// DISTINCT

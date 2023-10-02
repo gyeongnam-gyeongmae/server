@@ -14,7 +14,7 @@ import megabrain.gyeongnamgyeongmae.global.BaseTimeEntity;
 
 @Getter
 @Entity
-@Table(name = "AuctionItem")
+@Table(name = "auction_items")
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 public class AuctionItem extends BaseTimeEntity {
 

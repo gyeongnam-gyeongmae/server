@@ -11,6 +11,6 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 @AllArgsConstructor
 public class AuctionItemLikePK implements Serializable {
-  private Long auctionItemId;
-  private Long userId;
+  private Long auction_id;
+  private Long user_id;
 }
