@@ -1,6 +1,7 @@
 package megabrain.gyeongnamgyeongmae.domain.auctionItem.dto.Comment;
 
 import java.time.LocalDateTime;
+import java.util.Comparator;
 import java.util.List;
 import java.util.stream.Collectors;
 import lombok.Builder;
@@ -50,6 +51,7 @@ public class AuctionItemCommentParentDto {
         .children(
             comment.getChildren().stream()
                 .filter(childComment -> !childComment.isRemoved())
+                .sorted(Comparator.comparing(Comment::getId))
                 .map(AuctionItemCommentChildDto::of)
                 .collect(Collectors.toList()))
         .build();
