@@ -29,7 +29,7 @@ public class AuctionItem extends BaseTimeEntity {
   @Column(name = "removed", nullable = false, columnDefinition = "boolean default false")
   private boolean removed = false;
 
-  @ManyToOne(fetch = FetchType.LAZY)
+  @ManyToOne(fetch = FetchType.EAGER)
   @JoinColumn(name = "user_id")
   private User user;
 
@@ -42,7 +42,7 @@ public class AuctionItem extends BaseTimeEntity {
   @Column(name = "content")
   private String content;
 
-  @ManyToOne(fetch = FetchType.LAZY)
+  @ManyToOne(fetch = FetchType.EAGER)
   @JoinColumn(name = "category_id")
   private Category category;
 
