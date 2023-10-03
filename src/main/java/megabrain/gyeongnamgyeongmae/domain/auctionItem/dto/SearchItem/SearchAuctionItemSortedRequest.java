@@ -2,6 +2,7 @@ package megabrain.gyeongnamgyeongmae.domain.auctionItem.dto.SearchItem;
 
 import com.querydsl.core.BooleanBuilder;
 import com.querydsl.core.types.OrderSpecifier;
+import io.swagger.v3.oas.annotations.media.Schema;
 import java.util.List;
 import javax.validation.constraints.NotNull;
 import lombok.*;
@@ -11,19 +12,22 @@ import megabrain.gyeongnamgyeongmae.domain.auctionItem.domain.entity.QAuctionIte
 @Data
 public class SearchAuctionItemSortedRequest {
 
-  private String keyword;
+    private String keyword;
 
-  private String category;
+    private String category;
 
-  @NotNull private Boolean closed;
+    @Schema(name = "city", example = "김해시", description = "유저 프로필 조회 시 반환되는 유저의 거주지역")
+    private String city;
 
-  @NotNull private Boolean search_time;
+    @NotNull private Boolean closed;
 
-  @NotNull private Boolean like;
+    @NotNull private Boolean search_time;
 
-  @NotNull private Boolean search_price;
+    @NotNull private Boolean like;
 
-  @NotNull private Long page;
+    @NotNull private Boolean search_price;
+
+    @NotNull private Long page;
 
   public SearchAuctionItemSortedRequest() {
     this.closed = Boolean.FALSE;
@@ -34,6 +38,12 @@ public class SearchAuctionItemSortedRequest {
   public void applyKeyWordStatus(BooleanBuilder status, QAuctionItem item) {
     if (this.keyword != null) {
       status.and(item.name.like("%" + this.keyword + "%"));
+    }
+  }
+
+  public void applyUserCity(BooleanBuilder status, QAuctionItem item) {
+    if (this.city != null) {
+      status.and(item.user.address.city.eq(this.city));
     }
   }
 

@@ -74,7 +74,7 @@ dependencies {
     implementation("org.webjars:stomp-websocket:2.3.3-1")
     implementation("org.springframework.session:spring-session-data-redis")
     implementation("org.springframework.restdocs:spring-restdocs-mockmvc")
-    implementation("com.fasterxml.jackson.datatype:jackson-datatype-hibernate5")
+    implementation("com.fasterxml.jackson.datatype:jackson-datatype-jsr310")
     implementation("org.springframework:spring-context-support")
     implementation("org.springdoc:springdoc-openapi-ui:1.6.9")
     implementation("org.projectlombok:lombok")

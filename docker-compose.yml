@@ -4,7 +4,7 @@ version: '3.6'
 services:
   backend:
     container_name: gg-backend
-    image: ghcr.io/gyeongnam-gyeongmae/gyeongnam-gyeongmae-api:develop
+    image: ghcr.io/gyeongnam-gyeongmae/gyeongnam-gyeongmae-api:test
     build:
       context: .
       dockerfile: Dockerfile
@@ -17,7 +17,6 @@ services:
     depends_on:
       - postgres
       - redis
-    platform: linux/amd64
   postgres:
     container_name: gg-postgres
     image: postgres:14.1

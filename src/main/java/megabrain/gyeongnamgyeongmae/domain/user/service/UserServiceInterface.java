@@ -11,5 +11,7 @@ public interface UserServiceInterface {
 
   Long getIdByAuthVendorUserId(String authVendorUserId);
 
+  void setAddress(Long userId, Float latitude, Float longitude);
+
   List<User> findAllUser();
 }

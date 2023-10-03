@@ -34,6 +34,7 @@ public class AuctionItemRepositoryCustomImpl implements AuctionItemRepositoryCus
     BooleanBuilder keywordStatus = new BooleanBuilder();
     BooleanBuilder categoryStatus = new BooleanBuilder();
     BooleanBuilder sellStatus = new BooleanBuilder();
+    BooleanBuilder cityStatus = new BooleanBuilder();
 
     searchAuctionItemSortedRequest.applySearchPrice(orderSpecifiers, auctionItem);
     searchAuctionItemSortedRequest.applySearchLike(orderSpecifiers, auctionItem);
@@ -41,13 +42,14 @@ public class AuctionItemRepositoryCustomImpl implements AuctionItemRepositoryCus
 
     searchAuctionItemSortedRequest.applySearchCategory(categoryStatus, auctionItem);
     searchAuctionItemSortedRequest.applyKeyWordStatus(keywordStatus, auctionItem);
+    searchAuctionItemSortedRequest.applyUserCity(cityStatus, auctionItem);
     searchAuctionItemSortedRequest.applySearchClosed(sellStatus, auctionItem);
 
     JPAQuery<AuctionItem> query =
         queryFactory
             .selectFrom(auctionItem)
             .innerJoin(auctionItem.category, category)
-            .where(auctionItem.removed.eq(false), categoryStatus, keywordStatus, sellStatus);
+            .where(auctionItem.removed.eq(false), categoryStatus, keywordStatus, sellStatus, cityStatus);
 
     Long page = searchAuctionItemSortedRequest.getPage();
     Long itemsPerPage = 10L;

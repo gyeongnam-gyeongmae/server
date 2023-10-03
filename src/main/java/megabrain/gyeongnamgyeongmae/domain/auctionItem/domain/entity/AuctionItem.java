@@ -9,6 +9,7 @@ import lombok.NoArgsConstructor;
 import megabrain.gyeongnamgyeongmae.domain.auctionItem.dto.UpdateAuctionItemRequest;
 import megabrain.gyeongnamgyeongmae.domain.auctionItem.exception.AuctionRemovedException;
 import megabrain.gyeongnamgyeongmae.domain.category.domain.entity.Category;
+import megabrain.gyeongnamgyeongmae.domain.user.domain.entity.Address;
 import megabrain.gyeongnamgyeongmae.domain.user.domain.entity.User;
 import megabrain.gyeongnamgyeongmae.global.BaseTimeEntity;
 
@@ -55,6 +56,10 @@ public class AuctionItem extends BaseTimeEntity {
   @Column(name = "auction_status")
   @Enumerated(EnumType.STRING)
   private AuctionStatus status;
+
+  @Column(name = "address")
+  //  @QueryInits({"*", "*.*" /* default query inits */, "embeddable.nested"})
+  private Address address;
 
   @Column(name = "comment_count")
   private Long comment_count;

@@ -9,6 +9,7 @@ import megabrain.gyeongnamgyeongmae.global.BaseTimeEntity;
 import java.util.List;
 
 @Getter
+@Setter
 @Entity
 @Table(name = "users")
 @NoArgsConstructor(access = AccessLevel.PROTECTED)

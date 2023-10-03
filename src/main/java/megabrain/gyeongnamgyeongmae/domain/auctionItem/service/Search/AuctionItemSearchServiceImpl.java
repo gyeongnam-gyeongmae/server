@@ -25,6 +25,8 @@ public class AuctionItemSearchServiceImpl implements AuctionItemSearchService {
         searchAuctionItemSortedRequest::getKeyword, searchAuctionItemSortedRequest::setKeyword);
     setToNullIfEmpty(
         searchAuctionItemSortedRequest::getCategory, searchAuctionItemSortedRequest::setCategory);
+    setToNullIfEmpty(
+        searchAuctionItemSortedRequest::getCity, searchAuctionItemSortedRequest::setCity);
 
     return auctionItemRepository.searchAuctionItemPage(searchAuctionItemSortedRequest);
   }

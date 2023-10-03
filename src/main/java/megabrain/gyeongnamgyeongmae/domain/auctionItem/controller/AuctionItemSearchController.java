@@ -20,19 +20,19 @@ import org.springframework.web.bind.annotation.RestController;
 @RequiredArgsConstructor
 public class AuctionItemSearchController {
 
-  private final AuctionItemSearchService auctionItemSearchService;
+    private final AuctionItemSearchService auctionItemSearchService;
 
-  @GetMapping("")
-  @Operation(summary = "경매품 검색하기", description = "경매품을 찾습니다.")
-  @ApiResponses(
-      value = {
-        @ApiResponse(responseCode = "200", description = "경매품 검색 성공"),
-        @ApiResponse(responseCode = "500", description = "게시글을 찾지 못했습니다(서버 오류)"),
-      })
-  public ResponseEntity<AuctionItemSearchResponse> findItemCategory(
-      @ModelAttribute SearchAuctionItemSortedRequest searchAuctionItemSortedRequest) {
-    AuctionItemSearchResponse result =
-        auctionItemSearchService.findAuctionItemByRequest(searchAuctionItemSortedRequest);
-    return ResponseEntity.ok(result);
-  }
+    @GetMapping("")
+    @Operation(summary = "경매품 검색하기", description = "경매품을 찾습니다.")
+    @ApiResponses(
+            value = {
+                    @ApiResponse(responseCode = "200", description = "경매품 검색 성공"),
+                    @ApiResponse(responseCode = "500", description = "게시글을 찾지 못했습니다(서버 오류)"),
+            })
+    public ResponseEntity<AuctionItemSearchResponse> findItemCategory(
+            @ModelAttribute SearchAuctionItemSortedRequest searchAuctionItemSortedRequest) {
+        AuctionItemSearchResponse result =
+                auctionItemSearchService.findAuctionItemByRequest(searchAuctionItemSortedRequest);
+        return ResponseEntity.ok(result);
+    }
 }
