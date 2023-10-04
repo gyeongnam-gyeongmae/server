@@ -60,57 +60,51 @@ public class GeneralUserService implements UserServiceInterface {
 
   @Override
   @Transactional
-  public void setAddress(Long id, Float latitude, Float longitude) {
+  public void setAddress(Long id, Address address) {
     User user = userRepository.findById(id).orElseThrow(RuntimeException::new);
-    Address address = null;
-    try {
-      address = getAddressByCoordinate(latitude, longitude);
-    } catch (Exception e) {
-      throw new FailedCoordinateParse("좌표를 주소로 변환하는데 실패했습니다.");
-    }
     user.setAddress(address);
 
     userRepository.save(user);
   }
 
-  private Address getAddressByCoordinate(Float latitude, Float longitude) throws Exception {
+  @Override
+  @Transactional
+  public Address getAddressByCoordinate(Float latitude, Float longitude) {
 
     HttpHeaders headers = new HttpHeaders();
     RestTemplate restTemplate = new RestTemplate();
 
-    headers.add("Authorization", "KakaoAK " + kakaoRestApiKey);
-    transCoordUri = transCoordUri + "?x=" + longitude + "&y=" + latitude + "&input_coord=WGS84";
-    HttpEntity<MultiValueMap<String, String>> request = new HttpEntity<>(headers);
+    try {
+      headers.add("Authorization", "KakaoAK " + kakaoRestApiKey);
+      transCoordUri = transCoordUri + "?x=" + longitude + "&y=" + latitude + "&input_coord=WGS84";
+      HttpEntity<MultiValueMap<String, String>> request = new HttpEntity<>(headers);
 
-    ResponseEntity<String> response =
-        restTemplate.exchange(transCoordUri, HttpMethod.GET, request, String.class);
+      ResponseEntity<String> response =
+          restTemplate.exchange(transCoordUri, HttpMethod.GET, request, String.class);
 
-    return kakaoCoordParser(response);
+      return kakaoCoordParser(response);
+    } catch (Exception e) {
+      throw new FailedCoordinateParse("좌표를 주소로 변환하는데 실패했습니다.");
+    }
   }
 
   private Address kakaoCoordParser(ResponseEntity<String> response) throws Exception {
-    try {
-      JSONParser jsonParser = new JSONParser();
-      JSONObject jsonObject = (JSONObject) jsonParser.parse(response.getBody());
+    JSONParser jsonParser = new JSONParser();
+    JSONObject jsonObject = (JSONObject) jsonParser.parse(response.getBody());
 
-      JSONObject metadata = (JSONObject) jsonObject.get("meta");
-      Long size = (Long) metadata.get("total_count");
-      if (size < 1) {
-        throw new Exception();
-      }
-      JSONArray addressData = (JSONArray) jsonObject.get("documents");
-      JSONObject addressInfo = (JSONObject) addressData.get(0);
-      JSONObject roadAddress = (JSONObject) addressInfo.get("road_address");
-
-      String state = (String) roadAddress.get("region_1depth_name");
-      String city = (String) roadAddress.get("region_2depth_name");
-      String town = (String) roadAddress.get("region_3depth_name");
-
-      return Address.of(state, city, town);
-
-    } catch (Exception e) {
-      e.printStackTrace();
+    JSONObject metadata = (JSONObject) jsonObject.get("meta");
+    Long size = (Long) metadata.get("total_count");
+    if (size < 1) {
+      throw new Exception();
     }
-    return null;
+    JSONArray addressData = (JSONArray) jsonObject.get("documents");
+    JSONObject addressInfo = (JSONObject) addressData.get(0);
+    JSONObject roadAddress = (JSONObject) addressInfo.get("road_address");
+
+    String state = (String) roadAddress.get("region_1depth_name");
+    String city = (String) roadAddress.get("region_2depth_name");
+    String town = (String) roadAddress.get("region_3depth_name");
+
+    return Address.of(state, city, town);
   }
 }
