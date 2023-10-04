@@ -5,20 +5,19 @@ import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import java.util.List;
+import javax.validation.Valid;
 import javax.validation.constraints.NotEmpty;
 import lombok.RequiredArgsConstructor;
 import megabrain.gyeongnamgyeongmae.domain.authentication.service.AuthenticationServiceInterface;
 import megabrain.gyeongnamgyeongmae.domain.user.domain.entity.Address;
 import megabrain.gyeongnamgyeongmae.domain.user.domain.entity.User;
 import megabrain.gyeongnamgyeongmae.domain.user.dto.UserAddressCreateRequest;
+import megabrain.gyeongnamgyeongmae.domain.user.dto.UserUpdateRequest;
 import megabrain.gyeongnamgyeongmae.domain.user.service.UserServiceInterface;
 import megabrain.gyeongnamgyeongmae.global.anotation.LoginRequired;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 @RestController
 @RequiredArgsConstructor
@@ -60,5 +59,21 @@ public class UserController {
   public ResponseEntity<List<User>> findAllUser() {
     List<User> users = userService.findAllUser();
     return ResponseEntity.ok(users);
+  }
+
+  @PutMapping()
+  @Operation(summary = "유저 업데이트", description = "유저 정보를 업데이트합니다.")
+  @ApiResponses(
+      value = {
+        @ApiResponse(responseCode = "201", description = "업데이트 성공"),
+        @ApiResponse(responseCode = "400", description = "잘못된 요청 프로퍼티"),
+        @ApiResponse(responseCode = "401", description = "세션 인증 실패")
+      })
+  @LoginRequired
+  public ResponseEntity<HttpStatus> updateUserProfile(
+      @Valid @RequestBody UserUpdateRequest userUpdateRequest) {
+    User logedIduser = authenticationService.getLoginUser();
+    userService.updateUser(logedIduser, userUpdateRequest);
+    return ResponseEntity.status(HttpStatus.CREATED).build();
   }
 }

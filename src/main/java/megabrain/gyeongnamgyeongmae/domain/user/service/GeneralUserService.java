@@ -5,6 +5,7 @@ import lombok.RequiredArgsConstructor;
 import megabrain.gyeongnamgyeongmae.domain.user.domain.entity.Address;
 import megabrain.gyeongnamgyeongmae.domain.user.domain.entity.User;
 import megabrain.gyeongnamgyeongmae.domain.user.domain.repository.UserRepository;
+import megabrain.gyeongnamgyeongmae.domain.user.dto.UserUpdateRequest;
 import megabrain.gyeongnamgyeongmae.domain.user.exception.FailedCoordinateParse;
 import megabrain.gyeongnamgyeongmae.domain.user.exception.UserNotFoundException;
 import org.json.simple.JSONArray;
@@ -54,6 +55,12 @@ public class GeneralUserService implements UserServiceInterface {
   }
 
   @Override
+  @Transactional
+  public void updateUser(User user, UserUpdateRequest userUpdateRequest) {
+    user.updateUser(userUpdateRequest);
+  }
+
+  @Override
   public List<User> findAllUser() {
     return userRepository.findAll();
   }
@@ -71,6 +78,7 @@ public class GeneralUserService implements UserServiceInterface {
   @Transactional
   public Address getAddressByCoordinate(Float latitude, Float longitude) {
 
+    ResponseEntity<String> response;
     HttpHeaders headers = new HttpHeaders();
     RestTemplate restTemplate = new RestTemplate();
 
@@ -79,12 +87,16 @@ public class GeneralUserService implements UserServiceInterface {
       transCoordUri = transCoordUri + "?x=" + longitude + "&y=" + latitude + "&input_coord=WGS84";
       HttpEntity<MultiValueMap<String, String>> request = new HttpEntity<>(headers);
 
-      ResponseEntity<String> response =
-          restTemplate.exchange(transCoordUri, HttpMethod.GET, request, String.class);
+      response = restTemplate.exchange(transCoordUri, HttpMethod.GET, request, String.class);
 
+    } catch (Exception e) {
+      throw new FailedCoordinateParse("카카오 API를 통해 좌표를 발급하는데 실패하였습니다.");
+    }
+
+    try {
       return kakaoCoordParser(response);
     } catch (Exception e) {
-      throw new FailedCoordinateParse("좌표를 주소로 변환하는데 실패했습니다.");
+      throw new FailedCoordinateParse("받아온 데이터를 파싱하는데에 실패하였습니다.", e);
     }
   }
 
