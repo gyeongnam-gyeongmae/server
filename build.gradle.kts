@@ -84,6 +84,7 @@ dependencies {
 //    implementation("org.springframework.session:spring-session-jdbc")
     implementation("de.codecentric:spring-boot-admin-starter-client:2.7.1")
 
+
     compile("io.lettuce:lettuce-core:6.2.6.RELEASE")
     runtimeOnly("org.postgresql:postgresql")
     annotationProcessor("org.projectlombok:lombok")
