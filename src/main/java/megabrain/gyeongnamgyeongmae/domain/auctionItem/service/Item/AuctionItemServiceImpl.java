@@ -74,6 +74,11 @@ public class AuctionItemServiceImpl implements AuctionItemService {
     auctionItemRepository.save(auctionItem);
   }
 
+  @Override
+  public Boolean updateAuctionPrice(Long id, Long price) {
+    return auctionItemRepository.updateAuctionPrice(id, price) == 1;
+  }
+
   private void sellerCheck(AuctionItem auctionItem, Long userId) {
     if (!auctionItem.getUser().getId().equals(userId)) {
       throw new AuctionNotFoundException("작성자만 수정할 수 있습니다.");

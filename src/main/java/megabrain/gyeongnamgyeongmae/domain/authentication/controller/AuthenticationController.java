@@ -56,7 +56,7 @@ public class AuthenticationController {
   }
 
   @PostMapping("{id}/session")
-  @Operation(summary = "유저 아이디로 세션 획득(테스트용)", description = "유저 아이디로 세션 획득(테스트용)")
+  @Operation(summary = "유저 아이디로 세션 획득🔑(테스트용)", description = "유저 아이디로 세션 획득(테스트용)")
   public ResponseEntity<HttpStatus> getSession(@PathVariable("id") Long userId) {
 
     this.authenticationService.login(userId);
@@ -75,7 +75,7 @@ public class AuthenticationController {
   @LoginRequired
   @GetMapping("profile")
   @Operation(
-      summary = "프로필 조회 요청",
+      summary = "프로필 조회 요청 (세션 필요 🔑)",
       description = "쿠키에 존재하는 세션 키를 사용하여 현재 로그인되어있는 회원의 프로필 정보를 조회합니다.")
   @ApiResponses(
       value = {

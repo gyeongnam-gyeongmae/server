@@ -1,6 +1,9 @@
 package megabrain.gyeongnamgyeongmae.domain.auctionItem.domain.entity;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import java.time.LocalDateTime;
+import java.util.ArrayList;
+import java.util.List;
 import javax.persistence.*;
 import lombok.AccessLevel;
 import lombok.Builder;
@@ -63,6 +66,10 @@ public class AuctionItem extends BaseTimeEntity {
 
   @Column(name = "comment_count")
   private Long comment_count;
+
+  @OneToMany(mappedBy = "auction", cascade = CascadeType.ALL)
+  @JsonIgnore // 순환참조를 무시하기 위하여 사용
+  private List<AuctionBid> auctionBids = new ArrayList<>();
 
   @Builder
   public AuctionItem(Long id, String name, long price, String content, LocalDateTime closedTime) {
@@ -135,6 +142,10 @@ public class AuctionItem extends BaseTimeEntity {
     if (this.removed) {
       throw new AuctionRemovedException("삭제된 경매품 입니다.");
     }
+  }
+
+  public Boolean isClosed() {
+    return this.closedTime.isAfter(LocalDateTime.now());
   }
 
   public void updateAuctionItem(UpdateAuctionItemRequest upDateAuctionItemRequest) {
