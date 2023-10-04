@@ -119,4 +119,18 @@ public class AuthenticationController {
         phoneAuthenticationRequest.getPhoneNumber(), phoneAuthenticationCode);
     return ResponseEntity.status(HttpStatus.CREATED).build();
   }
+
+  @DeleteMapping()
+  @Operation(summary = "회원 탈퇴 요청 (세션 필요 🔑)", description = "회원 탈퇴를 요청합니다.")
+  @ApiResponses(
+      value = {
+        @ApiResponse(responseCode = "200", description = "회원 탈퇴 성공"),
+        @ApiResponse(responseCode = "401", description = "세션 로그인 필요"),
+      })
+  public ResponseEntity<HttpStatus> deleteUser() {
+    User logedInUser = this.authenticationService.getLoginUser();
+    userService.withdrawUserById(logedInUser.getId());
+    authenticationService.logout();
+    return ResponseEntity.status(HttpStatus.OK).build();
+  }
 }

@@ -13,5 +13,7 @@ public interface UserServiceInterface {
 
   void setAddress(Long userId, Float latitude, Float longitude);
 
+  void withdrawUserById(Long id);
+
   List<User> findAllUser();
 }
