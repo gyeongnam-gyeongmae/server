@@ -2,8 +2,15 @@ server.port: ${PORT}
 spring.config.import:
   - application-mailer.yml
   - application-postgresql.yml
-# oauth2 vendors
+  # oauth2 vendors
   - oauth/kakao-oauth.yml
+spring:
+  application:
+    name: spring-admin
+  security:
+    user:
+      name: admin
+      password: admin
 cloud:
   aws:
     s3:
@@ -12,15 +19,10 @@ cloud:
       access-key: ${cloud.aws.credentials.access-key}
       secret-key: ${cloud.aws.credentials.secret-key}
     region:
-        static: ${cloud.aws.region.static}
-        auto: ${cloud.aws.region.auto}
-#    region:
-#      static: ${cloud.aws.region.static}
-#      auto: ${cloud.aws.region.auto}
+      static: ${cloud.aws.region.static}
+      auto: ${cloud.aws.region.auto}
     stack:
       auto: false
-
-spring:
   servlet:
     multipart:
       max-file-size: 20MB

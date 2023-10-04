@@ -36,6 +36,12 @@ plugins {
     id("org.springframework.boot") version "2.7.14"
     id("io.spring.dependency-management") version "1.0.15.RELEASE"
     id("com.ewerk.gradle.plugins.querydsl") version "1.0.10"
+//    id("com.google.devtools.ksp") version "1.9.0-1.0.11" apply false
+//    id("com.google.dagger.hilt.android") version "2.47" apply false
+//    id("com.google.gms.google-services") version "4.3.15" apply false
+//    id("com.google.firebase.crashlytics") version "2.9.4" apply false
+//    id("com.google.firebase.firebase-perf") version "1.4.2" apply false
+
 }
 
 configurations {
@@ -80,8 +86,11 @@ dependencies {
     implementation("org.projectlombok:lombok")
     implementation("com.googlecode.json-simple:json-simple:1.1.1")
     implementation("org.json:json:20230227")
-//    implementation("org.springframework.session:spring-session-core")
-//    implementation("org.springframework.session:spring-session-jdbc")
+
+    implementation("org.springframework.boot:spring-boot-starter-security")
+    implementation("org.springframework.boot:spring-boot-starter-web")
+    implementation("de.codecentric:spring-boot-admin-starter-server:2.6.2")
+
     compile("io.lettuce:lettuce-core:6.2.6.RELEASE")
     runtimeOnly("org.postgresql:postgresql")
     annotationProcessor("org.projectlombok:lombok")
