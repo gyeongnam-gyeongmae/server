@@ -14,13 +14,15 @@ cloud:
     region:
         static: ${cloud.aws.region.static}
         auto: ${cloud.aws.region.auto}
-#    region:
-#      static: ${cloud.aws.region.static}
-#      auto: ${cloud.aws.region.auto}
     stack:
       auto: false
 
 spring:
+  boot:
+    admin:
+      client:
+        url:
+          - http://gg-backend:8080
   servlet:
     multipart:
       max-file-size: 20MB
