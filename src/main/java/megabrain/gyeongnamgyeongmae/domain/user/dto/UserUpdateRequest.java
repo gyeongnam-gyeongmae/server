@@ -1,18 +1,18 @@
 package megabrain.gyeongnamgyeongmae.domain.user.dto;
 
 import javax.validation.constraints.NotEmpty;
-import javax.validation.constraints.NotNull;
 import lombok.Getter;
 import megabrain.gyeongnamgyeongmae.domain.user.domain.entity.Address;
+import reactor.util.annotation.Nullable;
 
 @Getter
 public class UserUpdateRequest {
 
-  @NotEmpty private String phoneNumber;
+  @NotEmpty @Nullable private String phoneNumber;
 
-  @NotEmpty private String nickname;
+  @NotEmpty @Nullable private String nickname;
 
-  @NotEmpty private String introduce;
+  @NotEmpty @Nullable private String introduce;
 
-  @NotNull private Address address;
+  @Nullable private Address address;
 }
