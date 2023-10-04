@@ -33,7 +33,8 @@ public class AuctionBiddingServiceService implements AuctionBiddingServiceInterf
     AuctionItem auction = auctionItemService.findAuctionItemById(auctionId);
     if (auction.getUser().getId().equals(user.getId()))
       throw new AuctionOwnerCanNotBid("자신의 경매에는 입찰을 요청할 수 없습니다.");
-    if (auction.isClosed()) throw new AuctionBidMustBeGreater("이미 종료된 경매입니다.");
+    if (auction.getPrice() != null && auction.isClosed())
+      throw new AuctionBidMustBeGreater("이미 종료된 경매입니다.");
 
     if (auction.getPrice() != null && auctionBidRequest.getPrice() <= auction.getPrice())
       throw new AuctionBidMustBeGreater("입찰가는 현재 입찰가보다 커야합니다.");
