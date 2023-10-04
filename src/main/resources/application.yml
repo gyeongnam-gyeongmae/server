@@ -14,13 +14,14 @@ cloud:
     region:
         static: ${cloud.aws.region.static}
         auto: ${cloud.aws.region.auto}
-#    region:
-#      static: ${cloud.aws.region.static}
-#      auto: ${cloud.aws.region.auto}
     stack:
       auto: false
-
 spring:
+  boot:
+    admin:
+      client:
+        url:
+          - ${SPRING_BOOT_ADMIN_URL}
   servlet:
     multipart:
       max-file-size: 20MB
