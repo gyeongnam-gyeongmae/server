@@ -2,10 +2,7 @@ package megabrain.gyeongnamgyeongmae.global.advice;
 
 import java.util.Objects;
 import lombok.RequiredArgsConstructor;
-import megabrain.gyeongnamgyeongmae.domain.auctionItem.exception.AuctionNotFoundException;
-import megabrain.gyeongnamgyeongmae.domain.auctionItem.exception.AuctionRemovedException;
-import megabrain.gyeongnamgyeongmae.domain.auctionItem.exception.AuctionTimeException;
-import megabrain.gyeongnamgyeongmae.domain.auctionItem.exception.CommentNotFoundException;
+import megabrain.gyeongnamgyeongmae.domain.auctionItem.exception.*;
 import megabrain.gyeongnamgyeongmae.domain.authentication.exception.OAuthLoginException;
 import megabrain.gyeongnamgyeongmae.domain.authentication.exception.OAuthVendorNotFoundException;
 import megabrain.gyeongnamgyeongmae.domain.authentication.exception.UnAuthenticatedException;
@@ -35,6 +32,16 @@ public class ExceptionAdvice {
         Objects.requireNonNull(e.getFieldError()).getDefaultMessage(), HttpStatus.BAD_REQUEST);
   }
 
+  @ExceptionHandler(AuctionBidMustBeGreater.class)
+  public ResponseEntity<String> auctionBidMustBeGreater(AuctionBidMustBeGreater error) {
+    return new ResponseEntity<>(error.getMessage(), HttpStatus.BAD_REQUEST);
+  }
+
+  @ExceptionHandler(AuctionOwnerCanNotBid.class)
+  public ResponseEntity<String> auctionOwnerCantNotBid(AuctionOwnerCanNotBid error) {
+    return new ResponseEntity<>(error.getMessage(), HttpStatus.FORBIDDEN);
+  }
+
   @ExceptionHandler(OAuthVendorNotFoundException.class)
   public ResponseEntity<String> oAuthVendorNotFoundException(OAuthVendorNotFoundException error) {
     return new ResponseEntity<>(error.getMessage(), HttpStatus.NOT_FOUND);
@@ -52,7 +59,7 @@ public class ExceptionAdvice {
 
   @ExceptionHandler(UnAuthenticatedException.class)
   public ResponseEntity<HttpStatus> unAuthorizedException() {
-    return new ResponseEntity<>(HttpStatus.FORBIDDEN);
+    return new ResponseEntity<>(HttpStatus.UNAUTHORIZED);
   }
 
   @ExceptionHandler(OAuthLoginException.class)

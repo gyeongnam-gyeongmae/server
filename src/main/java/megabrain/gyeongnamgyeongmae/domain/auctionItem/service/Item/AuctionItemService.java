@@ -17,6 +17,8 @@ public interface AuctionItemService {
 
   void updateAuctionItem(UpdateAuctionItemRequest upDateAuctionItemRequest, Long id);
 
+  Boolean updateAuctionPrice(Long id, Long price);
+
   void deleteAuctionItemById(Long id);
 
   void likeAuctionItemById(Long id, AuctionItemLikeRequest auctionItemLikeRequest);

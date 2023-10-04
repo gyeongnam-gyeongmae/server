@@ -32,12 +32,12 @@ public class ChatMessageController {
 
   @LoginRequired
   @GetMapping("/{chat-room-id}/messages")
-  @Operation(summary = "채팅방의 메시지 조회(세션 로그인 필수)", description = "내가 속해있는 채팅방의 메시지를 조회합니다.")
+  @Operation(summary = "채팅방의 메시지 조회 (세션 필요 🔑)", description = "내가 속해있는 채팅방의 메시지를 조회합니다.")
   @ApiResponses(
       value = {
         @ApiResponse(responseCode = "200", description = "메시지 조회 성공"),
-        @ApiResponse(responseCode = "403", description = "채팅방 참여자가 아님"),
         @ApiResponse(responseCode = "401", description = "세션 로그인 필요"),
+        @ApiResponse(responseCode = "403", description = "채팅방 참여자가 아님"),
         @ApiResponse(responseCode = "404", description = "채팅방을 찾을 수 없음"),
       })
   public ResponseEntity<List<ChatMessage>> getChatMessageInChatRoom(

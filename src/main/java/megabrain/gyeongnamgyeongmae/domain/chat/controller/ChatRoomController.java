@@ -46,7 +46,7 @@ public class ChatRoomController {
   }
 
   @LoginRequired
-  @Operation(summary = "내가 속해있는 채팅방 조회(세션 로그인 필수)", description = "내가 속해있는 채팅방을 조회합니다.")
+  @Operation(summary = "내가 속해있는 채팅방 조회 (세션 필요 🔑)", description = "내가 속해있는 채팅방을 조회합니다.")
   @ApiResponses(
       value = {
         @ApiResponse(responseCode = "200", description = "채팅방 조회 성공"),
