@@ -22,6 +22,7 @@ spring:
       client:
         url:
           - ${SPRING_BOOT_ADMIN_URL}
+
   servlet:
     multipart:
       max-file-size: 20MB
