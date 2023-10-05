@@ -149,7 +149,7 @@ public class AuctionItemServiceImpl implements AuctionItemService {
   }
 
   @Override
-    public List<AuctionItemLike> auctionItemLikesFindByUserId(Long id) {
-        return auctionItemLikeRepository.AuctionLikeFindByUserId(id);
-    }
+  public List<AuctionItemLike> auctionItemLikesFindByUserId(Long id) {
+    return auctionItemLikeRepository.AuctionLikeFindByUserId(id);
+  }
 }
