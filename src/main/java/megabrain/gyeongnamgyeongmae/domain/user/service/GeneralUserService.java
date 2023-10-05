@@ -59,9 +59,9 @@ public class GeneralUserService implements UserServiceInterface {
   @Override
   @Transactional
   public void updateUser(User user, UserUpdateRequest userUpdateRequest) {
-    if (isDuplicateNickname(user.getPhoneNumber()))
+    if (isDuplicateNickname(userUpdateRequest.getNickname()))
       throw new DuplicateUserNickname("이미 존재하는 닉네임입니다.");
-    if (isDuplicatePhoneNumber(user.getPhoneNumber()))
+    if (isDuplicatePhoneNumber(userUpdateRequest.getPhoneNumber()))
       throw new DuplicateUserPhoneNumber("이미 존재하는 전화번호입니다.");
     user.updateUser(userUpdateRequest);
   }
