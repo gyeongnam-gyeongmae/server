@@ -27,7 +27,7 @@ public class UserController {
   private final UserServiceInterface userService;
   private final AuthenticationServiceInterface authenticationService;
 
-  @PostMapping("address")
+  @PutMapping("address")
   @LoginRequired
   @Operation(
       summary = "주소 등록",
