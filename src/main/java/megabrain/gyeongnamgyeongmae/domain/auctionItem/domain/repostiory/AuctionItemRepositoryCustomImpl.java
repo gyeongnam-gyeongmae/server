@@ -13,7 +13,7 @@ import megabrain.gyeongnamgyeongmae.domain.auctionItem.domain.entity.QAuctionIte
 import megabrain.gyeongnamgyeongmae.domain.auctionItem.dto.AuctionItemFirstView;
 import megabrain.gyeongnamgyeongmae.domain.auctionItem.dto.SearchItem.AuctionItemPaginationDto;
 import megabrain.gyeongnamgyeongmae.domain.auctionItem.dto.SearchItem.AuctionItemSearchResponse;
-import megabrain.gyeongnamgyeongmae.domain.auctionItem.dto.SearchItem.SearchAuctionItemSortedRequest;
+import megabrain.gyeongnamgyeongmae.domain.auctionItem.dto.SearchItemDto;
 import megabrain.gyeongnamgyeongmae.domain.category.domain.entity.QCategory;
 import megabrain.gyeongnamgyeongmae.domain.image.Service.FindImageServiceInterface;
 
@@ -25,7 +25,7 @@ public class AuctionItemRepositoryCustomImpl implements AuctionItemRepositoryCus
   public final FindImageServiceInterface findImageService;
 
   public AuctionItemSearchResponse searchAuctionItemPage(
-      SearchAuctionItemSortedRequest searchAuctionItemSortedRequest) {
+      SearchItemDto searchAuctionItemSortedRequest) {
 
     QAuctionItem auctionItem = QAuctionItem.auctionItem;
     QCategory category = QCategory.category;
@@ -35,6 +35,7 @@ public class AuctionItemRepositoryCustomImpl implements AuctionItemRepositoryCus
     BooleanBuilder categoryStatus = new BooleanBuilder();
     BooleanBuilder sellStatus = new BooleanBuilder();
     BooleanBuilder cityStatus = new BooleanBuilder();
+    BooleanBuilder userStatus = new BooleanBuilder();
 
     searchAuctionItemSortedRequest.applySearchPrice(orderSpecifiers, auctionItem);
     searchAuctionItemSortedRequest.applySearchLike(orderSpecifiers, auctionItem);
@@ -44,12 +45,19 @@ public class AuctionItemRepositoryCustomImpl implements AuctionItemRepositoryCus
     searchAuctionItemSortedRequest.applyKeyWordStatus(keywordStatus, auctionItem);
     searchAuctionItemSortedRequest.applyUserCity(cityStatus, auctionItem);
     searchAuctionItemSortedRequest.applySearchClosed(sellStatus, auctionItem);
+    searchAuctionItemSortedRequest.applySearchUser(userStatus, auctionItem);
 
     JPAQuery<AuctionItem> query =
         queryFactory
             .selectFrom(auctionItem)
             .innerJoin(auctionItem.category, category)
-            .where(auctionItem.removed.eq(false), categoryStatus, keywordStatus, sellStatus, cityStatus);
+            .where(
+                auctionItem.removed.eq(false),
+                categoryStatus,
+                keywordStatus,
+                sellStatus,
+                cityStatus,
+                userStatus);
 
     Long page = searchAuctionItemSortedRequest.getPage();
     Long itemsPerPage = 10L;

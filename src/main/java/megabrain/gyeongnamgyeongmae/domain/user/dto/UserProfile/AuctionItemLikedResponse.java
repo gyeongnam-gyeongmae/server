@@ -1,4 +1,4 @@
-package megabrain.gyeongnamgyeongmae.domain.user.dto;
+package megabrain.gyeongnamgyeongmae.domain.user.dto.UserProfile;
 
 import lombok.Data;
 import lombok.NoArgsConstructor;
