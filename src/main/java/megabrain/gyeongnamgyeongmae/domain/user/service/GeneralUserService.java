@@ -90,13 +90,15 @@ public class GeneralUserService implements UserServiceInterface {
 
     try {
       headers.add("Authorization", "KakaoAK " + kakaoRestApiKey);
-      transCoordUri = transCoordUri + "?x=" + longitude + "&y=" + latitude + "&input_coord=WGS84";
+      // transCoordUri가 재선언되지 않도록 주의
+      String requestUri =
+          transCoordUri + "?x=" + longitude + "&y=" + latitude + "&input_coord=WGS84";
       HttpEntity<MultiValueMap<String, String>> request = new HttpEntity<>(headers);
 
-      response = restTemplate.exchange(transCoordUri, HttpMethod.GET, request, String.class);
+      response = restTemplate.exchange(requestUri, HttpMethod.GET, request, String.class);
 
     } catch (Exception e) {
-      throw new FailedCoordinateParse("카카오 API를 통해 좌표를 발급하는데 실패하였습니다.");
+      throw new FailedCoordinateParse("카카오 API를 통해 좌표를 발급하는데 실패하였습니다." + e);
     }
 
     try {
