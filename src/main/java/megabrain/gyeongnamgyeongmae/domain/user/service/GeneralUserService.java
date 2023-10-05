@@ -6,6 +6,8 @@ import megabrain.gyeongnamgyeongmae.domain.user.domain.entity.Address;
 import megabrain.gyeongnamgyeongmae.domain.user.domain.entity.User;
 import megabrain.gyeongnamgyeongmae.domain.user.domain.repository.UserRepository;
 import megabrain.gyeongnamgyeongmae.domain.user.dto.UserUpdateRequest;
+import megabrain.gyeongnamgyeongmae.domain.user.exception.DuplicateUserNickname;
+import megabrain.gyeongnamgyeongmae.domain.user.exception.DuplicateUserPhoneNumber;
 import megabrain.gyeongnamgyeongmae.domain.user.exception.FailedCoordinateParse;
 import megabrain.gyeongnamgyeongmae.domain.user.exception.UserNotFoundException;
 import org.json.simple.JSONArray;
@@ -57,6 +59,10 @@ public class GeneralUserService implements UserServiceInterface {
   @Override
   @Transactional
   public void updateUser(User user, UserUpdateRequest userUpdateRequest) {
+    if (isDuplicateNickname(user.getPhoneNumber()))
+      throw new DuplicateUserNickname("이미 존재하는 닉네임입니다.");
+    if (isDuplicatePhoneNumber(user.getPhoneNumber()))
+      throw new DuplicateUserPhoneNumber("이미 존재하는 전화번호입니다.");
     user.updateUser(userUpdateRequest);
   }
 
@@ -118,5 +124,13 @@ public class GeneralUserService implements UserServiceInterface {
     String town = (String) roadAddress.get("region_3depth_name");
 
     return Address.of(state, city, town);
+  }
+
+  private Boolean isDuplicateNickname(String nickname) {
+    return userRepository.existsByNickname(nickname);
+  }
+
+  private Boolean isDuplicatePhoneNumber(String phoneNumber) {
+    return userRepository.existsByPhoneNumber(phoneNumber);
   }
 }

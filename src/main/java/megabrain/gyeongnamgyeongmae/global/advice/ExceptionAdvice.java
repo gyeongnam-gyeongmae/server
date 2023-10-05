@@ -13,6 +13,8 @@ import megabrain.gyeongnamgyeongmae.domain.chat.service.RedisMessageBrokerServic
 import megabrain.gyeongnamgyeongmae.domain.image.exception.ImageTypeException;
 import megabrain.gyeongnamgyeongmae.domain.image.exception.ImageUploadException;
 import megabrain.gyeongnamgyeongmae.domain.user.exception.DuplicateAuthVendorUserId;
+import megabrain.gyeongnamgyeongmae.domain.user.exception.DuplicateUserNickname;
+import megabrain.gyeongnamgyeongmae.domain.user.exception.DuplicateUserPhoneNumber;
 import megabrain.gyeongnamgyeongmae.domain.user.exception.UserNotFoundException;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -54,6 +56,16 @@ public class ExceptionAdvice {
 
   @ExceptionHandler(DuplicateAuthVendorUserId.class)
   public ResponseEntity<String> duplicateAuthVendorUserId(DuplicateAuthVendorUserId error) {
+    return new ResponseEntity<>(error.getMessage(), HttpStatus.CONFLICT);
+  }
+
+  @ExceptionHandler(DuplicateUserNickname.class)
+  public ResponseEntity<String> duplicateUserNickname(DuplicateUserNickname error) {
+    return new ResponseEntity<>(error.getMessage(), HttpStatus.CONFLICT);
+  }
+
+  @ExceptionHandler(DuplicateUserPhoneNumber.class)
+  public ResponseEntity<String> duplicateUserPhoneNumber(DuplicateUserPhoneNumber error) {
     return new ResponseEntity<>(error.getMessage(), HttpStatus.CONFLICT);
   }
 
