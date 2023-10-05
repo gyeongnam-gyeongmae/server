@@ -3,10 +3,10 @@ package megabrain.gyeongnamgyeongmae.domain.user.controller;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.responses.ApiResponses;
+import io.swagger.v3.oas.annotations.tags.Tag;
 import java.util.List;
 import java.util.stream.Collectors;
-
-import io.swagger.v3.oas.annotations.tags.Tag;
+import javax.validation.constraints.NotNull;
 import lombok.RequiredArgsConstructor;
 import megabrain.gyeongnamgyeongmae.domain.auctionItem.domain.entity.AuctionItemLike;
 import megabrain.gyeongnamgyeongmae.domain.auctionItem.dto.SearchItem.AuctionItemSearchResponse;
@@ -25,7 +25,9 @@ public class UserProfileController {
   private final UserProfileServiceInterface userProfileService;
 
   @GetMapping("/liked/{userId}")
-  @Operation(summary = "좋아요한 게시글 조회(관심 물품 조회)(임시 코드입니다)", description = "유저가 좋아요한 게시글을 조회합니다.(임시 코드입니다)")
+  @Operation(
+      summary = "좋아요한 게시글 조회(관심 물품 조회)(임시 코드입니다)",
+      description = "유저가 좋아요한 게시글을 조회합니다.(임시 코드입니다)")
   @ApiResponses(
       value = {
         @ApiResponse(responseCode = "200", description = "조회 성공"),
@@ -36,7 +38,8 @@ public class UserProfileController {
     //    User logedIduser = authenticationService.getLoginUser();
     //    List<AuctionItemLike> auctionItemLikes =
     // userService.findLikedAuctionItemIdsByUserId(logedIduser.getId());
-    List<AuctionItemLike> auctionItemLikes = userProfileService.findLikedAuctionItemIdsByUserId(userId);
+    List<AuctionItemLike> auctionItemLikes =
+        userProfileService.findLikedAuctionItemIdsByUserId(userId);
 
     //    List<AuctionItemLike> auctionItemLikes =
     // auctionItemLikeRepository.AuctionLikeFindByUserId(userId);
@@ -52,14 +55,21 @@ public class UserProfileController {
     return ResponseEntity.ok(auctionItemLikedResponse);
   }
 
-  @GetMapping("/auctionItem")
+  @GetMapping("/{userId}/auctionItems")
   @Operation(summary = "유저가 등록한 경매품 조회", description = "유저가 등록한 경매품을 조회합니다.")
-    @ApiResponses(
-        value = {
-            @ApiResponse(responseCode = "200", description = "조회 성공"),
-        })
-  public ResponseEntity<AuctionItemSearchResponse> findPostAuctionItemById(@ModelAttribute SearchAuctionItemByUser searchAuctionItemByUser) {
-    AuctionItemSearchResponse result = userProfileService.findPostAuctionItemIdsByUserId(searchAuctionItemByUser);
+  @ApiResponses(
+      value = {
+        @ApiResponse(responseCode = "200", description = "조회 성공"),
+      })
+  public ResponseEntity<AuctionItemSearchResponse> findPostAuctionItemsByUserId(
+      @PathVariable Long userId, @RequestParam @NotNull Long page) {
+
+    SearchAuctionItemByUser searchAuctionItemByUser = new SearchAuctionItemByUser();
+    searchAuctionItemByUser.setUserId(userId);
+    searchAuctionItemByUser.setPage(page);
+
+    AuctionItemSearchResponse result =
+        userProfileService.findPostAuctionItemIdsByUserId(searchAuctionItemByUser);
     return ResponseEntity.ok(result);
   }
 }
