@@ -8,10 +8,7 @@ import java.util.List;
 import javax.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import megabrain.gyeongnamgyeongmae.domain.auctionItem.domain.entity.AuctionItem;
-import megabrain.gyeongnamgyeongmae.domain.auctionItem.dto.AuctionItemLikeRequest;
-import megabrain.gyeongnamgyeongmae.domain.auctionItem.dto.AuctionItemResponse;
-import megabrain.gyeongnamgyeongmae.domain.auctionItem.dto.CreateAuctionItemRequest;
-import megabrain.gyeongnamgyeongmae.domain.auctionItem.dto.UpdateAuctionItemRequest;
+import megabrain.gyeongnamgyeongmae.domain.auctionItem.dto.*;
 import megabrain.gyeongnamgyeongmae.domain.auctionItem.service.Item.AuctionItemService;
 import megabrain.gyeongnamgyeongmae.domain.image.Service.FindImageServiceInterface;
 import org.springframework.http.HttpStatus;
@@ -35,10 +32,13 @@ public class AuctionItemController {
                     @ApiResponse(responseCode = "404", description = "구매자 혹은 판매자를 찾을 수 없음"),
                     @ApiResponse(responseCode = "500", description = "올바르지 못한 값을 입력")
             })
-    public ResponseEntity<HttpStatus> createAuctionItem(
+    public ResponseEntity<CreateAuctionItemResponse> createAuctionItem(
             @RequestBody @Valid CreateAuctionItemRequest createAuctionItemRequest) {
-        auctionItemService.createAuctionItem(createAuctionItemRequest);
-        return ResponseEntity.status(HttpStatus.CREATED).build();
+        CreateAuctionItemResponse createAuctionItemResponse =
+                CreateAuctionItemResponse.builder()
+                        .id(auctionItemService.createAuctionItem(createAuctionItemRequest).getId())
+                        .build();
+        return ResponseEntity.ok(createAuctionItemResponse);
     }
 
     @GetMapping("{id}")

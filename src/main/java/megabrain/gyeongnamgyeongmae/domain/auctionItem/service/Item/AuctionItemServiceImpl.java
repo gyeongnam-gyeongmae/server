@@ -31,12 +31,13 @@ public class AuctionItemServiceImpl implements AuctionItemService {
 
   @Override
   @Transactional
-  public void createAuctionItem(CreateAuctionItemRequest createAuctionItemRequest) {
+  public AuctionItem createAuctionItem(CreateAuctionItemRequest createAuctionItemRequest) {
     checkClosedTime(createAuctionItemRequest.getClosedTime());
     AuctionItem auctionItem = createAuctionItemRequest.toEntity();
     setAuctionItemProperties(
         auctionItem, createAuctionItemRequest.getUserId(), createAuctionItemRequest.getCategory());
     auctionItemRepository.save(auctionItem);
+    return auctionItem;
   }
 
   @Override
