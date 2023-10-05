@@ -9,7 +9,7 @@ import megabrain.gyeongnamgyeongmae.domain.auctionItem.dto.UpdateAuctionItemRequ
 
 public interface AuctionItemService {
 
-  void createAuctionItem(CreateAuctionItemRequest createAuctionItemRequest);
+  AuctionItem createAuctionItem(CreateAuctionItemRequest createAuctionItemRequest);
 
   AuctionItem findAuctionItemById(Long id);
 
