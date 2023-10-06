@@ -40,7 +40,6 @@ public class AuctionItemRepositoryCustomImpl implements AuctionItemRepositoryCus
     searchAuctionItemSortedRequest.applySearchTime(orderSpecifiers, auctionItem);
     searchAuctionItemSortedRequest.applySearchPrice(orderSpecifiers, auctionItem);
     searchAuctionItemSortedRequest.applySearchLike(orderSpecifiers, auctionItem);
-//    searchAuctionItemSortedRequest.applySearchTime(orderSpecifiers, auctionItem);
 
     searchAuctionItemSortedRequest.applySearchCategory(categoryStatus, auctionItem);
     searchAuctionItemSortedRequest.applyKeyWordStatus(keywordStatus, auctionItem);

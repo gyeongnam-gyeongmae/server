@@ -9,5 +9,5 @@ public interface UserProfileServiceInterface {
   List<AuctionItemLike> findLikedAuctionItemIdsByUserId(Long userId);
 
   AuctionItemSearchResponse findPostAuctionItemIdsByUserId(
-      SearchAuctionItemByUser searchAuctionItemByUser);
+      SearchAuctionItemByUser searchAuctionItemByUser, Long userId);
 }

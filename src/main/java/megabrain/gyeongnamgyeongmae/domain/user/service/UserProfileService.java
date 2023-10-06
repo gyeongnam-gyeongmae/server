@@ -24,11 +24,12 @@ public class UserProfileService implements UserProfileServiceInterface {
 
   @Override
   public AuctionItemSearchResponse findPostAuctionItemIdsByUserId(
-      SearchAuctionItemByUser searchAuctionItemByUser) {
+      SearchAuctionItemByUser searchAuctionItemByUser, Long userId) {
     SearchItemDto request =
         SearchItemDto.builder()
-            .user_id(searchAuctionItemByUser.getUserId())
+            .user_id(userId)
             .page(searchAuctionItemByUser.getPage())
+            .closed(searchAuctionItemByUser.isClosed())
             .build();
     return auctionItemSearchService.findAuctionItemByRequest(request);
   }

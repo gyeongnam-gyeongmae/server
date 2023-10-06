@@ -31,11 +31,11 @@ public class SearchItemDto {
   private Long page;
 
   @Builder
-  public SearchItemDto(Long user_id, Long page) {
+  public SearchItemDto(Long user_id, Long page, Boolean closed) {
     this.user_id = user_id;
     this.page = page;
+    this.closed = closed;
     search_time = false;
-    closed = false;
     like = false;
     search_price = false;
   }
