@@ -31,11 +31,11 @@ public class SearchItemDto {
   private Long page;
 
   @Builder
-  public SearchItemDto(Long user_id, Long page) {
+  public SearchItemDto(Long user_id, Long page, Boolean closed) {
     this.user_id = user_id;
     this.page = page;
+    this.closed = closed;
     search_time = false;
-    closed = false;
     like = false;
     search_price = false;
   }
@@ -105,8 +105,8 @@ public class SearchItemDto {
   }
 
   public void applySearchUser(BooleanBuilder builder, QAuctionItem item) {
-    if (this.closed) {
-      builder.and(item.user.id.eq(this.page));
+    if (this.user_id != null) {
+      builder.and(item.user.id.eq(this.user_id));
     }
   }
 }

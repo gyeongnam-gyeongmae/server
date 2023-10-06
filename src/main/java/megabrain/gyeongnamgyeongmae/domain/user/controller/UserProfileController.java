@@ -6,7 +6,6 @@ import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import java.util.List;
 import java.util.stream.Collectors;
-import javax.validation.constraints.NotNull;
 import lombok.RequiredArgsConstructor;
 import megabrain.gyeongnamgyeongmae.domain.auctionItem.domain.entity.AuctionItemLike;
 import megabrain.gyeongnamgyeongmae.domain.auctionItem.dto.SearchItem.AuctionItemSearchResponse;
@@ -62,14 +61,9 @@ public class UserProfileController {
         @ApiResponse(responseCode = "200", description = "조회 성공"),
       })
   public ResponseEntity<AuctionItemSearchResponse> findPostAuctionItemsByUserId(
-      @PathVariable Long userId, @RequestParam @NotNull Long page) {
-
-    SearchAuctionItemByUser searchAuctionItemByUser = new SearchAuctionItemByUser();
-    searchAuctionItemByUser.setUserId(userId);
-    searchAuctionItemByUser.setPage(page);
-
+      @PathVariable Long userId, @ModelAttribute SearchAuctionItemByUser searchAuctionItemByUser) {
     AuctionItemSearchResponse result =
-        userProfileService.findPostAuctionItemIdsByUserId(searchAuctionItemByUser);
+        userProfileService.findPostAuctionItemIdsByUserId(searchAuctionItemByUser, userId);
     return ResponseEntity.ok(result);
   }
 }

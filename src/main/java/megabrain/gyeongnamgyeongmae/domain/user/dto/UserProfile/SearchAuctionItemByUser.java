@@ -6,7 +6,7 @@ import lombok.Data;
 @Data
 public class SearchAuctionItemByUser {
 
-  @NotNull private Long userId;
+  private boolean closed;
 
   @NotNull private Long page;
 }
