@@ -10,4 +10,8 @@ public interface UserRepository extends JpaRepository<User, Long> {
   Long getIdByAuthVendorUserId(String authVendorUserId);
 
   boolean existsByAuthVendorUserId(String authVendorUserId);
+
+  Boolean existsByNickname(String nickname);
+
+  Boolean existsByPhoneNumber(String phoneNumber);
 }

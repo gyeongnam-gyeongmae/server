@@ -1,9 +1,8 @@
 package megabrain.gyeongnamgyeongmae.domain.auctionItem.domain.repostiory;
 
 import megabrain.gyeongnamgyeongmae.domain.auctionItem.dto.SearchItem.AuctionItemSearchResponse;
-import megabrain.gyeongnamgyeongmae.domain.auctionItem.dto.SearchItem.SearchAuctionItemSortedRequest;
+import megabrain.gyeongnamgyeongmae.domain.auctionItem.dto.SearchItemDto;
 
 public interface AuctionItemRepositoryCustom {
-  AuctionItemSearchResponse searchAuctionItemPage(
-      SearchAuctionItemSortedRequest searchAuctionItemSortedRequest);
+  AuctionItemSearchResponse searchAuctionItemPage(SearchItemDto searchAuctionItemSortedRequest);
 }

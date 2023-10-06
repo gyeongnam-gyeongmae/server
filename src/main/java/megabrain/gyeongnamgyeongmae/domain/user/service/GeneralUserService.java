@@ -5,6 +5,9 @@ import lombok.RequiredArgsConstructor;
 import megabrain.gyeongnamgyeongmae.domain.user.domain.entity.Address;
 import megabrain.gyeongnamgyeongmae.domain.user.domain.entity.User;
 import megabrain.gyeongnamgyeongmae.domain.user.domain.repository.UserRepository;
+import megabrain.gyeongnamgyeongmae.domain.user.dto.UserUpdateRequest;
+import megabrain.gyeongnamgyeongmae.domain.user.exception.DuplicateUserNickname;
+import megabrain.gyeongnamgyeongmae.domain.user.exception.DuplicateUserPhoneNumber;
 import megabrain.gyeongnamgyeongmae.domain.user.exception.FailedCoordinateParse;
 import megabrain.gyeongnamgyeongmae.domain.user.exception.UserNotFoundException;
 import org.json.simple.JSONArray;
@@ -54,6 +57,16 @@ public class GeneralUserService implements UserServiceInterface {
   }
 
   @Override
+  @Transactional
+  public void updateUser(User user, UserUpdateRequest userUpdateRequest) {
+    if (isDuplicateNickname(userUpdateRequest.getNickname()))
+      throw new DuplicateUserNickname("이미 존재하는 닉네임입니다.");
+    if (isDuplicatePhoneNumber(userUpdateRequest.getPhoneNumber()))
+      throw new DuplicateUserPhoneNumber("이미 존재하는 전화번호입니다.");
+    user.updateUser(userUpdateRequest);
+  }
+
+  @Override
   public List<User> findAllUser() {
     return userRepository.findAll();
   }
@@ -71,20 +84,27 @@ public class GeneralUserService implements UserServiceInterface {
   @Transactional
   public Address getAddressByCoordinate(Float latitude, Float longitude) {
 
+    ResponseEntity<String> response;
     HttpHeaders headers = new HttpHeaders();
     RestTemplate restTemplate = new RestTemplate();
 
     try {
       headers.add("Authorization", "KakaoAK " + kakaoRestApiKey);
-      transCoordUri = transCoordUri + "?x=" + longitude + "&y=" + latitude + "&input_coord=WGS84";
+      // transCoordUri가 재선언되지 않도록 주의
+      String requestUri =
+          transCoordUri + "?x=" + longitude + "&y=" + latitude + "&input_coord=WGS84";
       HttpEntity<MultiValueMap<String, String>> request = new HttpEntity<>(headers);
 
-      ResponseEntity<String> response =
-          restTemplate.exchange(transCoordUri, HttpMethod.GET, request, String.class);
+      response = restTemplate.exchange(requestUri, HttpMethod.GET, request, String.class);
 
+    } catch (Exception e) {
+      throw new FailedCoordinateParse("카카오 API를 통해 좌표를 발급하는데 실패하였습니다." + e);
+    }
+
+    try {
       return kakaoCoordParser(response);
     } catch (Exception e) {
-      throw new FailedCoordinateParse("좌표를 주소로 변환하는데 실패했습니다.");
+      throw new FailedCoordinateParse("받아온 데이터를 파싱하는데에 실패하였습니다.", e);
     }
   }
 
@@ -94,17 +114,31 @@ public class GeneralUserService implements UserServiceInterface {
 
     JSONObject metadata = (JSONObject) jsonObject.get("meta");
     Long size = (Long) metadata.get("total_count");
-    if (size < 1) {
-      throw new Exception();
-    }
+    if (size < 1) throw new Exception("documents가 존재하지 않음.");
+
     JSONArray addressData = (JSONArray) jsonObject.get("documents");
     JSONObject addressInfo = (JSONObject) addressData.get(0);
     JSONObject roadAddress = (JSONObject) addressInfo.get("road_address");
+    if (roadAddress != null) {
+      String state = (String) roadAddress.get("region_1depth_name");
+      String city = (String) roadAddress.get("region_2depth_name");
+      String town = (String) roadAddress.get("region_3depth_name");
 
-    String state = (String) roadAddress.get("region_1depth_name");
-    String city = (String) roadAddress.get("region_2depth_name");
-    String town = (String) roadAddress.get("region_3depth_name");
+      return Address.of(state, city, town);
+    }
+    JSONObject address = (JSONObject) addressInfo.get("address");
+    String state = (String) address.get("region_1depth_name");
+    String city = (String) address.get("region_2depth_name");
+    String town = (String) address.get("region_3depth_name");
 
     return Address.of(state, city, town);
+  }
+
+  private Boolean isDuplicateNickname(String nickname) {
+    return userRepository.existsByNickname(nickname);
+  }
+
+  private Boolean isDuplicatePhoneNumber(String phoneNumber) {
+    return userRepository.existsByPhoneNumber(phoneNumber);
   }
 }

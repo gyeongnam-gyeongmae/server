@@ -88,7 +88,8 @@ dependencies {
     testAnnotationProcessor("org.projectlombok:lombok")
     testImplementation("org.springframework.boot:spring-boot-starter-test")
 
-    implementation("de.codecentric:spring-boot-admin-starter-client:2.7.1")
+    implementation ("com.google.code.findbugs:jsr305:3.0.2")
+
 
     annotationProcessor("org.springframework.boot:spring-boot-configuration-processor")
     implementation("org.springframework.cloud:spring-cloud-aws-context:2.2.6.RELEASE")

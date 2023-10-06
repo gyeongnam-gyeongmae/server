@@ -1,12 +1,12 @@
 package megabrain.gyeongnamgyeongmae.domain.user.domain.entity;
 
+import java.util.List;
 import javax.persistence.*;
 import lombok.*;
 import lombok.NoArgsConstructor;
 import megabrain.gyeongnamgyeongmae.domain.image.domain.entity.Image;
+import megabrain.gyeongnamgyeongmae.domain.user.dto.UserUpdateRequest;
 import megabrain.gyeongnamgyeongmae.global.BaseTimeEntity;
-
-import java.util.List;
 
 @Getter
 @Setter
@@ -41,5 +41,12 @@ public class User extends BaseTimeEntity {
     this.phoneNumber = phoneNumber;
     this.authVendorUserId = authVendorUserId;
     this.nickname = nickname;
+  }
+
+  public void updateUser(UserUpdateRequest userUpdateRequest) {
+    this.phoneNumber = userUpdateRequest.getPhoneNumber();
+    this.nickname = userUpdateRequest.getNickname();
+    this.introduce = userUpdateRequest.getIntroduce();
+    this.address = userUpdateRequest.getAddress();
   }
 }

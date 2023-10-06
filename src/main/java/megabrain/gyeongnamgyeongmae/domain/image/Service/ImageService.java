@@ -53,6 +53,7 @@ public class ImageService implements ImageServiceInterface {
 
   private void AuctionItemUpload(List<MultipartFile> images, String from, AuctionItem auctionItem)
       throws IOException {
+    setImageRemove(findImageByAuctionItemId(auctionItem.getId()));
     for (MultipartFile file : images) {
       processUpload(from, file, image -> saveImage(image, auctionItem));
     }
@@ -63,6 +64,10 @@ public class ImageService implements ImageServiceInterface {
     for (MultipartFile file : images) {
       processUpload(from, file, image -> saveImage(image, user));
     }
+  }
+
+  private void setImageRemove(List<Image> images) {
+    images.forEach(Image::setRemoved);
   }
 
   private void processUpload(String from, MultipartFile file, Consumer<Image> imageSaver)
@@ -80,10 +85,6 @@ public class ImageService implements ImageServiceInterface {
   }
 
   private void saveImage(Image image, AuctionItem auctionItem) {
-    List<Image> images = findImageByAuctionItemId(auctionItem.getId());
-    if (images != null) {
-      images.forEach(Image::setRemoved);
-    }
     image.setAuctionItem(auctionItem);
     imageRepository.save(image);
   }
