@@ -2,8 +2,7 @@ server.port: ${PORT}
 spring.config.import:
   - application-mailer.yml
   - application-postgresql.yml
-# oauth2 vendors
-  - oauth/kakao-oauth.yml
+  - application-oauth.yml
 cloud:
   aws:
     s3:
@@ -12,11 +11,11 @@ cloud:
       access-key: ${cloud.aws.credentials.access-key}
       secret-key: ${cloud.aws.credentials.secret-key}
     region:
-        static: ${cloud.aws.region.static}
-        auto: ${cloud.aws.region.auto}
-#    region:
-#      static: ${cloud.aws.region.static}
-#      auto: ${cloud.aws.region.auto}
+      static: ${cloud.aws.region.static}
+      auto: ${cloud.aws.region.auto}
+    #    region:
+    #      static: ${cloud.aws.region.static}
+    #      auto: ${cloud.aws.region.auto}
     stack:
       auto: false
 

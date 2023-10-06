@@ -114,16 +114,22 @@ public class GeneralUserService implements UserServiceInterface {
 
     JSONObject metadata = (JSONObject) jsonObject.get("meta");
     Long size = (Long) metadata.get("total_count");
-    if (size < 1) {
-      throw new Exception();
-    }
+    if (size < 1) throw new Exception("documents가 존재하지 않음.");
+
     JSONArray addressData = (JSONArray) jsonObject.get("documents");
     JSONObject addressInfo = (JSONObject) addressData.get(0);
     JSONObject roadAddress = (JSONObject) addressInfo.get("road_address");
+    if (roadAddress != null) {
+      String state = (String) roadAddress.get("region_1depth_name");
+      String city = (String) roadAddress.get("region_2depth_name");
+      String town = (String) roadAddress.get("region_3depth_name");
 
-    String state = (String) roadAddress.get("region_1depth_name");
-    String city = (String) roadAddress.get("region_2depth_name");
-    String town = (String) roadAddress.get("region_3depth_name");
+      return Address.of(state, city, town);
+    }
+    JSONObject address = (JSONObject) addressInfo.get("address");
+    String state = (String) address.get("region_1depth_name");
+    String city = (String) address.get("region_2depth_name");
+    String town = (String) address.get("region_3depth_name");
 
     return Address.of(state, city, town);
   }
