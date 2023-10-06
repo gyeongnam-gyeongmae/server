@@ -145,7 +145,7 @@ public class AuctionItem extends BaseTimeEntity {
   }
 
   public Boolean isClosed() {
-    return this.closedTime.isAfter(LocalDateTime.now());
+    return this.closedTime.isBefore(LocalDateTime.now());
   }
 
   public void updateAuctionItem(UpdateAuctionItemRequest upDateAuctionItemRequest) {
