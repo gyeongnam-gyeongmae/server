@@ -105,8 +105,8 @@ public class SearchItemDto {
   }
 
   public void applySearchUser(BooleanBuilder builder, QAuctionItem item) {
-    if (this.closed) {
-      builder.and(item.user.id.eq(this.page));
+    if (this.user_id != null) {
+      builder.and(item.user.id.eq(this.user_id));
     }
   }
 }
