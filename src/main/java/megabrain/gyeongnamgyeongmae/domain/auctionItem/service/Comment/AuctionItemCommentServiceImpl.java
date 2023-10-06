@@ -43,7 +43,10 @@ public class AuctionItemCommentServiceImpl implements AuctionItemCommentService 
     comment.setAuctionItem(auctionItem);
     comment.setParent(parentComment);
 
-    auctionItem.plusCommentCount();
+    if (parentComment == null) {
+      auctionItem.plusCommentCount();
+    }
+
     saveComment(comment);
     auctionItemService.saveAuctionItem(auctionItem);
   }

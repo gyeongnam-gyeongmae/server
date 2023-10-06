@@ -147,4 +147,9 @@ public class AuctionItemServiceImpl implements AuctionItemService {
   private AuctionItemLike auctionItemLike(AuctionItemLikePK auctionItemLikePK) {
     return auctionItemLikeRepository.findById(auctionItemLikePK).orElse(null);
   }
+
+  @Override
+  public List<AuctionItemLike> auctionItemLikesFindByUserId(Long id) {
+    return auctionItemLikeRepository.AuctionLikeFindByUserId(id);
+  }
 }

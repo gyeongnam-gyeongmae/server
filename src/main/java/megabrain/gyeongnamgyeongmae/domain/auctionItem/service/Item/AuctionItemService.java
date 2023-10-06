@@ -2,6 +2,7 @@ package megabrain.gyeongnamgyeongmae.domain.auctionItem.service.Item;
 
 import java.util.List;
 import megabrain.gyeongnamgyeongmae.domain.auctionItem.domain.entity.AuctionItem;
+import megabrain.gyeongnamgyeongmae.domain.auctionItem.domain.entity.AuctionItemLike;
 import megabrain.gyeongnamgyeongmae.domain.auctionItem.dto.AuctionItemLikeRequest;
 import megabrain.gyeongnamgyeongmae.domain.auctionItem.dto.AuctionItemResponse;
 import megabrain.gyeongnamgyeongmae.domain.auctionItem.dto.CreateAuctionItemRequest;
@@ -24,4 +25,6 @@ public interface AuctionItemService {
   void likeAuctionItemById(Long id, AuctionItemLikeRequest auctionItemLikeRequest);
 
   void saveAuctionItem(AuctionItem auctionItem);
+
+  List<AuctionItemLike> auctionItemLikesFindByUserId(Long id);
 }
