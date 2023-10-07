@@ -17,11 +17,13 @@ public class SearchAuctionItemSortedRequest {
 
   @NotNull private FindStatus closed;
 
-  @NotNull private Boolean search_time;
+  private Boolean search_time;
 
-  @NotNull private Boolean like;
+  private Boolean like;
 
-  @NotNull private Boolean search_price;
+  private Boolean search_price;
+
+  @NotNull private Boolean basic;
 
   @NotNull private Long page;
 }

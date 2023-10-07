@@ -27,20 +27,23 @@ public class SearchItemDto {
 
   private Boolean search_price;
 
-  private Long page;
-
   private FindStatus onlyOpenOrClosed;
 
   private Long BuyUserId;
+
+  private Boolean basic;
+
+  private Long page;
 
   @Builder
   public SearchItemDto(Long user_id, Long page, FindStatus closed) {
     this.user_id = user_id;
     this.page = page;
     this.onlyOpenOrClosed = closed;
-    search_time = false;
-    like = false;
-    search_price = false;
+    search_time = null;
+    like = null;
+    search_price = null;
+    basic = true;
   }
 
   @Builder
@@ -48,9 +51,10 @@ public class SearchItemDto {
     this.BuyUserId = buyUserId;
     this.page = Page;
     this.onlyOpenOrClosed = FindStatus.CLOSED;
-    search_time = false;
-    like = false;
-    search_price = false;
+    search_time = null;
+    like = null;
+    search_price = null;
+    basic = true;
   }
 
   public static SearchItemDto of(SearchAuctionItemSortedRequest request) {
@@ -63,6 +67,7 @@ public class SearchItemDto {
     dto.setSearch_price(request.getSearch_price());
     dto.setPage(request.getPage());
     dto.setOnlyOpenOrClosed(request.getClosed());
+    dto.setBasic(request.getBasic());
     return dto;
   }
 
@@ -121,6 +126,9 @@ public class SearchItemDto {
   }
 
   public void applySearchTime(List<OrderSpecifier<?>> order, QAuctionItem item) {
+    if(order == null) {
+      return;
+    }
     if (this.search_time) {
       order.add(item.createdAt.desc());
     } else {
@@ -131,6 +139,12 @@ public class SearchItemDto {
   public void applySearchUser(BooleanBuilder builder, QAuctionItem item) {
     if (this.user_id != null) {
       builder.and(item.user.id.eq(this.user_id));
+    }
+  }
+
+  public void applyBasicOrder(List<OrderSpecifier<?>> order, QAuctionItem item) {
+    if (this.basic) {
+      order.add(item.createdAt.desc());
     }
   }
 }

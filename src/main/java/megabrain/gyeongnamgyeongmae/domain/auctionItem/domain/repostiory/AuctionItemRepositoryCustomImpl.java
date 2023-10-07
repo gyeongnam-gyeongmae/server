@@ -38,9 +38,13 @@ public class AuctionItemRepositoryCustomImpl implements AuctionItemRepositoryCus
     BooleanBuilder onlyStatus = new BooleanBuilder();
     BooleanBuilder buyerStatus = new BooleanBuilder();
 
-    searchAuctionItemSortedRequest.applySearchTime(orderSpecifiers, auctionItem);
-    searchAuctionItemSortedRequest.applySearchPrice(orderSpecifiers, auctionItem);
-    searchAuctionItemSortedRequest.applySearchLike(orderSpecifiers, auctionItem);
+    if (searchAuctionItemSortedRequest.getBasic() == Boolean.TRUE) {
+      searchAuctionItemSortedRequest.applyBasicOrder(orderSpecifiers, auctionItem);
+    } else {
+      searchAuctionItemSortedRequest.applySearchTime(orderSpecifiers, auctionItem);
+      searchAuctionItemSortedRequest.applySearchPrice(orderSpecifiers, auctionItem);
+      searchAuctionItemSortedRequest.applySearchLike(orderSpecifiers, auctionItem);
+    }
 
     searchAuctionItemSortedRequest.applySearchCategory(categoryStatus, auctionItem);
     searchAuctionItemSortedRequest.applyKeyWordStatus(keywordStatus, auctionItem);
@@ -58,7 +62,9 @@ public class AuctionItemRepositoryCustomImpl implements AuctionItemRepositoryCus
                 categoryStatus,
                 keywordStatus,
                 cityStatus,
-                userStatus, onlyStatus, buyerStatus);
+                userStatus,
+                onlyStatus,
+                buyerStatus);
 
     Long page = searchAuctionItemSortedRequest.getPage();
     Long itemsPerPage = 10L;
