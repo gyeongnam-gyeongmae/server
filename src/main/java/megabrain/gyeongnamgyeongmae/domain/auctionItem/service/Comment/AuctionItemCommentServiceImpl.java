@@ -5,14 +5,20 @@ import java.util.stream.Collectors;
 import lombok.RequiredArgsConstructor;
 import megabrain.gyeongnamgyeongmae.domain.auctionItem.domain.entity.AuctionItem;
 import megabrain.gyeongnamgyeongmae.domain.auctionItem.domain.entity.Comment;
+import megabrain.gyeongnamgyeongmae.domain.auctionItem.domain.entity.CommentLike;
+import megabrain.gyeongnamgyeongmae.domain.auctionItem.domain.entity.CommentLikePK;
 import megabrain.gyeongnamgyeongmae.domain.auctionItem.domain.repostiory.AuctionItemCommentRepository;
+import megabrain.gyeongnamgyeongmae.domain.auctionItem.domain.repostiory.CommentLikeRepository;
 import megabrain.gyeongnamgyeongmae.domain.auctionItem.dto.AuctionItemCommentDeleteRequest;
 import megabrain.gyeongnamgyeongmae.domain.auctionItem.dto.AuctionItemCommentRequest;
 import megabrain.gyeongnamgyeongmae.domain.auctionItem.dto.AuctionItemCommentUpdateRequest;
 import megabrain.gyeongnamgyeongmae.domain.auctionItem.dto.Comment.AuctionItemCommentParentDto;
+import megabrain.gyeongnamgyeongmae.domain.auctionItem.dto.Comment.CommentLikeDto;
+import megabrain.gyeongnamgyeongmae.domain.auctionItem.dto.Comment.CommentSearchResponse;
 import megabrain.gyeongnamgyeongmae.domain.auctionItem.exception.CommentNotFoundException;
 import megabrain.gyeongnamgyeongmae.domain.auctionItem.service.Item.AuctionItemService;
 import megabrain.gyeongnamgyeongmae.domain.user.domain.entity.User;
+import megabrain.gyeongnamgyeongmae.domain.user.dto.UserProfile.SearchByUserDto;
 import megabrain.gyeongnamgyeongmae.domain.user.service.UserServiceInterface;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -24,6 +30,7 @@ public class AuctionItemCommentServiceImpl implements AuctionItemCommentService 
   private final AuctionItemCommentRepository auctionItemCommentRepository;
   private final UserServiceInterface userService;
   private final AuctionItemService auctionItemService;
+  private final CommentLikeRepository commentLikeRepository;
 
   @Transactional
   public void createAuctionItemComment(
@@ -51,6 +58,11 @@ public class AuctionItemCommentServiceImpl implements AuctionItemCommentService 
     auctionItemService.saveAuctionItem(auctionItem);
   }
 
+  @Override
+  public List<AuctionItemCommentParentDto> findAuctionItemCommentById(Long id) {
+    return null;
+  }
+
   public void saveComment(Comment comment) {
     auctionItemCommentRepository.save(comment);
   }
@@ -62,15 +74,15 @@ public class AuctionItemCommentServiceImpl implements AuctionItemCommentService 
         .orElseThrow(() -> new CommentNotFoundException("댓글을 찾을 수 없습니다."));
   }
 
-  @Transactional(readOnly = true)
-  public List<AuctionItemCommentParentDto> findAuctionItemCommentById(Long id) {
-    auctionItemService.findAuctionItemById(id);
-    List<Comment> commentEntityList =
-        auctionItemCommentRepository.findByAuctionItemCommentByAuctionId(id);
-    return commentEntityList.stream()
-        .map(AuctionItemCommentParentDto::of)
-        .collect(Collectors.toList());
-  }
+//  @Transactional(readOnly = true)
+//  public List<AuctionItemCommentParentDto> findAuctionItemCommentById(Long id) {
+//    auctionItemService.findAuctionItemById(id);
+//    List<Comment> commentEntityList =
+//        auctionItemCommentRepository.findByAuctionItemCommentByAuctionId(id);
+//    return commentEntityList.stream()
+//        .map(AuctionItemCommentParentDto::of)
+//        .collect(Collectors.toList());
+//  }
 
   @Transactional
   public void updateAuctionItemComment(
@@ -89,4 +101,46 @@ public class AuctionItemCommentServiceImpl implements AuctionItemCommentService 
     comment.deleteComment();
     auctionItemCommentRepository.save(comment);
   }
+
+  @Override
+  @Transactional
+  public void likeAuctionItemComment(CommentLikeDto commentLikeDto) {
+    Comment comment = findCommentById(commentLikeDto.getCommentId());
+    User user = userService.findUserById(commentLikeDto.getUserId());
+
+    CommentLikePK commentLikePK = new CommentLikePK(commentLikeDto.getUserId(), commentLikeDto.getUserId());
+
+    CommentLike commentLike = commentLike(commentLikePK);
+
+    if (commentLike != null) {
+      deleteCommentLike(commentLike);
+      comment.minusLikeCount();
+    } else {
+      commentLike = createAndSaveCommentLike(comment, user, commentLikePK);
+      comment.plusLikeCount();
+      saveCommentLike(commentLike);
+    }
+    auctionItemCommentRepository.save(comment);
+  }
+
+  private CommentLike commentLike(CommentLikePK commentLikePK) {
+    return commentLikeRepository.findById(commentLikePK).orElse(null);
+  }
+
+  private void deleteCommentLike(CommentLike commentLike) {
+    commentLikeRepository.delete(commentLike);
+  }
+
+  private CommentLike createAndSaveCommentLike(
+      Comment comment, User user, CommentLikePK commentLikePK) {
+    CommentLike commentLike =
+        CommentLike.builder().id(commentLikePK).comment(comment).user(user).build();
+    saveCommentLike(commentLike);
+    return commentLike;
+  }
+
+  private void saveCommentLike(CommentLike commentLike) {
+    commentLikeRepository.save(commentLike);
+  }
+
 }

@@ -4,9 +4,11 @@ import javax.validation.constraints.NotNull;
 import lombok.Data;
 
 @Data
-public class SearchAuctionItemByUser {
+public class SearchByUserDto {
 
+  //최신순, 오래된순
   private boolean closed;
 
   @NotNull private Long page;
+
 }

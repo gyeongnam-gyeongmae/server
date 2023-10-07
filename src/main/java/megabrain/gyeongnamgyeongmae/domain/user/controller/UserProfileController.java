@@ -8,9 +8,10 @@ import java.util.List;
 import java.util.stream.Collectors;
 import lombok.RequiredArgsConstructor;
 import megabrain.gyeongnamgyeongmae.domain.auctionItem.domain.entity.AuctionItemLike;
+import megabrain.gyeongnamgyeongmae.domain.auctionItem.dto.Comment.CommentSearchResponse;
 import megabrain.gyeongnamgyeongmae.domain.auctionItem.dto.SearchItem.AuctionItemSearchResponse;
 import megabrain.gyeongnamgyeongmae.domain.user.dto.UserProfile.AuctionItemLikedResponse;
-import megabrain.gyeongnamgyeongmae.domain.user.dto.UserProfile.SearchAuctionItemByUser;
+import megabrain.gyeongnamgyeongmae.domain.user.dto.UserProfile.SearchByUserDto;
 import megabrain.gyeongnamgyeongmae.domain.user.service.UserProfileServiceInterface;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -61,9 +62,35 @@ public class UserProfileController {
         @ApiResponse(responseCode = "200", description = "조회 성공"),
       })
   public ResponseEntity<AuctionItemSearchResponse> findPostAuctionItemsByUserId(
-      @PathVariable Long userId, @ModelAttribute SearchAuctionItemByUser searchAuctionItemByUser) {
+      @PathVariable Long userId, @ModelAttribute SearchByUserDto searchByUserDto) {
     AuctionItemSearchResponse result =
-        userProfileService.findPostAuctionItemIdsByUserId(searchAuctionItemByUser, userId);
+        userProfileService.findPostAuctionItemIdsByUserId(searchByUserDto, userId);
     return ResponseEntity.ok(result);
   }
+
+//  @GetMapping("/{userId}/comments")
+//    @Operation(summary = "유저가 쓴 댓글 조회", description = "해당 유저가 등록한 댓글을 조회합니다.")
+//    @ApiResponses(
+//        value = {
+//          @ApiResponse(responseCode = "200", description = "조회 성공"),
+//        })
+//  public ResponseEntity<AuctionItemSearchResponse> findPostCommentsByUserId(
+//      @PathVariable Long userId, @ModelAttribute SearchByUserDto searchByUserDto) {
+//    AuctionItemSearchResponse result =
+//        userProfileService.findGetCommentIdsByUserId(searchByUserDto, userId);
+//    return ResponseEntity.ok(result);
+//  }
+
+  @GetMapping("/{userId}/comments/like")
+  @Operation(summary = "유저가 좋아요한 댓글 조회", description = "해당 유저가 좋아요한 댓글을 조회합니다.")
+    @ApiResponses(
+        value = {
+            @ApiResponse(responseCode = "200", description = "조회 성공"),
+        })
+  public ResponseEntity<CommentSearchResponse> findLikeCommentsByUserId(
+        @PathVariable Long userId, @ModelAttribute SearchByUserDto searchByUserDto) {
+        CommentSearchResponse result =
+            userProfileService.findGetLikeCommentByUserId(searchByUserDto, userId);
+        return ResponseEntity.ok(result);
+    }
 }

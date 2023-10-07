@@ -1,4 +1,4 @@
-package megabrain.gyeongnamgyeongmae.domain.auctionItem.service.bidding;
+package megabrain.gyeongnamgyeongmae.domain.auctionItem.service.Comment.bidding;
 
 import java.io.IOException;
 import jdk.nashorn.internal.runtime.regexp.joni.exception.InternalException;
