@@ -6,6 +6,7 @@ import lombok.RequiredArgsConstructor;
 import megabrain.gyeongnamgyeongmae.domain.auctionItem.domain.entity.AuctionItem;
 import megabrain.gyeongnamgyeongmae.domain.auctionItem.domain.entity.AuctionItemLike;
 import megabrain.gyeongnamgyeongmae.domain.auctionItem.domain.entity.AuctionItemLikePK;
+import megabrain.gyeongnamgyeongmae.domain.auctionItem.domain.entity.AuctionStatus;
 import megabrain.gyeongnamgyeongmae.domain.auctionItem.domain.repostiory.AuctionItemLikeRepository;
 import megabrain.gyeongnamgyeongmae.domain.auctionItem.domain.repostiory.AuctionItemRepository;
 import megabrain.gyeongnamgyeongmae.domain.auctionItem.dto.AuctionItemLikeRequest;
@@ -17,6 +18,7 @@ import megabrain.gyeongnamgyeongmae.domain.auctionItem.exception.AuctionTimeExce
 import megabrain.gyeongnamgyeongmae.domain.category.service.CategoryServiceInterface;
 import megabrain.gyeongnamgyeongmae.domain.user.domain.entity.User;
 import megabrain.gyeongnamgyeongmae.domain.user.service.UserServiceInterface;
+import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -151,5 +153,18 @@ public class AuctionItemServiceImpl implements AuctionItemService {
   @Override
   public List<AuctionItemLike> auctionItemLikesFindByUserId(Long id) {
     return auctionItemLikeRepository.AuctionLikeFindByUserId(id);
+  }
+
+  @Transactional
+  @Scheduled(fixedRate = 60000)
+  public void updateOngoingToBidding() {
+    LocalDateTime now = LocalDateTime.now();
+    List<AuctionItem> ongoingItems = auctionItemRepository.findByStatusAndClosedTimeBefore(AuctionStatus.ONGOING, now);
+
+    for (AuctionItem item : ongoingItems) {
+      item.setStatus(AuctionStatus.BIDDING);
+    }
+
+    auctionItemRepository.saveAll(ongoingItems);
   }
 }

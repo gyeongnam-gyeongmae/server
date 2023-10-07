@@ -27,4 +27,5 @@ public interface AuctionItemService {
   void saveAuctionItem(AuctionItem auctionItem);
 
   List<AuctionItemLike> auctionItemLikesFindByUserId(Long id);
+
 }
