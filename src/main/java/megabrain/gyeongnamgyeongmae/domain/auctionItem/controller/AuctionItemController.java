@@ -102,4 +102,12 @@ public class AuctionItemController {
         auctionItemService.likeAuctionItemById(id, auctionItemLikeRequest);
         return ResponseEntity.status(HttpStatus.OK).build();
     }
+
+    @PostMapping("{id}/buy")
+    @Operation(summary = "경매품 구매하기", description = "경매품을 판매완료 처리합니다. body에 구매자 id를 넣어주세요 (임시코드)")
+    public ResponseEntity<HttpStatus> buyAuctionItemById(
+            @PathVariable Long id, @RequestBody Long BuyerId) {
+        auctionItemService.buyAuctionItemById(id, BuyerId);
+        return ResponseEntity.status(HttpStatus.OK).build();
+    }
 }

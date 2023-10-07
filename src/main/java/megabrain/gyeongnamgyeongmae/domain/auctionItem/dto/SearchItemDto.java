@@ -27,18 +27,34 @@ public class SearchItemDto {
 
   private Boolean search_price;
 
-  private Long page;
-
   private FindStatus onlyOpenOrClosed;
+
+  private Long BuyUserId;
+
+  private Boolean basic;
+
+  private Long page;
 
   @Builder
   public SearchItemDto(Long user_id, Long page, FindStatus closed) {
     this.user_id = user_id;
     this.page = page;
     this.onlyOpenOrClosed = closed;
-    search_time = false;
-    like = false;
-    search_price = false;
+    search_time = null;
+    like = null;
+    search_price = null;
+    basic = true;
+  }
+
+  @Builder
+  public SearchItemDto(Long buyUserId, Long Page) {
+    this.BuyUserId = buyUserId;
+    this.page = Page;
+    this.onlyOpenOrClosed = FindStatus.CLOSED;
+    search_time = null;
+    like = null;
+    search_price = null;
+    basic = true;
   }
 
   public static SearchItemDto of(SearchAuctionItemSortedRequest request) {
@@ -51,18 +67,27 @@ public class SearchItemDto {
     dto.setSearch_price(request.getSearch_price());
     dto.setPage(request.getPage());
     dto.setOnlyOpenOrClosed(request.getClosed());
+    dto.setBasic(request.getBasic());
     return dto;
   }
 
-  public void applySearchOnly(BooleanBuilder onlyStatus, QAuctionItem auctionItem){
-    if(this.onlyOpenOrClosed == FindStatus.ALL){
-      onlyStatus.and(auctionItem.status.in(AuctionStatus.ONGOING, AuctionStatus.CLOSED, AuctionStatus.BIDDING));
+  public void applySearchOnly(BooleanBuilder onlyStatus, QAuctionItem auctionItem) {
+    if (this.onlyOpenOrClosed == FindStatus.ALL) {
+      onlyStatus.and(
+          auctionItem.status.in(
+              AuctionStatus.ONGOING, AuctionStatus.CLOSED, AuctionStatus.BIDDING));
     }
-    if(this.onlyOpenOrClosed == FindStatus.OPEN){
+    if (this.onlyOpenOrClosed == FindStatus.OPEN) {
       onlyStatus.and(auctionItem.status.eq(AuctionStatus.ONGOING));
     }
-    if(this.onlyOpenOrClosed == FindStatus.CLOSED){
+    if (this.onlyOpenOrClosed == FindStatus.CLOSED) {
       onlyStatus.and(auctionItem.status.in(AuctionStatus.CLOSED, AuctionStatus.BIDDING));
+    }
+  }
+
+  public void applySearchBuyer(BooleanBuilder buyerStatus, QAuctionItem item) {
+    if (this.BuyUserId != null) {
+      buyerStatus.and(item.buyer.id.eq(this.BuyUserId));
     }
   }
 
@@ -101,6 +126,9 @@ public class SearchItemDto {
   }
 
   public void applySearchTime(List<OrderSpecifier<?>> order, QAuctionItem item) {
+    if(order == null) {
+      return;
+    }
     if (this.search_time) {
       order.add(item.createdAt.desc());
     } else {
@@ -108,10 +136,15 @@ public class SearchItemDto {
     }
   }
 
-
   public void applySearchUser(BooleanBuilder builder, QAuctionItem item) {
     if (this.user_id != null) {
       builder.and(item.user.id.eq(this.user_id));
+    }
+  }
+
+  public void applyBasicOrder(List<OrderSpecifier<?>> order, QAuctionItem item) {
+    if (this.basic) {
+      order.add(item.createdAt.desc());
     }
   }
 }

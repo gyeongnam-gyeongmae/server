@@ -2,6 +2,8 @@ package megabrain.gyeongnamgyeongmae.domain.auctionItem.service.Item;
 
 import java.time.LocalDateTime;
 import java.util.List;
+import java.util.Optional;
+import java.util.stream.Collectors;
 import lombok.RequiredArgsConstructor;
 import megabrain.gyeongnamgyeongmae.domain.auctionItem.domain.entity.AuctionItem;
 import megabrain.gyeongnamgyeongmae.domain.auctionItem.domain.entity.AuctionItemLike;
@@ -159,12 +161,34 @@ public class AuctionItemServiceImpl implements AuctionItemService {
   @Scheduled(fixedRate = 60000)
   public void updateOngoingToBidding() {
     LocalDateTime now = LocalDateTime.now();
-    List<AuctionItem> ongoingItems = auctionItemRepository.findByStatusAndClosedTimeBefore(AuctionStatus.ONGOING, now);
+    List<AuctionItem> ongoingItems =
+        auctionItemRepository.findByStatusAndClosedTimeBefore(AuctionStatus.ONGOING, now);
 
     for (AuctionItem item : ongoingItems) {
       item.setStatus(AuctionStatus.BIDDING);
     }
 
     auctionItemRepository.saveAll(ongoingItems);
+  }
+
+  @Override
+  @Transactional
+  public void buyAuctionItemById(Long id, Long userId) {
+    AuctionItem auctionItem = findAuctionItemById(id);
+    User user = userService.findUserById(userId);
+    auctionItem.setStatus(AuctionStatus.CLOSED);
+    auctionItem.setBuyer(user);
+    auctionItemRepository.save(auctionItem);
+  }
+
+  @Override
+  public List<AuctionItem> auctionItemFindByIds(List<AuctionItemLike> auctionItemLikes) {
+    return auctionItemLikes.stream()
+        .map(
+            auctionItemLike ->
+                auctionItemRepository.findById(auctionItemLike.getId().getAuction_id()))
+        .filter(Optional::isPresent)
+        .map(Optional::get)
+        .collect(Collectors.toList());
   }
 }
