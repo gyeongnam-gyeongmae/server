@@ -1,6 +1,6 @@
 package megabrain.gyeongnamgyeongmae.domain.auctionItem.controller;
 
-import static megabrain.gyeongnamgyeongmae.domain.auctionItem.service.bidding.AuctionBiddingServiceService.AUCTION_PRICE_CHANNEL_NAME;
+import static megabrain.gyeongnamgyeongmae.domain.auctionItem.service.Comment.bidding.AuctionBiddingServiceService.AUCTION_PRICE_CHANNEL_NAME;
 
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
@@ -9,7 +9,7 @@ import io.swagger.v3.oas.annotations.tags.Tag;
 import javax.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import megabrain.gyeongnamgyeongmae.domain.auctionItem.dto.bidding.AuctionBidRequest;
-import megabrain.gyeongnamgyeongmae.domain.auctionItem.service.bidding.AuctionBiddingServiceInterface;
+import megabrain.gyeongnamgyeongmae.domain.auctionItem.service.Comment.bidding.AuctionBiddingServiceInterface;
 import megabrain.gyeongnamgyeongmae.domain.authentication.service.AuthenticationService;
 import megabrain.gyeongnamgyeongmae.domain.user.domain.entity.User;
 import megabrain.gyeongnamgyeongmae.global.anotation.LoginRequired;

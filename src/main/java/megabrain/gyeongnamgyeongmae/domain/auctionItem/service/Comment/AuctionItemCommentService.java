@@ -6,6 +6,9 @@ import megabrain.gyeongnamgyeongmae.domain.auctionItem.dto.AuctionItemCommentDel
 import megabrain.gyeongnamgyeongmae.domain.auctionItem.dto.AuctionItemCommentRequest;
 import megabrain.gyeongnamgyeongmae.domain.auctionItem.dto.AuctionItemCommentUpdateRequest;
 import megabrain.gyeongnamgyeongmae.domain.auctionItem.dto.Comment.AuctionItemCommentParentDto;
+import megabrain.gyeongnamgyeongmae.domain.auctionItem.dto.Comment.CommentLikeDto;
+import megabrain.gyeongnamgyeongmae.domain.auctionItem.dto.Comment.CommentSearchResponse;
+import megabrain.gyeongnamgyeongmae.domain.user.dto.UserProfile.SearchByUserDto;
 
 public interface AuctionItemCommentService {
 
@@ -18,4 +21,7 @@ public interface AuctionItemCommentService {
   void updateAuctionItemComment(AuctionItemCommentUpdateRequest auctionItemCommentUpdateRequest);
 
   void deleteAuctionItemComment(AuctionItemCommentDeleteRequest auctionItemCommentDeleteRequest);
+
+  void likeAuctionItemComment(CommentLikeDto commentLikeDto);
+
 }
