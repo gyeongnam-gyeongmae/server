@@ -12,6 +12,7 @@ import megabrain.gyeongnamgyeongmae.domain.auctionItem.dto.SearchItemDto;
 import megabrain.gyeongnamgyeongmae.domain.auctionItem.service.Comment.AuctionItemCommentService;
 import megabrain.gyeongnamgyeongmae.domain.auctionItem.service.Item.AuctionItemService;
 import megabrain.gyeongnamgyeongmae.domain.auctionItem.service.Search.AuctionItemSearchService;
+import megabrain.gyeongnamgyeongmae.domain.user.dto.UserItemSearchDto;
 import megabrain.gyeongnamgyeongmae.domain.user.dto.UserProfile.SearchByUserDto;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -32,12 +33,12 @@ public class UserProfileService implements UserProfileServiceInterface {
 
   @Override
   public AuctionItemSearchResponse findPostAuctionItemIdsByUserId(
-          SearchByUserDto searchByUserDto, Long userId) {
+          UserItemSearchDto userItemSearchDto, Long userId) {
     SearchItemDto request =
         SearchItemDto.builder()
             .user_id(userId)
-            .page(searchByUserDto.getPage())
-            .closed(searchByUserDto.isClosed())
+            .page(userItemSearchDto.getPage())
+            .closed(userItemSearchDto.getClosed())
             .build();
     return auctionItemSearchService.findAuctionItemByRequest(request);
   }
