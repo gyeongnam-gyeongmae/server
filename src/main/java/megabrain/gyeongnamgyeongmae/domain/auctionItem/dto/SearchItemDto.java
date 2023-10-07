@@ -8,6 +8,7 @@ import lombok.Data;
 import megabrain.gyeongnamgyeongmae.domain.auctionItem.domain.entity.AuctionStatus;
 import megabrain.gyeongnamgyeongmae.domain.auctionItem.domain.entity.QAuctionItem;
 import megabrain.gyeongnamgyeongmae.domain.auctionItem.dto.SearchItem.SearchAuctionItemSortedRequest;
+import megabrain.gyeongnamgyeongmae.domain.user.dto.FindStatus;
 
 @Data
 public class SearchItemDto {
@@ -20,8 +21,6 @@ public class SearchItemDto {
 
   private Long user_id;
 
-  private Boolean closed;
-
   private Boolean search_time;
 
   private Boolean like;
@@ -30,11 +29,13 @@ public class SearchItemDto {
 
   private Long page;
 
+  private FindStatus onlyOpenOrClosed;
+
   @Builder
-  public SearchItemDto(Long user_id, Long page, Boolean closed) {
+  public SearchItemDto(Long user_id, Long page, FindStatus closed) {
     this.user_id = user_id;
     this.page = page;
-    this.closed = closed;
+    this.onlyOpenOrClosed = closed;
     search_time = false;
     like = false;
     search_price = false;
@@ -45,12 +46,24 @@ public class SearchItemDto {
     dto.setKeyword(request.getKeyword());
     dto.setCategory(request.getCategory());
     dto.setCity(request.getCity());
-    dto.setClosed(request.getClosed());
     dto.setSearch_time(request.getSearch_time());
     dto.setLike(request.getLike());
     dto.setSearch_price(request.getSearch_price());
     dto.setPage(request.getPage());
+    dto.setOnlyOpenOrClosed(request.getClosed());
     return dto;
+  }
+
+  public void applySearchOnly(BooleanBuilder onlyStatus, QAuctionItem auctionItem){
+    if(this.onlyOpenOrClosed == FindStatus.ALL){
+      onlyStatus.and(auctionItem.status.in(AuctionStatus.ONGOING, AuctionStatus.CLOSED, AuctionStatus.BIDDING));
+    }
+    if(this.onlyOpenOrClosed == FindStatus.OPEN){
+      onlyStatus.and(auctionItem.status.eq(AuctionStatus.ONGOING));
+    }
+    if(this.onlyOpenOrClosed == FindStatus.CLOSED){
+      onlyStatus.and(auctionItem.status.in(AuctionStatus.CLOSED, AuctionStatus.BIDDING));
+    }
   }
 
   public void applyKeyWordStatus(BooleanBuilder status, QAuctionItem item) {
@@ -95,14 +108,6 @@ public class SearchItemDto {
     }
   }
 
-  public void applySearchClosed(BooleanBuilder builder, QAuctionItem item) {
-    if (this.closed) {
-      builder.and(item.status.eq(AuctionStatus.ONGOING));
-    } else {
-      builder.and(
-          item.status.in(AuctionStatus.ONGOING, AuctionStatus.CLOSED, AuctionStatus.BIDDING));
-    }
-  }
 
   public void applySearchUser(BooleanBuilder builder, QAuctionItem item) {
     if (this.user_id != null) {

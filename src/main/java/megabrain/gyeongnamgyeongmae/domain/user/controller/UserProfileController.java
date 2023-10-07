@@ -10,6 +10,7 @@ import lombok.RequiredArgsConstructor;
 import megabrain.gyeongnamgyeongmae.domain.auctionItem.domain.entity.AuctionItemLike;
 import megabrain.gyeongnamgyeongmae.domain.auctionItem.dto.Comment.CommentSearchResponse;
 import megabrain.gyeongnamgyeongmae.domain.auctionItem.dto.SearchItem.AuctionItemSearchResponse;
+import megabrain.gyeongnamgyeongmae.domain.user.dto.UserItemSearchDto;
 import megabrain.gyeongnamgyeongmae.domain.user.dto.UserProfile.AuctionItemLikedResponse;
 import megabrain.gyeongnamgyeongmae.domain.user.dto.UserProfile.SearchByUserDto;
 import megabrain.gyeongnamgyeongmae.domain.user.service.UserProfileServiceInterface;
@@ -35,14 +36,11 @@ public class UserProfileController {
   //  @LoginRequired
   public ResponseEntity<AuctionItemLikedResponse> findLikedAuctionItemIds(
       @PathVariable Long userId) {
-    //    User logedIduser = authenticationService.getLoginUser();
-    //    List<AuctionItemLike> auctionItemLikes =
-    // userService.findLikedAuctionItemIdsByUserId(logedIduser.getId());
+
     List<AuctionItemLike> auctionItemLikes =
         userProfileService.findLikedAuctionItemIdsByUserId(userId);
 
-    //    List<AuctionItemLike> auctionItemLikes =
-    // auctionItemLikeRepository.AuctionLikeFindByUserId(userId);
+
 
     List<Long> auctionItemIds =
         auctionItemLikes.stream()
@@ -62,9 +60,9 @@ public class UserProfileController {
         @ApiResponse(responseCode = "200", description = "조회 성공"),
       })
   public ResponseEntity<AuctionItemSearchResponse> findPostAuctionItemsByUserId(
-      @PathVariable Long userId, @ModelAttribute SearchByUserDto searchByUserDto) {
+      @PathVariable Long userId, @ModelAttribute UserItemSearchDto userItemSearchDto) {
     AuctionItemSearchResponse result =
-        userProfileService.findPostAuctionItemIdsByUserId(searchByUserDto, userId);
+        userProfileService.findPostAuctionItemIdsByUserId(userItemSearchDto, userId);
     return ResponseEntity.ok(result);
   }
 
