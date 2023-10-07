@@ -28,4 +28,9 @@ public interface AuctionItemService {
 
   List<AuctionItemLike> auctionItemLikesFindByUserId(Long id);
 
+  void buyAuctionItemById(Long id, Long userId);
+
+  List<AuctionItem> auctionItemFindByIds(List<AuctionItemLike> auctionItemLikes);
+
+
 }

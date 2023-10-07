@@ -71,6 +71,10 @@ public class AuctionItem extends BaseTimeEntity {
   @JsonIgnore // 순환참조를 무시하기 위하여 사용
   private List<AuctionBid> auctionBids = new ArrayList<>();
 
+  @ManyToOne(fetch = FetchType.EAGER)
+  @JoinColumn(name = "buyer_id")
+  private User buyer;
+
   @Builder
   public AuctionItem(Long id, String name, long price, String content, LocalDateTime closedTime) {
     this.status = AuctionStatus.ONGOING;
@@ -116,6 +120,10 @@ public class AuctionItem extends BaseTimeEntity {
 
   public void minusLikeCount() {
     this.like_count -= 1;
+  }
+
+  public void setBuyer(User buyer) {
+    this.buyer = buyer;
   }
 
   public void plusLikeCount() {

@@ -10,4 +10,5 @@ public interface AuctionItemSearchService {
       SearchAuctionItemSortedRequest searchAuctionItemSortedRequest);
 
   AuctionItemSearchResponse findAuctionItemByRequest(SearchItemDto searchItemDto);
+
 }

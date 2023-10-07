@@ -31,11 +31,23 @@ public class SearchItemDto {
 
   private FindStatus onlyOpenOrClosed;
 
+  private Long BuyUserId;
+
   @Builder
   public SearchItemDto(Long user_id, Long page, FindStatus closed) {
     this.user_id = user_id;
     this.page = page;
     this.onlyOpenOrClosed = closed;
+    search_time = false;
+    like = false;
+    search_price = false;
+  }
+
+  @Builder
+  public SearchItemDto(Long buyUserId, Long Page) {
+    this.BuyUserId = buyUserId;
+    this.page = Page;
+    this.onlyOpenOrClosed = FindStatus.CLOSED;
     search_time = false;
     like = false;
     search_price = false;
@@ -54,15 +66,23 @@ public class SearchItemDto {
     return dto;
   }
 
-  public void applySearchOnly(BooleanBuilder onlyStatus, QAuctionItem auctionItem){
-    if(this.onlyOpenOrClosed == FindStatus.ALL){
-      onlyStatus.and(auctionItem.status.in(AuctionStatus.ONGOING, AuctionStatus.CLOSED, AuctionStatus.BIDDING));
+  public void applySearchOnly(BooleanBuilder onlyStatus, QAuctionItem auctionItem) {
+    if (this.onlyOpenOrClosed == FindStatus.ALL) {
+      onlyStatus.and(
+          auctionItem.status.in(
+              AuctionStatus.ONGOING, AuctionStatus.CLOSED, AuctionStatus.BIDDING));
     }
-    if(this.onlyOpenOrClosed == FindStatus.OPEN){
+    if (this.onlyOpenOrClosed == FindStatus.OPEN) {
       onlyStatus.and(auctionItem.status.eq(AuctionStatus.ONGOING));
     }
-    if(this.onlyOpenOrClosed == FindStatus.CLOSED){
+    if (this.onlyOpenOrClosed == FindStatus.CLOSED) {
       onlyStatus.and(auctionItem.status.in(AuctionStatus.CLOSED, AuctionStatus.BIDDING));
+    }
+  }
+
+  public void applySearchBuyer(BooleanBuilder buyerStatus, QAuctionItem item) {
+    if (this.BuyUserId != null) {
+      buyerStatus.and(item.buyer.id.eq(this.BuyUserId));
     }
   }
 
@@ -107,7 +127,6 @@ public class SearchItemDto {
       order.add(item.closedTime.desc());
     }
   }
-
 
   public void applySearchUser(BooleanBuilder builder, QAuctionItem item) {
     if (this.user_id != null) {
