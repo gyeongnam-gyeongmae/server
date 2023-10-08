@@ -21,6 +21,8 @@ public class AuctionItemFirstView {
 
   private String name;
 
+  private String nickname;
+
   private LocalDateTime closedTime;
 
   private AuctionStatus status;
@@ -43,6 +45,7 @@ public class AuctionItemFirstView {
   public static AuctionItemFirstView of(AuctionItem auctionItem, Image image) {
     return AuctionItemFirstView.builder()
         .id(auctionItem.getId())
+        .nickname(auctionItem.getUser().getNickname())
         .name(auctionItem.getName())
         .address(auctionItem.getUser().getAddress())
         .like_count(auctionItem.getLike_count())
