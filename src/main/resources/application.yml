@@ -13,9 +13,6 @@ cloud:
     region:
       static: ${cloud.aws.region.static}
       auto: ${cloud.aws.region.auto}
-    #    region:
-    #      static: ${cloud.aws.region.static}
-    #      auto: ${cloud.aws.region.auto}
     stack:
       auto: false
 

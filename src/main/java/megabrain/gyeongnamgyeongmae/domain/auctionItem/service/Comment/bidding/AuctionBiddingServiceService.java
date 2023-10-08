@@ -9,6 +9,7 @@ import megabrain.gyeongnamgyeongmae.domain.auctionItem.domain.repostiory.Auction
 import megabrain.gyeongnamgyeongmae.domain.auctionItem.domain.repostiory.SseEmitterRepository;
 import megabrain.gyeongnamgyeongmae.domain.auctionItem.dto.bidding.AuctionBidRequest;
 import megabrain.gyeongnamgyeongmae.domain.auctionItem.exception.AuctionBidMustBeGreater;
+import megabrain.gyeongnamgyeongmae.domain.auctionItem.exception.AuctionNotFoundException;
 import megabrain.gyeongnamgyeongmae.domain.auctionItem.exception.AuctionOwnerCanNotBid;
 import megabrain.gyeongnamgyeongmae.domain.auctionItem.service.Item.AuctionItemService;
 import megabrain.gyeongnamgyeongmae.domain.user.domain.entity.User;
@@ -31,9 +32,10 @@ public class AuctionBiddingServiceService implements AuctionBiddingServiceInterf
   @Transactional
   public void bidAuction(Long auctionId, AuctionBidRequest auctionBidRequest, User user) {
     AuctionItem auction = auctionItemService.findAuctionItemById(auctionId);
+    if (auction == null) throw new AuctionNotFoundException("존재하지 않는 경매입니다.");
     if (auction.getUser().getId().equals(user.getId()))
       throw new AuctionOwnerCanNotBid("자신의 경매에는 입찰을 요청할 수 없습니다.");
-    if (auction.getPrice() != null && auction.isClosed())
+    if (auction.getClosedTime() == null || auction.isClosed())
       throw new AuctionBidMustBeGreater("이미 종료된 경매입니다.");
 
     if (auction.getPrice() != null && auctionBidRequest.getPrice() <= auction.getPrice())
@@ -53,6 +55,7 @@ public class AuctionBiddingServiceService implements AuctionBiddingServiceInterf
     String channelName = AUCTION_PRICE_CHANNEL_NAME + auctionId;
     redisSubscriber.createChannel(channelName);
     SseEmitter sseEmitter = new SseEmitter(DEFAULT_TIMEOUT);
+    sseEmitter.onTimeout(() -> sseEmitterRepository.delete(channelName, sseEmitter));
 
     sseEmitterRepository.save(channelName, sseEmitter);
 

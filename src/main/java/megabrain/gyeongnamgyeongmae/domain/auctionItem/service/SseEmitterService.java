@@ -20,19 +20,20 @@ public class SseEmitterService {
    */
   public int notify(String channelName, String auctionPrice) {
     List<SseEmitter> sseEmitters = sseEmitterRepository.findAllByChannelName(channelName);
-    if (sseEmitters != null) {
-      synchronized (sseEmitters) {
-        Iterator<SseEmitter> iterator = sseEmitters.iterator();
-        while (iterator.hasNext()) {
-          SseEmitter sseEmitter = iterator.next();
-          try {
-            sseEmitter.send(SseEmitter.event().data(auctionPrice));
-          } catch (IOException e) {
-            iterator.remove();
-          }
+    if (sseEmitters == null) return 0;
+
+    synchronized (sseEmitters) {
+      Iterator<SseEmitter> iterator = sseEmitters.iterator();
+      while (iterator.hasNext()) {
+        SseEmitter sseEmitter = iterator.next();
+        try {
+          sseEmitter.send(SseEmitter.event().data(auctionPrice));
+        } catch (IOException e) {
+          iterator.remove();
         }
       }
     }
+
     return sseEmitters.size();
   }
 }
