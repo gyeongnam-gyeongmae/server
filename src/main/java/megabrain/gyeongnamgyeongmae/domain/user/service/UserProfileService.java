@@ -37,36 +37,41 @@ public class UserProfileService implements UserProfileServiceInterface {
   public final FindImageServiceInterface findImageService;
 
   @Override
-  public AuctionItemSearchResponse findLikedAuctionItemIdsByUserId(Long userId, Long page) {
+  public List<Long> findLikedAuctionItemIdsByUserId(Long userId, Long page) {
 
     Long itemsPerPage = 10L;
     List<AuctionItemLike> auctionItemLikes =
             auctionItemService.auctionItemLikesFindByUserId(userId);
     List<AuctionItem> auctionItems = auctionItemService.auctionItemFindByIds(auctionItemLikes);
-    Long totalItems = (long) auctionItems.size();
 
-    Long startIndex = (page - 1) * itemsPerPage;
-    Long endIndex = Math.min(startIndex + itemsPerPage, totalItems);
-
-    List<AuctionItem> currentPageAuctionItems = auctionItems.subList(startIndex.intValue(), endIndex.intValue());
-    List<AuctionItemFirstView> firstViews = convertResultsToViews(currentPageAuctionItems);
-
-    Long itemCount = (long) firstViews.size();
-
-
-    AuctionItemPaginationDto paginationInfo = new AuctionItemPaginationDto();
-    paginationInfo.setCurrentPage(page);
-    paginationInfo.setItemCount(itemCount);
-    paginationInfo.setItemsPerPage(itemsPerPage);
-    paginationInfo.setTotalItems(totalItems);
-    paginationInfo.setTotalPages((totalItems + itemsPerPage - 1) / itemsPerPage);
-
-
-
-    return AuctionItemSearchResponse.builder()
-            .auctionItemFirstViewPage(firstViews)
-            .auctionItemPaginationDto(paginationInfo)
-            .build();
+    return auctionItems.stream()
+            .map(AuctionItem::getId)
+            .collect(Collectors.toList());
+//
+//    Long totalItems = (long) auctionItems.size();
+//
+//    Long startIndex = (page - 1) * itemsPerPage;
+//    Long endIndex = Math.min(startIndex + itemsPerPage, totalItems);
+//
+//    List<AuctionItem> currentPageAuctionItems = auctionItems.subList(startIndex.intValue(), endIndex.intValue());
+//    List<AuctionItemFirstView> firstViews = convertResultsToViews(currentPageAuctionItems);
+//
+//    Long itemCount = (long) firstViews.size();
+//
+//
+//    AuctionItemPaginationDto paginationInfo = new AuctionItemPaginationDto();
+//    paginationInfo.setCurrentPage(page);
+//    paginationInfo.setItemCount(itemCount);
+//    paginationInfo.setItemsPerPage(itemsPerPage);
+//    paginationInfo.setTotalItems(totalItems);
+//    paginationInfo.setTotalPages((totalItems + itemsPerPage - 1) / itemsPerPage);
+//
+//
+//
+//    return AuctionItemSearchResponse.builder()
+//            .auctionItemFirstViewPage(firstViews)
+//            .auctionItemPaginationDto(paginationInfo)
+//            .build();
   }
 
   private List<AuctionItemFirstView> convertResultsToViews(List<AuctionItem> results) {

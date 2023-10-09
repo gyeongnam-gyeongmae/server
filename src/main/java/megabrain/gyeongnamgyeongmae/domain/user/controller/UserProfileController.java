@@ -13,6 +13,8 @@ import megabrain.gyeongnamgyeongmae.domain.user.service.UserProfileServiceInterf
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.List;
+
 @Tag(name = "유저 프로필", description = "유저 프로필 관련  api")
 @RestController
 @RequiredArgsConstructor
@@ -27,13 +29,12 @@ public class UserProfileController {
       value = {
         @ApiResponse(responseCode = "200", description = "조회 성공"),
       })
-  public ResponseEntity<AuctionItemSearchResponse> findLikedAuctionItemIds(
+  public ResponseEntity<List<Long>> findLikedAuctionItemIds(
       @PathVariable Long userId, @RequestParam Long page) {
 
-    AuctionItemSearchResponse auctionItemLikedResponses =
-        userProfileService.findLikedAuctionItemIdsByUserId(userId, page);
+    List<Long> result = userProfileService.findLikedAuctionItemIdsByUserId(userId, page);
 
-    return ResponseEntity.ok(auctionItemLikedResponses);
+    return ResponseEntity.ok(result);
   }
 
   @GetMapping("/{userId}/auctionItems")

@@ -42,7 +42,7 @@ public class AuctionItemCommentController {
   @Operation(summary = "게시된 경매품에 대한 댓글 보기", description = "경매품에 대한 경매품 댓글 보기")
   @ApiResponses(
       value = {
-        @ApiResponse(responseCode = "201", description = "댓글 작성 성공"),
+        @ApiResponse(responseCode = "200", description = "댓글 작성 성공"),
         @ApiResponse(responseCode = "404", description = "경매품을 찾을 수 없음"),
         @ApiResponse(responseCode = "410", description = "삭제된 경매품 입니다"),
       })
@@ -57,7 +57,7 @@ public class AuctionItemCommentController {
   @Operation(summary = "작성된 댓글 수정", description = "게시된 댓글에 대해 수정하기")
   @ApiResponses(
       value = {
-        @ApiResponse(responseCode = "201", description = "댓글 작성 성공"),
+        @ApiResponse(responseCode = "200", description = "댓글 수정 성공"),
         @ApiResponse(responseCode = "404", description = "경매품을 찾을 수 없음"),
         @ApiResponse(responseCode = "410", description = "삭제된 경매품 입니다"),
       })
@@ -71,7 +71,7 @@ public class AuctionItemCommentController {
   @Operation(summary = "작성된 댓글 삭제", description = "게시된 댓글에 대해 삭제하기")
   @ApiResponses(
       value = {
-        @ApiResponse(responseCode = "201", description = "댓글 작성 성공"),
+        @ApiResponse(responseCode = "200", description = "댓글 삭제 성공"),
         @ApiResponse(responseCode = "404", description = "경매품을 찾을 수 없음"),
         @ApiResponse(responseCode = "410", description = "삭제된 경매품 입니다"),
       })
