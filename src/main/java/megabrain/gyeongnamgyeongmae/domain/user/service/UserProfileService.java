@@ -2,7 +2,6 @@ package megabrain.gyeongnamgyeongmae.domain.user.service;
 
 import java.util.List;
 import java.util.stream.Collectors;
-
 import lombok.RequiredArgsConstructor;
 import megabrain.gyeongnamgyeongmae.domain.auctionItem.domain.entity.AuctionItem;
 import megabrain.gyeongnamgyeongmae.domain.auctionItem.domain.entity.AuctionItemLike;
@@ -24,19 +23,17 @@ import megabrain.gyeongnamgyeongmae.domain.user.dto.UserProfile.SearchByUserDto;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-
-
-
 @Service
 @RequiredArgsConstructor
 public class UserProfileService implements UserProfileServiceInterface {
 
+  public final FindImageServiceInterface findImageService;
   private final AuctionItemService auctionItemService;
   private final AuctionItemSearchService auctionItemSearchService;
   private final AuctionItemCommentService auctionItemCommentService;
   private final CommentLikeRepository commentLikeRepository;
   private final AuctionItemRepository auctionItemRepository;
-  private  final FindImageServiceInterface findImageService;
+  private final FindImageServiceInterface findImageService;
   private final AuctionItemLikeRepository auctionItemLikeRepository;
 
   @Override
@@ -46,7 +43,6 @@ public class UserProfileService implements UserProfileServiceInterface {
     List<AuctionItemLike> auctionItemLikes =
             auctionItemService.auctionItemLikesFindByUserId(userId);
     List<AuctionItem> auctionItems = auctionItemService.auctionItemFindByIds(auctionItemLikes);
-
 
     Long totalItems = (long) auctionItems.size();
 
@@ -99,9 +95,8 @@ public class UserProfileService implements UserProfileServiceInterface {
 
   @Override
   @Transactional(readOnly = true)
-  public CommentSearchResponse findGetLikeCommentByUserId(
-      SearchByUserDto searchByUserDto, Long userId) {
-    return commentLikeRepository.searchCommentLikePage(searchByUserDto, userId);
+  public CommentSearchResponse findGetLikeCommentByUserId(Long userId) {
+    return commentLikeRepository.searchCommentLikePage(userId);
   }
 
   @Override

@@ -13,7 +13,7 @@ public interface UserProfileServiceInterface {
   AuctionItemSearchResponse findPostAuctionItemIdsByUserId(
       UserItemSearchDto userItemSearchDto, Long userId);
 
-  CommentSearchResponse findGetLikeCommentByUserId(SearchByUserDto searchByUserDto, Long userId);
+  CommentSearchResponse findGetLikeCommentByUserId(Long userId);
 
   AuctionItemSearchResponse findBuyAuctionItemIdsByUserId(Long userId, Long page);
 }
