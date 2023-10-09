@@ -41,8 +41,10 @@ public class AuctionItemFirstView {
 
   private Long comment_count;
 
+  private Boolean isLike;
+
   @Builder
-  public static AuctionItemFirstView of(AuctionItem auctionItem, Image image) {
+  public static AuctionItemFirstView of(AuctionItem auctionItem, Image image, Boolean isLike) {
     return AuctionItemFirstView.builder()
         .id(auctionItem.getId())
         .nickname(auctionItem.getUser().getNickname())
@@ -56,6 +58,7 @@ public class AuctionItemFirstView {
         .status(auctionItem.getStatus())
         .now_price(auctionItem.getPrice())
         .image_url(Optional.ofNullable(image).map(Image::getImageUrl).orElse(null))
+        .isLike(Optional.ofNullable(isLike).orElse(false))
         .build();
   }
 }

@@ -6,6 +6,8 @@ import java.util.stream.Collectors;
 import lombok.RequiredArgsConstructor;
 import megabrain.gyeongnamgyeongmae.domain.auctionItem.domain.entity.AuctionItem;
 import megabrain.gyeongnamgyeongmae.domain.auctionItem.domain.entity.AuctionItemLike;
+import megabrain.gyeongnamgyeongmae.domain.auctionItem.domain.entity.AuctionItemLikePK;
+import megabrain.gyeongnamgyeongmae.domain.auctionItem.domain.repostiory.AuctionItemLikeRepository;
 import megabrain.gyeongnamgyeongmae.domain.auctionItem.domain.repostiory.AuctionItemRepository;
 import megabrain.gyeongnamgyeongmae.domain.auctionItem.domain.repostiory.CommentLikeRepository;
 import megabrain.gyeongnamgyeongmae.domain.auctionItem.dto.AuctionItemFirstView;
@@ -34,52 +36,52 @@ public class UserProfileService implements UserProfileServiceInterface {
   private final AuctionItemCommentService auctionItemCommentService;
   private final CommentLikeRepository commentLikeRepository;
   private final AuctionItemRepository auctionItemRepository;
-  public final FindImageServiceInterface findImageService;
+  private  final FindImageServiceInterface findImageService;
+  private final AuctionItemLikeRepository auctionItemLikeRepository;
 
   @Override
-  public List<Long> findLikedAuctionItemIdsByUserId(Long userId, Long page) {
+  public AuctionItemSearchResponse findLikedAuctionItemIdsByUserId(Long userId, Long page) {
 
     Long itemsPerPage = 10L;
     List<AuctionItemLike> auctionItemLikes =
             auctionItemService.auctionItemLikesFindByUserId(userId);
     List<AuctionItem> auctionItems = auctionItemService.auctionItemFindByIds(auctionItemLikes);
 
-    return auctionItems.stream()
-            .map(AuctionItem::getId)
-            .collect(Collectors.toList());
-//
-//    Long totalItems = (long) auctionItems.size();
-//
-//    Long startIndex = (page - 1) * itemsPerPage;
-//    Long endIndex = Math.min(startIndex + itemsPerPage, totalItems);
-//
-//    List<AuctionItem> currentPageAuctionItems = auctionItems.subList(startIndex.intValue(), endIndex.intValue());
-//    List<AuctionItemFirstView> firstViews = convertResultsToViews(currentPageAuctionItems);
-//
-//    Long itemCount = (long) firstViews.size();
-//
-//
-//    AuctionItemPaginationDto paginationInfo = new AuctionItemPaginationDto();
-//    paginationInfo.setCurrentPage(page);
-//    paginationInfo.setItemCount(itemCount);
-//    paginationInfo.setItemsPerPage(itemsPerPage);
-//    paginationInfo.setTotalItems(totalItems);
-//    paginationInfo.setTotalPages((totalItems + itemsPerPage - 1) / itemsPerPage);
-//
-//
-//
-//    return AuctionItemSearchResponse.builder()
-//            .auctionItemFirstViewPage(firstViews)
-//            .auctionItemPaginationDto(paginationInfo)
-//            .build();
+
+    Long totalItems = (long) auctionItems.size();
+
+    Long startIndex = (page - 1) * itemsPerPage;
+    Long endIndex = Math.min(startIndex + itemsPerPage, totalItems);
+
+    List<AuctionItem> currentPageAuctionItems = auctionItems.subList(startIndex.intValue(), endIndex.intValue());
+    List<AuctionItemFirstView> firstViews = convertResultsToViews(currentPageAuctionItems,userId);
+
+    Long itemCount = (long) firstViews.size();
+
+
+    AuctionItemPaginationDto paginationInfo = new AuctionItemPaginationDto();
+    paginationInfo.setCurrentPage(page);
+    paginationInfo.setItemCount(itemCount);
+    paginationInfo.setItemsPerPage(itemsPerPage);
+    paginationInfo.setTotalItems(totalItems);
+    paginationInfo.setTotalPages((totalItems + itemsPerPage - 1) / itemsPerPage);
+
+    return AuctionItemSearchResponse.builder()
+            .auctionItemFirstViewPage(firstViews)
+            .auctionItemPaginationDto(paginationInfo)
+            .build();
   }
 
-  private List<AuctionItemFirstView> convertResultsToViews(List<AuctionItem> results) {
+
+  private List<AuctionItemFirstView> convertResultsToViews(List<AuctionItem> results, Long userId){
     return results.stream()
-            .map(
-                    result ->
-                            AuctionItemFirstView.of(
-                                    result, findImageService.findFirstImageByAuctionItemId(result.getId())))
+            .map(result -> {
+              boolean isPresent = auctionItemLikeRepository.findById(new AuctionItemLikePK(result.getId(), userId)).isPresent();
+              return AuctionItemFirstView.of(
+                      result,
+                      findImageService.findFirstImageByAuctionItemId(result.getId()),
+                      isPresent);
+            })
             .collect(Collectors.toList());
   }
 

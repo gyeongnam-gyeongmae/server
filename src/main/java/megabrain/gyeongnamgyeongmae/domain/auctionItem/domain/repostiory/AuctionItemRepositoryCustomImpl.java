@@ -9,6 +9,7 @@ import java.util.List;
 import java.util.stream.Collectors;
 import lombok.RequiredArgsConstructor;
 import megabrain.gyeongnamgyeongmae.domain.auctionItem.domain.entity.AuctionItem;
+import megabrain.gyeongnamgyeongmae.domain.auctionItem.domain.entity.AuctionItemLikePK;
 import megabrain.gyeongnamgyeongmae.domain.auctionItem.domain.entity.QAuctionItem;
 import megabrain.gyeongnamgyeongmae.domain.auctionItem.dto.AuctionItemFirstView;
 import megabrain.gyeongnamgyeongmae.domain.auctionItem.dto.SearchItem.AuctionItemPaginationDto;
@@ -23,6 +24,7 @@ public class AuctionItemRepositoryCustomImpl implements AuctionItemRepositoryCus
   public final JPAQueryFactory queryFactory;
 
   public final FindImageServiceInterface findImageService;
+  public final AuctionItemLikeRepository auctionItemLikeRepository;
 
   public AuctionItemSearchResponse searchAuctionItemPage(
       SearchItemDto searchAuctionItemSortedRequest) {
@@ -85,7 +87,8 @@ public class AuctionItemRepositoryCustomImpl implements AuctionItemRepositoryCus
     paginationInfo.setTotalItems(totalItems);
     paginationInfo.setTotalPages((totalItems + itemsPerPage - 1) / itemsPerPage);
 
-    List<AuctionItemFirstView> auctionItemFirstViews = convertResultsToViews(results);
+    List<AuctionItemFirstView> auctionItemFirstViews =
+        convertResultsToViews(results, searchAuctionItemSortedRequest.getSearcherId());
 
     return AuctionItemSearchResponse.builder()
         .auctionItemFirstViewPage(auctionItemFirstViews)
@@ -93,12 +96,28 @@ public class AuctionItemRepositoryCustomImpl implements AuctionItemRepositoryCus
         .build();
   }
 
-  private List<AuctionItemFirstView> convertResultsToViews(List<AuctionItem> results) {
+  private List<AuctionItemFirstView> convertResultsToViews(
+          List<AuctionItem> results, Long searcherId) {
     return results.stream()
-        .map(
-            result ->
-                AuctionItemFirstView.of(
-                    result, findImageService.findFirstImageByAuctionItemId(result.getId())))
-        .collect(Collectors.toList());
+            .map(result -> {
+              boolean isPresent = auctionItemLikeRepository.findById(new AuctionItemLikePK(result.getId(), searcherId)).isPresent();
+              return AuctionItemFirstView.of(
+                      result,
+                      findImageService.findFirstImageByAuctionItemId(result.getId()),
+                      isPresent);
+            })
+            .collect(Collectors.toList());
   }
+
+//  private List<AuctionItemFirstView> convertResultsToViews(
+//      List<AuctionItem> results, Long searcherId) {
+//    return results.stream()
+//        .map(
+//            result ->
+//                AuctionItemFirstView.of(
+//                    result,
+//                    findImageService.findFirstImageByAuctionItemId(result.getId()),
+//                        auctionItemLikeRepository.findById(new AuctionItemLikePK(result.getId(), searcherId)).isPresent()))
+//        .collect(Collectors.toList());
+//  }
 }

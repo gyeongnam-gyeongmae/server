@@ -26,4 +26,6 @@ public class SearchAuctionItemSortedRequest {
   @NotNull private Boolean basic;
 
   @NotNull private Long page;
+
+  private Long SearcherId;
 }

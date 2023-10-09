@@ -29,12 +29,12 @@ public class UserProfileController {
       value = {
         @ApiResponse(responseCode = "200", description = "조회 성공"),
       })
-  public ResponseEntity<List<Long>> findLikedAuctionItemIds(
-      @PathVariable Long userId) {
-    Long page = 1L;
-    List<Long> result = userProfileService.findLikedAuctionItemIdsByUserId(userId, page);
+  public ResponseEntity<AuctionItemSearchResponse> findLikedAuctionItemIds(
+      @PathVariable Long userId, @RequestParam Long page) {
+    AuctionItemSearchResponse auctionItemLikedResponses =
+            userProfileService.findLikedAuctionItemIdsByUserId(userId, page);
 
-    return ResponseEntity.ok(result);
+    return ResponseEntity.ok(auctionItemLikedResponses);
   }
 
   @GetMapping("/{userId}/auctionItems")
