@@ -93,8 +93,8 @@ public class UserProfileService implements UserProfileServiceInterface {
 
   @Override
   @Transactional(readOnly = true)
-  public CommentSearchResponse findGetLikeCommentByUserId(Long userId) {
-    return commentLikeRepository.searchCommentLikePage(userId);
+  public CommentSearchResponse findGetLikeCommentByUserId(Long userId,Long page) {
+    return commentLikeRepository.searchCommentLikePage(userId,page);
   }
 
   @Override
