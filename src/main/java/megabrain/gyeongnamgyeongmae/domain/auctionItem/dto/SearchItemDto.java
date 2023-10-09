@@ -35,6 +35,8 @@ public class SearchItemDto {
 
   private Long page;
 
+  private Long SearcherId;
+
   @Builder
   public SearchItemDto(Long user_id, Long page, FindStatus closed) {
     this.user_id = user_id;
@@ -44,6 +46,7 @@ public class SearchItemDto {
     like = null;
     search_price = null;
     basic = true;
+    setSearcherId(user_id);
   }
 
   @Builder
@@ -55,6 +58,7 @@ public class SearchItemDto {
     like = null;
     search_price = null;
     basic = true;
+    setSearcherId(buyUserId);
   }
 
   public static SearchItemDto of(SearchAuctionItemSortedRequest request) {
@@ -68,6 +72,7 @@ public class SearchItemDto {
     dto.setPage(request.getPage());
     dto.setOnlyOpenOrClosed(request.getClosed());
     dto.setBasic(request.getBasic());
+    dto.setSearcherId(request.getSearcherId());
     return dto;
   }
 

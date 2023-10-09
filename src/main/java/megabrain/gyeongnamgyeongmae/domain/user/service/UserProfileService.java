@@ -5,7 +5,8 @@ import java.util.stream.Collectors;
 import lombok.RequiredArgsConstructor;
 import megabrain.gyeongnamgyeongmae.domain.auctionItem.domain.entity.AuctionItem;
 import megabrain.gyeongnamgyeongmae.domain.auctionItem.domain.entity.AuctionItemLike;
-import megabrain.gyeongnamgyeongmae.domain.auctionItem.domain.repostiory.AuctionItemRepository;
+import megabrain.gyeongnamgyeongmae.domain.auctionItem.domain.entity.AuctionItemLikePK;
+import megabrain.gyeongnamgyeongmae.domain.auctionItem.domain.repostiory.AuctionItemLikeRepository;
 import megabrain.gyeongnamgyeongmae.domain.auctionItem.domain.repostiory.CommentLikeRepository;
 import megabrain.gyeongnamgyeongmae.domain.auctionItem.dto.AuctionItemFirstView;
 import megabrain.gyeongnamgyeongmae.domain.auctionItem.dto.Comment.CommentSearchResponse;
@@ -17,7 +18,6 @@ import megabrain.gyeongnamgyeongmae.domain.auctionItem.service.Item.AuctionItemS
 import megabrain.gyeongnamgyeongmae.domain.auctionItem.service.Search.AuctionItemSearchService;
 import megabrain.gyeongnamgyeongmae.domain.image.Service.FindImageServiceInterface;
 import megabrain.gyeongnamgyeongmae.domain.user.dto.UserItemSearchDto;
-import megabrain.gyeongnamgyeongmae.domain.user.dto.UserProfile.SearchByUserDto;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -30,30 +30,30 @@ public class UserProfileService implements UserProfileServiceInterface {
   private final AuctionItemSearchService auctionItemSearchService;
   private final AuctionItemCommentService auctionItemCommentService;
   private final CommentLikeRepository commentLikeRepository;
-  private final AuctionItemRepository auctionItemRepository;
+  private final AuctionItemLikeRepository auctionItemLikeRepository;
 
   @Override
   public AuctionItemSearchResponse findLikedAuctionItemIdsByUserId(Long userId, Long page) {
 
     Long itemsPerPage = 10L;
     List<AuctionItemLike> auctionItemLikes =
-            auctionItemService.auctionItemLikesFindByUserId(userId);
+        auctionItemService.auctionItemLikesFindByUserId(userId);
     List<AuctionItem> auctionItems = auctionItemService.auctionItemFindByIds(auctionItemLikes);
 
-//    return auctionItems.stream()
-//            .map(AuctionItem::getId)
-//            .collect(Collectors.toList());
+    //    return auctionItems.stream()
+    //            .map(AuctionItem::getId)
+    //            .collect(Collectors.toList());
 
     Long totalItems = (long) auctionItems.size();
 
     Long startIndex = (page - 1) * itemsPerPage;
     Long endIndex = Math.min(startIndex + itemsPerPage, totalItems);
 
-    List<AuctionItem> currentPageAuctionItems = auctionItems.subList(startIndex.intValue(), endIndex.intValue());
-    List<AuctionItemFirstView> firstViews = convertResultsToViews(currentPageAuctionItems);
+    List<AuctionItem> currentPageAuctionItems =
+        auctionItems.subList(startIndex.intValue(), endIndex.intValue());
+    List<AuctionItemFirstView> firstViews = convertResultsToViews(currentPageAuctionItems, userId);
 
     Long itemCount = (long) firstViews.size();
-
 
     AuctionItemPaginationDto paginationInfo = new AuctionItemPaginationDto();
     paginationInfo.setCurrentPage(page);
@@ -62,21 +62,27 @@ public class UserProfileService implements UserProfileServiceInterface {
     paginationInfo.setTotalItems(totalItems);
     paginationInfo.setTotalPages((totalItems + itemsPerPage - 1) / itemsPerPage);
 
-
-
     return AuctionItemSearchResponse.builder()
-            .auctionItemFirstViewPage(firstViews)
-            .auctionItemPaginationDto(paginationInfo)
-            .build();
+        .auctionItemFirstViewPage(firstViews)
+        .auctionItemPaginationDto(paginationInfo)
+        .build();
   }
 
-  private List<AuctionItemFirstView> convertResultsToViews(List<AuctionItem> results) {
+  private List<AuctionItemFirstView> convertResultsToViews(
+      List<AuctionItem> results, Long searcherId) {
     return results.stream()
-            .map(
-                    result ->
-                            AuctionItemFirstView.of(
-                                    result, findImageService.findFirstImageByAuctionItemId(result.getId())))
-            .collect(Collectors.toList());
+        .map(
+            result -> {
+              boolean isPresent =
+                  auctionItemLikeRepository
+                      .findById(new AuctionItemLikePK(result.getId(), searcherId))
+                      .isPresent();
+              return AuctionItemFirstView.of(
+                  result,
+                  findImageService.findFirstImageByAuctionItemId(result.getId()),
+                  isPresent);
+            })
+        .collect(Collectors.toList());
   }
 
   @Override
@@ -93,14 +99,13 @@ public class UserProfileService implements UserProfileServiceInterface {
 
   @Override
   @Transactional(readOnly = true)
-  public CommentSearchResponse findGetLikeCommentByUserId(Long userId,Long page) {
-    return commentLikeRepository.searchCommentLikePage(userId,page);
+  public CommentSearchResponse findGetLikeCommentByUserId(Long userId, Long page) {
+    return commentLikeRepository.searchCommentLikePage(userId, page);
   }
 
   @Override
-  public AuctionItemSearchResponse findBuyAuctionItemIdsByUserId(Long userId,Long page) {
-    SearchItemDto searchItemDto =
-        SearchItemDto.builder().user_id(userId).page(page).build();
+  public AuctionItemSearchResponse findBuyAuctionItemIdsByUserId(Long userId, Long page) {
+    SearchItemDto searchItemDto = SearchItemDto.builder().user_id(userId).page(page).build();
     return auctionItemSearchService.findAuctionItemByRequest(searchItemDto);
   }
 }
