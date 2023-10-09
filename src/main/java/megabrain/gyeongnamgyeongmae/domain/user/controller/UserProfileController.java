@@ -11,6 +11,7 @@ import megabrain.gyeongnamgyeongmae.domain.auctionItem.dto.Comment.CommentFirstV
 import megabrain.gyeongnamgyeongmae.domain.auctionItem.dto.Comment.CommentSearchResponse;
 import megabrain.gyeongnamgyeongmae.domain.auctionItem.dto.SearchItem.AuctionItemSearchResponse;
 import megabrain.gyeongnamgyeongmae.domain.user.dto.UserItemSearchDto;
+import megabrain.gyeongnamgyeongmae.domain.user.dto.UserProfile.SearchByUserDto;
 import megabrain.gyeongnamgyeongmae.domain.user.service.UserProfileServiceInterface;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -82,11 +83,8 @@ public class UserProfileController {
       value = {
         @ApiResponse(responseCode = "200", description = "조회 성공"),
       })
-  public ResponseEntity<List<Long>> findLikeCommentsByUserId(@PathVariable Long userId) {
-    CommentSearchResponse result1 = userProfileService.findGetLikeCommentByUserId(userId);
-    List<CommentFirstView> commentViews = result1.getCommentFirstViewPage();
-    List<Long> result =
-        commentViews.stream().map(CommentFirstView::getCommentId).collect(Collectors.toList());
+  public ResponseEntity<CommentSearchResponse> findLikeCommentsByUserId(@PathVariable Long userId, @ModelAttribute SearchByUserDto searchByUserDto) {
+    CommentSearchResponse result = userProfileService.findGetLikeCommentByUserId(searchByUserDto, userId);
     return ResponseEntity.ok(result);
   }
 }

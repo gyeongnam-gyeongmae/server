@@ -4,5 +4,5 @@ import megabrain.gyeongnamgyeongmae.domain.auctionItem.dto.Comment.CommentSearch
 import megabrain.gyeongnamgyeongmae.domain.user.dto.UserProfile.SearchByUserDto;
 
 public interface CommentLikeRepositoryCustom {
-    CommentSearchResponse searchCommentLikePage(Long userId);
+    CommentSearchResponse searchCommentLikePage(SearchByUserDto searchByUserDto,Long userId);
 }
