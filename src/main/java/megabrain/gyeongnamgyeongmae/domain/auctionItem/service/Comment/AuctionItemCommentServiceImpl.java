@@ -1,5 +1,6 @@
 package megabrain.gyeongnamgyeongmae.domain.auctionItem.service.Comment;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
 import lombok.RequiredArgsConstructor;
@@ -69,14 +70,22 @@ public class AuctionItemCommentServiceImpl implements AuctionItemCommentService 
 
   @Override
   @Transactional(readOnly = true)
-  public List<AuctionItemCommentParentDto> findAuctionItemCommentById(Long id) {
+  public List<AuctionItemCommentParentDto> findAuctionItemCommentById(Long id, Long finderId) {
     auctionItemService.findAuctionItemById(id);
-    List<Comment> commentEntityList =
-        auctionItemCommentRepository.findByAuctionItemCommentByAuctionId(id);
-    return commentEntityList.stream()
-        .map(AuctionItemCommentParentDto::of)
-        .collect(Collectors.toList());
+    List<Comment> commentEntityList = auctionItemCommentRepository.findByAuctionItemCommentByAuctionId(id);
+
+    List<AuctionItemCommentParentDto> commentDtoList = commentEntityList.stream()
+            .map(AuctionItemCommentParentDto::of)
+            .collect(Collectors.toList());
+
+    for(int i = 0; i < commentDtoList.size(); i++){
+      Boolean isLiked = commentLikeRepository.findById(new CommentLikePK(commentDtoList.get(i).getId(), finderId)).isPresent();
+      commentDtoList.get(i).setIsLiked(isLiked);
+    }
+    return commentDtoList;
   }
+
+
 
   @Transactional
   public void updateAuctionItemComment(
@@ -103,7 +112,7 @@ public class AuctionItemCommentServiceImpl implements AuctionItemCommentService 
     User user = userService.findUserById(commentLikeDto.getUserId());
 
     CommentLikePK commentLikePK =
-        new CommentLikePK(commentLikeDto.getUserId(), commentLikeDto.getUserId());
+        new CommentLikePK(commentLikeDto.getCommentId(), commentLikeDto.getUserId());
 
     CommentLike commentLike = commentLike(commentLikePK);
 

@@ -19,6 +19,7 @@ public class AuctionItemCommentParentDto {
   private LocalDateTime createdAt;
   private LocalDateTime updatedAt;
   private List<AuctionItemCommentChildDto> children;
+  private Boolean isLiked;
 
   public AuctionItemCommentParentDto(
       final Long id,
@@ -28,7 +29,8 @@ public class AuctionItemCommentParentDto {
       final Integer likeCount,
       final LocalDateTime createdAt,
       final LocalDateTime updatedAt,
-      final List<AuctionItemCommentChildDto> children) {
+      final List<AuctionItemCommentChildDto> children,
+      final Boolean isLiked) {
     this.id = id;
     this.content = content;
     this.userId = userId;
@@ -37,6 +39,7 @@ public class AuctionItemCommentParentDto {
     this.createdAt = createdAt;
     this.updatedAt = updatedAt;
     this.children = children;
+    this.isLiked = isLiked;
   }
 
   public static AuctionItemCommentParentDto of(Comment comment) {
@@ -48,6 +51,7 @@ public class AuctionItemCommentParentDto {
         .likeCount(comment.getLike_count())
         .createdAt(comment.getCreatedAt())
         .updatedAt(comment.getUpdatedAt())
+        .isLiked(false)
         .children(
             comment.getChildren().stream()
                 .filter(childComment -> !childComment.isRemoved())
@@ -55,5 +59,9 @@ public class AuctionItemCommentParentDto {
                 .map(AuctionItemCommentChildDto::of)
                 .collect(Collectors.toList()))
         .build();
+  }
+
+  public void setIsLiked(Boolean isLiked) {
+    this.isLiked = isLiked;
   }
 }

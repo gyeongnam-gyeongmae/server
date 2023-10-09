@@ -14,7 +14,7 @@ public interface AuctionItemCommentService {
 
   void createAuctionItemComment(AuctionItemCommentRequest auctionItemCommentRequest, Long id);
 
-  List<AuctionItemCommentParentDto> findAuctionItemCommentById(Long id);
+  List<AuctionItemCommentParentDto> findAuctionItemCommentById(Long id, Long finderid);
 
   Comment findCommentById(Long id);
 
