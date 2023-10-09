@@ -86,7 +86,7 @@ public class UserProfileController {
     CommentSearchResponse result1 = userProfileService.findGetLikeCommentByUserId(userId);
     List<CommentFirstView> commentViews = result1.getCommentFirstViewPage();
     List<Long> result =
-        commentViews.stream().map(CommentFirstView::getAuctionItemId).collect(Collectors.toList());
+        commentViews.stream().map(CommentFirstView::getCommentId).collect(Collectors.toList());
     return ResponseEntity.ok(result);
   }
 }
