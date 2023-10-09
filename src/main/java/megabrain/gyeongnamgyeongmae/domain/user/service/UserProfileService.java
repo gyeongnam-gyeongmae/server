@@ -2,7 +2,6 @@ package megabrain.gyeongnamgyeongmae.domain.user.service;
 
 import java.util.List;
 import java.util.stream.Collectors;
-
 import lombok.RequiredArgsConstructor;
 import megabrain.gyeongnamgyeongmae.domain.auctionItem.domain.entity.AuctionItem;
 import megabrain.gyeongnamgyeongmae.domain.auctionItem.domain.entity.AuctionItemLike;
@@ -22,56 +21,53 @@ import megabrain.gyeongnamgyeongmae.domain.user.dto.UserProfile.SearchByUserDto;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-
-
-
 @Service
 @RequiredArgsConstructor
 public class UserProfileService implements UserProfileServiceInterface {
 
+  public final FindImageServiceInterface findImageService;
   private final AuctionItemService auctionItemService;
   private final AuctionItemSearchService auctionItemSearchService;
   private final AuctionItemCommentService auctionItemCommentService;
   private final CommentLikeRepository commentLikeRepository;
   private final AuctionItemRepository auctionItemRepository;
-  public final FindImageServiceInterface findImageService;
 
   @Override
-  public List<Long> findLikedAuctionItemIdsByUserId(Long userId, Long page) {
+  public AuctionItemSearchResponse findLikedAuctionItemIdsByUserId(Long userId, Long page) {
 
     Long itemsPerPage = 10L;
     List<AuctionItemLike> auctionItemLikes =
             auctionItemService.auctionItemLikesFindByUserId(userId);
     List<AuctionItem> auctionItems = auctionItemService.auctionItemFindByIds(auctionItemLikes);
 
-    return auctionItems.stream()
-            .map(AuctionItem::getId)
-            .collect(Collectors.toList());
-//
-//    Long totalItems = (long) auctionItems.size();
-//
-//    Long startIndex = (page - 1) * itemsPerPage;
-//    Long endIndex = Math.min(startIndex + itemsPerPage, totalItems);
-//
-//    List<AuctionItem> currentPageAuctionItems = auctionItems.subList(startIndex.intValue(), endIndex.intValue());
-//    List<AuctionItemFirstView> firstViews = convertResultsToViews(currentPageAuctionItems);
-//
-//    Long itemCount = (long) firstViews.size();
-//
-//
-//    AuctionItemPaginationDto paginationInfo = new AuctionItemPaginationDto();
-//    paginationInfo.setCurrentPage(page);
-//    paginationInfo.setItemCount(itemCount);
-//    paginationInfo.setItemsPerPage(itemsPerPage);
-//    paginationInfo.setTotalItems(totalItems);
-//    paginationInfo.setTotalPages((totalItems + itemsPerPage - 1) / itemsPerPage);
-//
-//
-//
-//    return AuctionItemSearchResponse.builder()
-//            .auctionItemFirstViewPage(firstViews)
-//            .auctionItemPaginationDto(paginationInfo)
-//            .build();
+//    return auctionItems.stream()
+//            .map(AuctionItem::getId)
+//            .collect(Collectors.toList());
+
+    Long totalItems = (long) auctionItems.size();
+
+    Long startIndex = (page - 1) * itemsPerPage;
+    Long endIndex = Math.min(startIndex + itemsPerPage, totalItems);
+
+    List<AuctionItem> currentPageAuctionItems = auctionItems.subList(startIndex.intValue(), endIndex.intValue());
+    List<AuctionItemFirstView> firstViews = convertResultsToViews(currentPageAuctionItems);
+
+    Long itemCount = (long) firstViews.size();
+
+
+    AuctionItemPaginationDto paginationInfo = new AuctionItemPaginationDto();
+    paginationInfo.setCurrentPage(page);
+    paginationInfo.setItemCount(itemCount);
+    paginationInfo.setItemsPerPage(itemsPerPage);
+    paginationInfo.setTotalItems(totalItems);
+    paginationInfo.setTotalPages((totalItems + itemsPerPage - 1) / itemsPerPage);
+
+
+
+    return AuctionItemSearchResponse.builder()
+            .auctionItemFirstViewPage(firstViews)
+            .auctionItemPaginationDto(paginationInfo)
+            .build();
   }
 
   private List<AuctionItemFirstView> convertResultsToViews(List<AuctionItem> results) {
@@ -97,9 +93,8 @@ public class UserProfileService implements UserProfileServiceInterface {
 
   @Override
   @Transactional(readOnly = true)
-  public CommentSearchResponse findGetLikeCommentByUserId(
-      SearchByUserDto searchByUserDto, Long userId) {
-    return commentLikeRepository.searchCommentLikePage(searchByUserDto, userId);
+  public CommentSearchResponse findGetLikeCommentByUserId(Long userId) {
+    return commentLikeRepository.searchCommentLikePage(userId);
   }
 
   @Override

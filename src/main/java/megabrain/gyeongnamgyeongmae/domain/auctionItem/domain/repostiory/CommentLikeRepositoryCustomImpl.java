@@ -23,19 +23,20 @@ public class CommentLikeRepositoryCustomImpl implements CommentLikeRepositoryCus
   public final JPAQueryFactory queryFactory;
   public final AuctionItemCommentRepository commentRepository;
 
-  public CommentSearchResponse searchCommentLikePage(SearchByUserDto searchByUserDto, Long userId) {
+  public CommentSearchResponse searchCommentLikePage(Long userId) {
 
     QComment comment = QComment.comment;
     QCommentLike commentLike = QCommentLike.commentLike;
     QUser user = QUser.user;
 
     List<OrderSpecifier<?>> orderSpecifiers = new ArrayList<>();
+    orderSpecifiers.add(commentLike.createdAt.desc());
 
-    if (searchByUserDto.isClosed()) {
-      orderSpecifiers.add(commentLike.createdAt.asc());
-    } else {
-      orderSpecifiers.add(commentLike.createdAt.desc());
-    }
+//    if (searchByUserDto.isClosed()) {
+//      orderSpecifiers.add(commentLike.createdAt.asc());
+//    } else {
+//      orderSpecifiers.add(commentLike.createdAt.desc());
+//    }
 
     JPAQuery<CommentLike> query =
             queryFactory
@@ -44,14 +45,15 @@ public class CommentLikeRepositoryCustomImpl implements CommentLikeRepositoryCus
                     .innerJoin(commentLike.comment, comment)
                     .where(commentLike.user.id.eq(userId));
 
-    Long page = searchByUserDto.getPage();
+//    Long page = searchByUserDto.getPage();
+    Long page = 1L;
     Long itemsPerPage = 10L;
 
     List<CommentLike> results =
         query
             .orderBy(orderSpecifiers.toArray(new OrderSpecifier[0]))
-            .offset((page - 1) * itemsPerPage)
-            .limit(itemsPerPage)
+//            .offset((page - 1) * itemsPerPage)
+//            .limit(itemsPerPage)
             .fetch();
 
     Long totalItems = query.fetchCount();

@@ -8,12 +8,12 @@ import megabrain.gyeongnamgyeongmae.domain.user.dto.UserProfile.SearchByUserDto;
 import java.util.List;
 
 public interface UserProfileServiceInterface {
-  List<Long> findLikedAuctionItemIdsByUserId(Long userId, Long page);
+  AuctionItemSearchResponse findLikedAuctionItemIdsByUserId(Long userId, Long page);
 
   AuctionItemSearchResponse findPostAuctionItemIdsByUserId(
       UserItemSearchDto userItemSearchDto, Long userId);
 
-  CommentSearchResponse findGetLikeCommentByUserId(SearchByUserDto searchByUserDto, Long userId);
+  CommentSearchResponse findGetLikeCommentByUserId(Long userId);
 
   AuctionItemSearchResponse findBuyAuctionItemIdsByUserId(Long userId, Long page);
 }

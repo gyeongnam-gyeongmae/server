@@ -4,16 +4,16 @@ import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import io.swagger.v3.oas.annotations.tags.Tag;
+import java.util.List;
+import java.util.stream.Collectors;
 import lombok.RequiredArgsConstructor;
+import megabrain.gyeongnamgyeongmae.domain.auctionItem.dto.Comment.CommentFirstView;
 import megabrain.gyeongnamgyeongmae.domain.auctionItem.dto.Comment.CommentSearchResponse;
 import megabrain.gyeongnamgyeongmae.domain.auctionItem.dto.SearchItem.AuctionItemSearchResponse;
 import megabrain.gyeongnamgyeongmae.domain.user.dto.UserItemSearchDto;
-import megabrain.gyeongnamgyeongmae.domain.user.dto.UserProfile.SearchByUserDto;
 import megabrain.gyeongnamgyeongmae.domain.user.service.UserProfileServiceInterface;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-
-import java.util.List;
 
 @Tag(name = "유저 프로필", description = "유저 프로필 관련  api")
 @RestController
@@ -29,10 +29,10 @@ public class UserProfileController {
       value = {
         @ApiResponse(responseCode = "200", description = "조회 성공"),
       })
-  public ResponseEntity<List<Long>> findLikedAuctionItemIds(
-      @PathVariable Long userId) {
-    Long page = 1L;
-    List<Long> result = userProfileService.findLikedAuctionItemIdsByUserId(userId, page);
+  public ResponseEntity<AuctionItemSearchResponse> findLikedAuctionItemIds(
+      @PathVariable Long userId, @RequestParam Long page) {
+    AuctionItemSearchResponse result =
+        userProfileService.findLikedAuctionItemIdsByUserId(userId, page);
 
     return ResponseEntity.ok(result);
   }
@@ -82,10 +82,11 @@ public class UserProfileController {
       value = {
         @ApiResponse(responseCode = "200", description = "조회 성공"),
       })
-  public ResponseEntity<CommentSearchResponse> findLikeCommentsByUserId(
-      @PathVariable Long userId, @ModelAttribute SearchByUserDto searchByUserDto) {
-    CommentSearchResponse result =
-        userProfileService.findGetLikeCommentByUserId(searchByUserDto, userId);
+  public ResponseEntity<List<Long>> findLikeCommentsByUserId(@PathVariable Long userId) {
+    CommentSearchResponse result1 = userProfileService.findGetLikeCommentByUserId(userId);
+    List<CommentFirstView> commentViews = result1.getCommentFirstViewPage();
+    List<Long> result =
+        commentViews.stream().map(CommentFirstView::getAuctionItemId).collect(Collectors.toList());
     return ResponseEntity.ok(result);
   }
 }
