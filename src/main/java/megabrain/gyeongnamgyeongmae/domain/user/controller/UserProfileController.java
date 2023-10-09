@@ -30,8 +30,8 @@ public class UserProfileController {
         @ApiResponse(responseCode = "200", description = "조회 성공"),
       })
   public ResponseEntity<List<Long>> findLikedAuctionItemIds(
-      @PathVariable Long userId, @RequestParam Long page) {
-
+      @PathVariable Long userId) {
+    Long page = 1L;
     List<Long> result = userProfileService.findLikedAuctionItemIdsByUserId(userId, page);
 
     return ResponseEntity.ok(result);
