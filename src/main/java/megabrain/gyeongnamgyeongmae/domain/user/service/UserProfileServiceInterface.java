@@ -5,8 +5,10 @@ import megabrain.gyeongnamgyeongmae.domain.auctionItem.dto.SearchItem.AuctionIte
 import megabrain.gyeongnamgyeongmae.domain.user.dto.UserItemSearchDto;
 import megabrain.gyeongnamgyeongmae.domain.user.dto.UserProfile.SearchByUserDto;
 
+import java.util.List;
+
 public interface UserProfileServiceInterface {
-  AuctionItemSearchResponse findLikedAuctionItemIdsByUserId(Long userId, Long page);
+  List<Long> findLikedAuctionItemIdsByUserId(Long userId, Long page);
 
   AuctionItemSearchResponse findPostAuctionItemIdsByUserId(
       UserItemSearchDto userItemSearchDto, Long userId);
