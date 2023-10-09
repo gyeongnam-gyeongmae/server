@@ -9,4 +9,6 @@ public interface FindImageServiceInterface {
   List<String> findImageByAuctionItemIdBackUrls(Long id);
 
   Image findFirstImageByAuctionItemId(Long id);
+
+  Image findFirstImageByUserId(Long id);
 }

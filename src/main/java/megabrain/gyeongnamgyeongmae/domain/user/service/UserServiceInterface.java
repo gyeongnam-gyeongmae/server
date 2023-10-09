@@ -22,4 +22,5 @@ public interface UserServiceInterface {
   List<User> findAllUser();
 
   Address getAddressByCoordinate(Float latitude, Float longitude);
+
 }

@@ -16,7 +16,10 @@ import megabrain.gyeongnamgyeongmae.domain.auctionItem.dto.SearchItemDto;
 import megabrain.gyeongnamgyeongmae.domain.auctionItem.service.Comment.AuctionItemCommentService;
 import megabrain.gyeongnamgyeongmae.domain.auctionItem.service.Item.AuctionItemService;
 import megabrain.gyeongnamgyeongmae.domain.auctionItem.service.Search.AuctionItemSearchService;
+import megabrain.gyeongnamgyeongmae.domain.authentication.dto.UserProfileResponse;
 import megabrain.gyeongnamgyeongmae.domain.image.Service.FindImageServiceInterface;
+import megabrain.gyeongnamgyeongmae.domain.image.domain.entity.Image;
+import megabrain.gyeongnamgyeongmae.domain.user.domain.entity.User;
 import megabrain.gyeongnamgyeongmae.domain.user.dto.UserItemSearchDto;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -107,5 +110,15 @@ public class UserProfileService implements UserProfileServiceInterface {
   public AuctionItemSearchResponse findBuyAuctionItemIdsByUserId(Long userId, Long page) {
     SearchItemDto searchItemDto = SearchItemDto.builder().user_id(userId).page(page).build();
     return auctionItemSearchService.findAuctionItemByRequest(searchItemDto);
+  }
+
+  @Override
+  public UserProfileResponse getUserProfile(User user) {
+    Image image = findImageService.findFirstImageByUserId(user.getId());
+    UserProfileResponse userProfile = UserProfileResponse.of(user);
+    if (image != null) {
+      userProfile.setNewImageUrl(image.getImageUrl());
+    }
+    return userProfile;
   }
 }

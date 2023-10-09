@@ -2,6 +2,7 @@ package megabrain.gyeongnamgyeongmae.domain.authentication.service;
 
 import megabrain.gyeongnamgyeongmae.domain.authentication.domain.entity.OAuthUserProfile;
 import megabrain.gyeongnamgyeongmae.domain.authentication.domain.entity.OAuthVendorName;
+import megabrain.gyeongnamgyeongmae.domain.authentication.dto.UserProfileResponse;
 import megabrain.gyeongnamgyeongmae.domain.user.domain.entity.User;
 
 public interface AuthenticationServiceInterface {
