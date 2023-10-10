@@ -109,6 +109,7 @@ public class UserProfileService implements UserProfileServiceInterface {
   @Override
   public AuctionItemSearchResponse findBuyAuctionItemIdsByUserId(Long userId, Long page) {
     SearchItemDto searchItemDto = SearchItemDto.builder().user_id(userId).page(page).build();
+    searchItemDto.setBuyUserId(userId);
     return auctionItemSearchService.findAuctionItemByRequest(searchItemDto);
   }
 
