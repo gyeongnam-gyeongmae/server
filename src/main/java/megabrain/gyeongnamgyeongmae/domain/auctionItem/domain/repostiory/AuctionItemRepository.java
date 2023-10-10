@@ -15,6 +15,6 @@ public interface AuctionItemRepository
   List<AuctionItem> findByStatusAndClosedTimeBefore(AuctionStatus status, LocalDateTime beforeTime);
 
   @Modifying
-  @Query("update AuctionItem auction set auction.price = :price where auction.id = :id")
+  @Query("update AuctionItem auction set auction.nowPrice = :price where auction.id = :id")
   int updateAuctionPrice(@Param("id") Long id, @Param("price") Long price);
 }

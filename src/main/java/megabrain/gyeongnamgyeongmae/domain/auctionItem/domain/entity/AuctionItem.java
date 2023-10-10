@@ -43,6 +43,9 @@ public class AuctionItem extends BaseTimeEntity {
   @Column(name = "highest_price")
   private Long price;
 
+  @Column(name = "now_price")
+  private Long nowPrice;
+
   @Column(name = "content")
   private String content;
 
@@ -76,7 +79,9 @@ public class AuctionItem extends BaseTimeEntity {
   private User buyer;
 
   @Builder
-  public AuctionItem(Long id, String name, long price, String content, LocalDateTime closedTime) {
+  public AuctionItem(
+      Long id, String name, long price, String content, LocalDateTime closedTime, Long nowPrice) {
+    this.nowPrice = nowPrice;
     this.status = AuctionStatus.ONGOING;
     this.comment_count = 0L;
     this.id = id;
@@ -102,6 +107,7 @@ public class AuctionItem extends BaseTimeEntity {
     this.id = id;
     this.name = name;
     this.price = price;
+    this.nowPrice = price;
     this.content = content;
     this.closedTime = closedTime;
     this.category = category;

@@ -51,7 +51,7 @@ public class AuctionItemFirstView {
         .closedTime(auctionItem.getClosedTime())
         .comment_count(auctionItem.getComment_count())
         .status(auctionItem.getStatus())
-        .now_price(auctionItem.getPrice())
+        .now_price(auctionItem.getNowPrice())
         .image_url(Optional.ofNullable(image).map(Image::getImageUrl).orElse(null))
         .build();
   }
