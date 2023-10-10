@@ -1,5 +1,6 @@
 package megabrain.gyeongnamgyeongmae.domain.user.domain.entity;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import java.util.List;
 import javax.persistence.*;
 import lombok.*;
@@ -34,6 +35,7 @@ public class User extends BaseTimeEntity {
   @Embedded private Address address;
 
   @OneToMany(mappedBy = "user")
+  @JsonIgnore
   private List<Image> images;
 
   @Builder
