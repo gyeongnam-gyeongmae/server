@@ -42,14 +42,14 @@ public class AuctionItemCommentController {
   @Operation(summary = "게시된 경매품에 대한 댓글 보기", description = "경매품에 대한 경매품 댓글 보기")
   @ApiResponses(
       value = {
-        @ApiResponse(responseCode = "201", description = "댓글 작성 성공"),
+        @ApiResponse(responseCode = "200", description = "댓글 작성 성공"),
         @ApiResponse(responseCode = "404", description = "경매품을 찾을 수 없음"),
         @ApiResponse(responseCode = "410", description = "삭제된 경매품 입니다"),
       })
   public ResponseEntity<List<AuctionItemCommentParentDto>> findAuctionItemCommentById(
-      @PathVariable Long id) {
+      @PathVariable Long id, @RequestParam Long userId) {
     List<AuctionItemCommentParentDto> commentViews =
-        auctionItemCommentService.findAuctionItemCommentById(id);
+        auctionItemCommentService.findAuctionItemCommentById(id, userId);
     return ResponseEntity.ok(commentViews);
   }
 
@@ -57,7 +57,7 @@ public class AuctionItemCommentController {
   @Operation(summary = "작성된 댓글 수정", description = "게시된 댓글에 대해 수정하기")
   @ApiResponses(
       value = {
-        @ApiResponse(responseCode = "201", description = "댓글 작성 성공"),
+        @ApiResponse(responseCode = "200", description = "댓글 수정 성공"),
         @ApiResponse(responseCode = "404", description = "경매품을 찾을 수 없음"),
         @ApiResponse(responseCode = "410", description = "삭제된 경매품 입니다"),
       })
@@ -71,7 +71,7 @@ public class AuctionItemCommentController {
   @Operation(summary = "작성된 댓글 삭제", description = "게시된 댓글에 대해 삭제하기")
   @ApiResponses(
       value = {
-        @ApiResponse(responseCode = "201", description = "댓글 작성 성공"),
+        @ApiResponse(responseCode = "200", description = "댓글 삭제 성공"),
         @ApiResponse(responseCode = "404", description = "경매품을 찾을 수 없음"),
         @ApiResponse(responseCode = "410", description = "삭제된 경매품 입니다"),
       })
@@ -83,13 +83,14 @@ public class AuctionItemCommentController {
 
   @PostMapping({"/like"})
   @Operation(summary = "경매품 댓글 좋아요 및 좋아요 취소", description = "경매품 댓글에 좋아요를 누릅니다. 또는 좋아요를 취소합니다")
-    @ApiResponses(
-        value = {
-            @ApiResponse(responseCode = "200", description = "댓글 좋아요 성공"),
-            @ApiResponse(responseCode = "404", description = "경매품을 찾을 수 없음"),
-            @ApiResponse(responseCode = "410", description = "삭제된 경매품 입니다"),
-        })
-  public ResponseEntity<HttpStatus> likeAuctionItemComment(@RequestBody CommentLikeDto commentLikeDto){
+  @ApiResponses(
+      value = {
+        @ApiResponse(responseCode = "200", description = "댓글 좋아요 성공"),
+        @ApiResponse(responseCode = "404", description = "경매품을 찾을 수 없음"),
+        @ApiResponse(responseCode = "410", description = "삭제된 경매품 입니다"),
+      })
+  public ResponseEntity<HttpStatus> likeAuctionItemComment(
+      @RequestBody CommentLikeDto commentLikeDto) {
     auctionItemCommentService.likeAuctionItemComment(commentLikeDto);
     return ResponseEntity.status(HttpStatus.OK).build();
   }

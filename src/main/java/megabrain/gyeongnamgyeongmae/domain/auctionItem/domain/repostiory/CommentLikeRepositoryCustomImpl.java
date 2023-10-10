@@ -23,19 +23,20 @@ public class CommentLikeRepositoryCustomImpl implements CommentLikeRepositoryCus
   public final JPAQueryFactory queryFactory;
   public final AuctionItemCommentRepository commentRepository;
 
-  public CommentSearchResponse searchCommentLikePage(SearchByUserDto searchByUserDto, Long userId) {
+  public CommentSearchResponse searchCommentLikePage(Long userId, Long page) {
 
     QComment comment = QComment.comment;
     QCommentLike commentLike = QCommentLike.commentLike;
     QUser user = QUser.user;
 
     List<OrderSpecifier<?>> orderSpecifiers = new ArrayList<>();
+    orderSpecifiers.add(commentLike.createdAt.desc());
 
-    if (searchByUserDto.isClosed()) {
-      orderSpecifiers.add(commentLike.createdAt.asc());
-    } else {
-      orderSpecifiers.add(commentLike.createdAt.desc());
-    }
+//    if (searchByUserDto.isClosed()) {
+//      orderSpecifiers.add(commentLike.createdAt.asc());
+//    } else {
+//      orderSpecifiers.add(commentLike.createdAt.desc());
+//    }
 
     JPAQuery<CommentLike> query =
             queryFactory
@@ -44,7 +45,6 @@ public class CommentLikeRepositoryCustomImpl implements CommentLikeRepositoryCus
                     .innerJoin(commentLike.comment, comment)
                     .where(commentLike.user.id.eq(userId));
 
-    Long page = searchByUserDto.getPage();
     Long itemsPerPage = 10L;
 
     List<CommentLike> results =

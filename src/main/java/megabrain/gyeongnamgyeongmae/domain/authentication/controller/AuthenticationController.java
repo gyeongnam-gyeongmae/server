@@ -9,9 +9,11 @@ import javax.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import megabrain.gyeongnamgyeongmae.domain.authentication.domain.entity.OAuthVendorName;
 import megabrain.gyeongnamgyeongmae.domain.authentication.dto.PhoneAuthenticationRequest;
+import megabrain.gyeongnamgyeongmae.domain.authentication.dto.UserProfileResponse;
 import megabrain.gyeongnamgyeongmae.domain.authentication.dto.UserRegisterRequest;
 import megabrain.gyeongnamgyeongmae.domain.authentication.service.AuthenticationServiceInterface;
 import megabrain.gyeongnamgyeongmae.domain.user.domain.entity.User;
+import megabrain.gyeongnamgyeongmae.domain.user.service.UserProfileServiceInterface;
 import megabrain.gyeongnamgyeongmae.domain.user.service.UserServiceInterface;
 import megabrain.gyeongnamgyeongmae.global.anotation.LoginRequired;
 import org.springframework.http.HttpStatus;
@@ -25,6 +27,7 @@ import org.springframework.web.bind.annotation.*;
 public class AuthenticationController {
   private final AuthenticationServiceInterface authenticationService;
   private final UserServiceInterface userService;
+  private final UserProfileServiceInterface userProfileService;
 
   @PostMapping("register/{auth-vendor}")
   @Operation(summary = "회원가입/로그인 요청", description = "회원의 OAuth 회원가입/로그인을 요청합니다.")
@@ -82,9 +85,10 @@ public class AuthenticationController {
         @ApiResponse(responseCode = "200", description = "회원 정보 반환"),
         @ApiResponse(responseCode = "401", description = "세션 로그인 필요"),
       })
-  public ResponseEntity<User> getMyProfile() {
-    User logedInUser = this.authenticationService.getLoginUser();
-    return new ResponseEntity<>(logedInUser, HttpStatus.OK);
+  public ResponseEntity<UserProfileResponse> getMyProfile() {
+    User logedInUser = authenticationService.getLoginUser();
+    UserProfileResponse userProfileResponse =  userProfileService.getUserProfile(logedInUser);
+    return ResponseEntity.ok(userProfileResponse);
   }
 
   @GetMapping("phone")

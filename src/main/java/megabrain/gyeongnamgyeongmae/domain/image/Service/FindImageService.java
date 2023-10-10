@@ -31,4 +31,10 @@ public class FindImageService implements FindImageServiceInterface {
   public Image findFirstImageByAuctionItemId(Long id) {
     return imageRepository.findFirstImageByAuctionItemId(id);
   }
+
+
+  @Override
+  public Image findFirstImageByUserId(Long id) {
+    return imageRepository.findFirstImageByUserId(id);
+  }
 }

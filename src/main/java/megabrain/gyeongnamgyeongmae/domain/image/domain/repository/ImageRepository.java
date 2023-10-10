@@ -19,4 +19,10 @@ public interface ImageRepository extends JpaRepository<Image, Long> {
           "SELECT  * FROM images where auction_id = :id AND removed = FALSE ORDER BY created_at ASC LIMIT 1 ",
       nativeQuery = true)
   Image findFirstImageByAuctionItemId(Long id);
+
+  @Query(
+      value =
+          "SELECT  * FROM images where user_id = :id AND removed = FALSE ",
+      nativeQuery = true)
+  Image findFirstImageByUserId(Long id);
 }

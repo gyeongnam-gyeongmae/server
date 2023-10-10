@@ -7,6 +7,7 @@ import java.util.stream.Collectors;
 import lombok.Builder;
 import lombok.Getter;
 import megabrain.gyeongnamgyeongmae.domain.auctionItem.domain.entity.Comment;
+import megabrain.gyeongnamgyeongmae.domain.image.domain.entity.Image;
 
 @Getter
 @Builder
@@ -19,6 +20,8 @@ public class AuctionItemCommentParentDto {
   private LocalDateTime createdAt;
   private LocalDateTime updatedAt;
   private List<AuctionItemCommentChildDto> children;
+  private String imageUrl;
+  private Boolean isLiked;
 
   public AuctionItemCommentParentDto(
       final Long id,
@@ -28,7 +31,9 @@ public class AuctionItemCommentParentDto {
       final Integer likeCount,
       final LocalDateTime createdAt,
       final LocalDateTime updatedAt,
-      final List<AuctionItemCommentChildDto> children) {
+      final List<AuctionItemCommentChildDto> children,
+      final String imageUrl,
+      final Boolean isLiked) {
     this.id = id;
     this.content = content;
     this.userId = userId;
@@ -37,9 +42,16 @@ public class AuctionItemCommentParentDto {
     this.createdAt = createdAt;
     this.updatedAt = updatedAt;
     this.children = children;
+    this.imageUrl = imageUrl;
+    this.isLiked = isLiked;
   }
 
   public static AuctionItemCommentParentDto of(Comment comment) {
+    List<Image> images = comment.getUser().getImages().stream().filter(image -> !image.isRemoved()).collect(Collectors.toList());
+    String imageUrl = "https://yt3.ggpht.com/a/default-user=s88-c-k-c0x00ffffff-no-rj";
+    if (!images.isEmpty()) {
+      imageUrl = images.get(0).getImageUrl();
+    }
     return builder()
         .id(comment.getId())
         .content(comment.getContent())
@@ -48,6 +60,8 @@ public class AuctionItemCommentParentDto {
         .likeCount(comment.getLike_count())
         .createdAt(comment.getCreatedAt())
         .updatedAt(comment.getUpdatedAt())
+        .imageUrl(imageUrl)
+        .isLiked(false)
         .children(
             comment.getChildren().stream()
                 .filter(childComment -> !childComment.isRemoved())
@@ -55,5 +69,9 @@ public class AuctionItemCommentParentDto {
                 .map(AuctionItemCommentChildDto::of)
                 .collect(Collectors.toList()))
         .build();
+  }
+
+  public void setIsLiked(Boolean isLiked) {
+    this.isLiked = isLiked;
   }
 }

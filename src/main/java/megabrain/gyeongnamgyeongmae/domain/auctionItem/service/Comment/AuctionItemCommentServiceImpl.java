@@ -1,5 +1,6 @@
 package megabrain.gyeongnamgyeongmae.domain.auctionItem.service.Comment;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
 import lombok.RequiredArgsConstructor;
@@ -14,11 +15,9 @@ import megabrain.gyeongnamgyeongmae.domain.auctionItem.dto.AuctionItemCommentReq
 import megabrain.gyeongnamgyeongmae.domain.auctionItem.dto.AuctionItemCommentUpdateRequest;
 import megabrain.gyeongnamgyeongmae.domain.auctionItem.dto.Comment.AuctionItemCommentParentDto;
 import megabrain.gyeongnamgyeongmae.domain.auctionItem.dto.Comment.CommentLikeDto;
-import megabrain.gyeongnamgyeongmae.domain.auctionItem.dto.Comment.CommentSearchResponse;
 import megabrain.gyeongnamgyeongmae.domain.auctionItem.exception.CommentNotFoundException;
 import megabrain.gyeongnamgyeongmae.domain.auctionItem.service.Item.AuctionItemService;
 import megabrain.gyeongnamgyeongmae.domain.user.domain.entity.User;
-import megabrain.gyeongnamgyeongmae.domain.user.dto.UserProfile.SearchByUserDto;
 import megabrain.gyeongnamgyeongmae.domain.user.service.UserServiceInterface;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -58,12 +57,7 @@ public class AuctionItemCommentServiceImpl implements AuctionItemCommentService 
     auctionItemService.saveAuctionItem(auctionItem);
   }
 
-  @Override
-  public List<AuctionItemCommentParentDto> findAuctionItemCommentById(Long id) {
-    return null;
-  }
-
-  public void saveComment(Comment comment) {
+  private void saveComment(Comment comment) {
     auctionItemCommentRepository.save(comment);
   }
 
@@ -74,15 +68,24 @@ public class AuctionItemCommentServiceImpl implements AuctionItemCommentService 
         .orElseThrow(() -> new CommentNotFoundException("댓글을 찾을 수 없습니다."));
   }
 
-//  @Transactional(readOnly = true)
-//  public List<AuctionItemCommentParentDto> findAuctionItemCommentById(Long id) {
-//    auctionItemService.findAuctionItemById(id);
-//    List<Comment> commentEntityList =
-//        auctionItemCommentRepository.findByAuctionItemCommentByAuctionId(id);
-//    return commentEntityList.stream()
-//        .map(AuctionItemCommentParentDto::of)
-//        .collect(Collectors.toList());
-//  }
+  @Override
+  @Transactional(readOnly = true)
+  public List<AuctionItemCommentParentDto> findAuctionItemCommentById(Long id, Long finderId) {
+    auctionItemService.findAuctionItemById(id);
+    List<Comment> commentEntityList = auctionItemCommentRepository.findByAuctionItemCommentByAuctionId(id);
+
+    List<AuctionItemCommentParentDto> commentDtoList = commentEntityList.stream()
+            .map(AuctionItemCommentParentDto::of)
+            .collect(Collectors.toList());
+
+    for(int i = 0; i < commentDtoList.size(); i++){
+      Boolean isLiked = commentLikeRepository.findById(new CommentLikePK(commentDtoList.get(i).getId(), finderId)).isPresent();
+      commentDtoList.get(i).setIsLiked(isLiked);
+    }
+    return commentDtoList;
+  }
+
+
 
   @Transactional
   public void updateAuctionItemComment(
@@ -108,7 +111,8 @@ public class AuctionItemCommentServiceImpl implements AuctionItemCommentService 
     Comment comment = findCommentById(commentLikeDto.getCommentId());
     User user = userService.findUserById(commentLikeDto.getUserId());
 
-    CommentLikePK commentLikePK = new CommentLikePK(commentLikeDto.getUserId(), commentLikeDto.getUserId());
+    CommentLikePK commentLikePK =
+        new CommentLikePK(commentLikeDto.getCommentId(), commentLikeDto.getUserId());
 
     CommentLike commentLike = commentLike(commentLikePK);
 
@@ -142,5 +146,4 @@ public class AuctionItemCommentServiceImpl implements AuctionItemCommentService 
   private void saveCommentLike(CommentLike commentLike) {
     commentLikeRepository.save(commentLike);
   }
-
 }
