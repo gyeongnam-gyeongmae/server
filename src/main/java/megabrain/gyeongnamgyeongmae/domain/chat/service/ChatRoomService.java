@@ -3,6 +3,7 @@ package megabrain.gyeongnamgyeongmae.domain.chat.service;
 import java.util.List;
 import lombok.RequiredArgsConstructor;
 import megabrain.gyeongnamgyeongmae.domain.auctionItem.domain.entity.AuctionItem;
+import megabrain.gyeongnamgyeongmae.domain.auctionItem.domain.entity.AuctionStatus;
 import megabrain.gyeongnamgyeongmae.domain.auctionItem.domain.repostiory.AuctionItemRepository;
 import megabrain.gyeongnamgyeongmae.domain.auctionItem.exception.AuctionNotFoundException;
 import megabrain.gyeongnamgyeongmae.domain.chat.domain.entity.ChatParticipant;
@@ -40,7 +41,11 @@ public class ChatRoomService implements ChatRoomServiceInterface {
     chatRoom.addParticipants(sellerParticipant);
     chatRoom.addParticipants(buyerParticipant);
 
+    auction.setBuyer(buyer);
+    auction.setStatus(AuctionStatus.CLOSED);
     chatRoomRepository.save(chatRoom);
+    auctionItemRepository.save(auction);
+
   }
 
   @Override
