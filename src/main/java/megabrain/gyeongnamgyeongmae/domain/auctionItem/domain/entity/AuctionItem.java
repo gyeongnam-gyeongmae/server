@@ -79,9 +79,8 @@ public class AuctionItem extends BaseTimeEntity {
   private User buyer;
 
   @Builder
-  public AuctionItem(
-      Long id, String name, long price, String content, LocalDateTime closedTime, Long nowPrice) {
-    this.nowPrice = nowPrice;
+  public AuctionItem(Long id, String name, long price, String content, LocalDateTime closedTime) {
+    this.nowPrice = price;
     this.status = AuctionStatus.ONGOING;
     this.comment_count = 0L;
     this.id = id;
