@@ -46,19 +46,11 @@ public class SearchItemDto {
     like = null;
     search_price = null;
     basic = true;
-    setSearcherId(user_id);
   }
 
-  @Builder
-  public SearchItemDto(Long buyUserId, Long Page) {
+  public void setBuyUserId(Long buyUserId) {
     this.BuyUserId = buyUserId;
-    this.page = Page;
-    this.onlyOpenOrClosed = FindStatus.CLOSED;
-    search_time = null;
-    like = null;
-    search_price = null;
-    basic = true;
-    setSearcherId(buyUserId);
+    this.user_id = null;
   }
 
   public static SearchItemDto of(SearchAuctionItemSortedRequest request) {
@@ -131,7 +123,7 @@ public class SearchItemDto {
   }
 
   public void applySearchTime(List<OrderSpecifier<?>> order, QAuctionItem item) {
-    if(order == null) {
+    if (order == null) {
       return;
     }
     if (this.search_time) {
