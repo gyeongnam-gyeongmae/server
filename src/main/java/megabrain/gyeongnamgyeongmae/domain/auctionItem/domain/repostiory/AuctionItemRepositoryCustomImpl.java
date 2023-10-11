@@ -29,6 +29,10 @@ public class AuctionItemRepositoryCustomImpl implements AuctionItemRepositoryCus
   public AuctionItemSearchResponse searchAuctionItemPage(
       SearchItemDto searchAuctionItemSortedRequest) {
 
+    /// 인기많은순
+    // 가격순
+    //판매중
+
     QAuctionItem auctionItem = QAuctionItem.auctionItem;
     QCategory category = QCategory.category;
 
@@ -43,9 +47,9 @@ public class AuctionItemRepositoryCustomImpl implements AuctionItemRepositoryCus
     if (searchAuctionItemSortedRequest.getBasic() == Boolean.TRUE) {
       searchAuctionItemSortedRequest.applyBasicOrder(orderSpecifiers, auctionItem);
     } else {
-      searchAuctionItemSortedRequest.applySearchTime(orderSpecifiers, auctionItem);
-      searchAuctionItemSortedRequest.applySearchPrice(orderSpecifiers, auctionItem);
       searchAuctionItemSortedRequest.applySearchLike(orderSpecifiers, auctionItem);
+      searchAuctionItemSortedRequest.applySearchPrice(orderSpecifiers, auctionItem);
+//      searchAuctionItemSortedRequest.applySearchTime(orderSpecifiers, auctionItem);
     }
 
     searchAuctionItemSortedRequest.applySearchCategory(categoryStatus, auctionItem);
