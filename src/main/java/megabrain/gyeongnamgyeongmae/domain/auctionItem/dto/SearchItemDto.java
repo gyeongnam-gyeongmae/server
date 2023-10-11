@@ -53,6 +53,10 @@ public class SearchItemDto {
     this.user_id = null;
   }
 
+  public void setSearcherId(Long searcherId) {
+    this.SearcherId = searcherId;
+  }
+
   public static SearchItemDto of(SearchAuctionItemSortedRequest request) {
     SearchItemDto dto = SearchItemDto.builder().build();
     dto.setKeyword(request.getKeyword());

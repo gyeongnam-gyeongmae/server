@@ -97,6 +97,8 @@ public class UserProfileService implements UserProfileServiceInterface {
             .page(userItemSearchDto.getPage())
             .closed(userItemSearchDto.getClosed())
             .build();
+    request.setSearcherId(userId);
+
     return auctionItemSearchService.findAuctionItemByRequest(request);
   }
 
@@ -110,6 +112,7 @@ public class UserProfileService implements UserProfileServiceInterface {
   public AuctionItemSearchResponse findBuyAuctionItemIdsByUserId(Long userId, Long page) {
     SearchItemDto searchItemDto = SearchItemDto.builder().user_id(userId).page(page).build();
     searchItemDto.setBuyUserId(userId);
+    searchItemDto.setSearcherId(userId);
     return auctionItemSearchService.findAuctionItemByRequest(searchItemDto);
   }
 
