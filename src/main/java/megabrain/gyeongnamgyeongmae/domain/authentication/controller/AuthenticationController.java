@@ -9,6 +9,7 @@ import javax.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import megabrain.gyeongnamgyeongmae.domain.authentication.domain.entity.OAuthVendorName;
 import megabrain.gyeongnamgyeongmae.domain.authentication.dto.PhoneAuthenticationRequest;
+import megabrain.gyeongnamgyeongmae.domain.authentication.dto.UserLoginRequest;
 import megabrain.gyeongnamgyeongmae.domain.authentication.dto.UserProfileResponse;
 import megabrain.gyeongnamgyeongmae.domain.authentication.dto.UserRegisterRequest;
 import megabrain.gyeongnamgyeongmae.domain.authentication.service.AuthenticationServiceInterface;
@@ -58,6 +59,35 @@ public class AuthenticationController {
     return ResponseEntity.status(HttpStatus.CREATED).build();
   }
 
+  @PostMapping("login/{auth-vendor}")
+  @Operation(summary = "회원가입/로그인 요청", description = "회원의 OAuth 회원가입/로그인을 요청합니다.")
+  @ResponseStatus(value = HttpStatus.CREATED, reason = "회원가입/로그인 성공, 세션 키를 쿠키에 담아 반환합니다.")
+  public ResponseEntity<HttpStatus> userRegisterWithOAuthVendor(
+      @Parameter(
+              name = "auth-vendor",
+              example = "KAKAO",
+              required = true,
+              description = "지원중인 OAuth2 제공사(KAKAO)")
+          @PathVariable("auth-vendor")
+          OAuthVendorName authVendorName,
+      @RequestBody @Valid UserLoginRequest userLoginRequest) {
+
+    User user =
+        this.authenticationService
+            .oauthLoginStrategy(authVendorName, userLoginRequest.getVendorAccessToken())
+            .toUserEntity();
+
+    Long userId = this.userService.getIdByAuthVendorUserId(user.getAuthVendorUserId());
+
+    if (userId == null) {
+      this.userService.registerUser(user);
+      userId = user.getId();
+    }
+    this.authenticationService.login(userId);
+
+    return ResponseEntity.status(HttpStatus.CREATED).build();
+  }
+
   @PostMapping("{id}/session")
   @Operation(summary = "유저 아이디로 세션 획득🔑(테스트용)", description = "유저 아이디로 세션 획득(테스트용)")
   public ResponseEntity<HttpStatus> getSession(@PathVariable("id") Long userId) {
@@ -87,7 +117,7 @@ public class AuthenticationController {
       })
   public ResponseEntity<UserProfileResponse> getMyProfile() {
     User logedInUser = authenticationService.getLoginUser();
-    UserProfileResponse userProfileResponse =  userProfileService.getUserProfile(logedInUser);
+    UserProfileResponse userProfileResponse = userProfileService.getUserProfile(logedInUser);
     return ResponseEntity.ok(userProfileResponse);
   }
 
