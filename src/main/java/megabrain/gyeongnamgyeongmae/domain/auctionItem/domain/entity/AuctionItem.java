@@ -115,6 +115,11 @@ public class AuctionItem extends BaseTimeEntity {
     this.updatedAt = updatedAt;
   }
 
+  public void closeAuction() {
+    this.status = AuctionStatus.CLOSED;
+    this.closedTime = LocalDateTime.now();
+  }
+
   public void setUser(User user) {
     this.user = user;
   }

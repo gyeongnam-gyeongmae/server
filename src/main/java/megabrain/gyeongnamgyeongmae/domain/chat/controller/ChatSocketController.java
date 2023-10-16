@@ -14,6 +14,7 @@ import org.springframework.messaging.handler.annotation.DestinationVariable;
 import org.springframework.messaging.handler.annotation.MessageMapping;
 import org.springframework.messaging.handler.annotation.SendTo;
 import org.springframework.stereotype.Controller;
+import org.springframework.transaction.annotation.Transactional;
 
 @RequiredArgsConstructor
 @Controller
@@ -30,6 +31,7 @@ public class ChatSocketController {
 
   @MessageMapping("/chat-rooms/{id}")
   @SendTo("/subscribe/chat-rooms/{id}")
+  @Transactional
   public ChatMessageResponse sendMessage(
       @DestinationVariable Long id, ChatMessageSendRequest message) {
     User user = userService.findUserById(message.getUserId());

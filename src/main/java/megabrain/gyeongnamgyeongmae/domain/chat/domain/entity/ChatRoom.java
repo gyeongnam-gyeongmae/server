@@ -24,11 +24,11 @@ public class ChatRoom extends BaseTimeEntity {
   @JoinColumn(name = "auction_id")
   private AuctionItem auction;
 
-  @OneToMany(mappedBy = "chatRoom", cascade = CascadeType.ALL)
+  @OneToMany(mappedBy = "chatRoom", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
   @JsonIgnore // 순환참조를 무시하기 위하여 사용
   private List<ChatParticipant> participants = new ArrayList<>();
 
-  @OneToMany(mappedBy = "room", cascade = CascadeType.ALL)
+  @OneToMany(mappedBy = "room", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
   @JsonIgnore // 순환참조를 무시하기 위하여 사용
   private List<ChatMessage> messages = new ArrayList<>();
 
@@ -37,10 +37,16 @@ public class ChatRoom extends BaseTimeEntity {
   }
 
   public void addParticipants(ChatParticipant user) {
-    participants.add(user);
+    this.participants.add(user);
+    if (user.getChatRoom() != this) user.setRoom(this);
   }
 
   public static ChatRoom of(AuctionItem auction) {
     return new ChatRoom(auction);
+  }
+
+  public void addMessage(ChatMessage message) {
+    this.messages.add(message);
+    if (message.getRoom() != this) message.setRoom(this);
   }
 }

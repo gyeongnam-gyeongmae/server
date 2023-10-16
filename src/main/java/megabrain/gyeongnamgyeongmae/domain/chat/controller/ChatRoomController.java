@@ -5,10 +5,12 @@ import io.swagger.v3.oas.annotations.Parameter;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import io.swagger.v3.oas.annotations.tags.Tag;
+import java.util.ArrayList;
 import java.util.List;
 import lombok.RequiredArgsConstructor;
 import megabrain.gyeongnamgyeongmae.domain.authentication.service.AuthenticationServiceInterface;
 import megabrain.gyeongnamgyeongmae.domain.chat.domain.entity.ChatRoom;
+import megabrain.gyeongnamgyeongmae.domain.chat.dto.ChatRoomResponse;
 import megabrain.gyeongnamgyeongmae.domain.chat.service.ChatRoomServiceInterface;
 import megabrain.gyeongnamgyeongmae.global.anotation.LoginRequired;
 import org.springframework.http.HttpStatus;
@@ -53,12 +55,17 @@ public class ChatRoomController {
         @ApiResponse(responseCode = "401", description = "세션 로그인 필요"),
       })
   @GetMapping
-  public ResponseEntity<List<ChatRoom>> getMyChatRoom() {
+  public ResponseEntity<List<ChatRoomResponse>> getMyChatRoom() {
 
     List<ChatRoom> chatRooms =
         this.chatRoomService.getJoinChatRoomByUserId(
             this.authenticationService.getLoginUser().getId());
 
-    return ResponseEntity.ok(chatRooms);
+    ArrayList<ChatRoomResponse> chatRoomsResponse = new ArrayList<>();
+    for (ChatRoom chatRoom : chatRooms) {
+      chatRoomsResponse.add(ChatRoomResponse.of(chatRoom));
+    }
+
+    return ResponseEntity.ok(chatRoomsResponse);
   }
 }

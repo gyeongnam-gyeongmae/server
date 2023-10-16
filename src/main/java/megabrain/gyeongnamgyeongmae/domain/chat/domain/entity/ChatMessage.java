@@ -46,4 +46,8 @@ public class ChatMessage extends BaseTimeEntity {
   public static ChatMessage of(String content, MessageTypeEnum type, ChatRoom room, User user) {
     return new ChatMessage(content, type, room, user);
   }
+
+  public void setRoom(ChatRoom room) {
+    this.room = room;
+  }
 }

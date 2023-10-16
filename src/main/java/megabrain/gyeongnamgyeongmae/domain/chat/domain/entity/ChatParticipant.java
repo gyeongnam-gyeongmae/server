@@ -22,6 +22,9 @@ public class ChatParticipant {
   @JoinColumn(name = "user_id")
   private User user;
 
+  @Column(name = "is_completed", columnDefinition = "boolean default false")
+  private Boolean isCompleted;
+
   private ChatParticipant(User user) {
     this.user = user;
   }
@@ -29,6 +32,14 @@ public class ChatParticipant {
   private ChatParticipant(ChatRoom chatRoom, User user) {
     this.chatRoom = chatRoom;
     this.user = user;
+  }
+
+  public void setIsCompleted(Boolean isCompleted) {
+    this.isCompleted = isCompleted;
+  }
+
+  public void setRoom(ChatRoom chatRoom) {
+    this.chatRoom = chatRoom;
   }
 
   public static ChatParticipant of(User user, ChatRoom chatRoom) {
