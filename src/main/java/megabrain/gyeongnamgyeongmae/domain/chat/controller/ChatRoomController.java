@@ -12,10 +12,13 @@ import megabrain.gyeongnamgyeongmae.domain.authentication.service.Authentication
 import megabrain.gyeongnamgyeongmae.domain.chat.domain.entity.ChatRoom;
 import megabrain.gyeongnamgyeongmae.domain.chat.dto.ChatRoomResponse;
 import megabrain.gyeongnamgyeongmae.domain.chat.service.ChatRoomServiceInterface;
+import megabrain.gyeongnamgyeongmae.domain.user.domain.entity.User;
 import megabrain.gyeongnamgyeongmae.global.anotation.LoginRequired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.servlet.mvc.method.annotation.SseEmitter;
 
 @RestController
 @RequiredArgsConstructor
@@ -67,5 +70,43 @@ public class ChatRoomController {
     }
 
     return ResponseEntity.ok(chatRoomsResponse);
+  }
+
+  @LoginRequired
+  @GetMapping("/{id}")
+  @Operation(summary = "채팅방 열림 상태 구독", description = "채팅방 종료 여부를 반환하는 SSE를 구독합니다.")
+  @ApiResponses(
+      value = {
+        @ApiResponse(responseCode = "200", description = "SSE 구독 성공 성공"),
+        @ApiResponse(responseCode = "403", description = "채팅방 참여자가 아님"),
+        @ApiResponse(responseCode = "404", description = "채팅방 조회 실패")
+      })
+  public SseEmitter subscribeAuctionPrice(@PathVariable Long id) {
+    User user = authenticationService.getLoginUser();
+    ChatRoom chatRoom = chatRoomService.getChatRoomById(id);
+    if (!chatRoomService.isUserParticipantInChatRoom(user.getId(), chatRoom)) {
+      throw new RuntimeException("채팅방 참여자가 아닙니다.");
+    }
+    return chatRoomService.subscribeChatRoomState(id);
+  }
+
+  @LoginRequired
+  @PostMapping("/{id}/complete")
+  @Transactional
+  @Operation(summary = "거래완료 정보 송신", description = "거래를 완료하였음을 송신합니다.")
+  @ApiResponses(
+      value = {
+        @ApiResponse(responseCode = "200", description = "거래완료 정보 송신 성공"),
+        @ApiResponse(responseCode = "403", description = "채팅방 참여자가 아님"),
+        @ApiResponse(responseCode = "404", description = "채팅방 조회 실패")
+      })
+  public ResponseEntity<HttpStatus> sendCompleteMessage(@PathVariable Long id) {
+    User user = authenticationService.getLoginUser();
+    ChatRoom chatRoom = chatRoomService.getChatRoomById(id);
+    if (!chatRoomService.isUserParticipantInChatRoom(user.getId(), chatRoom))
+      throw new RuntimeException("채팅방 참여자가 아닙니다.");
+
+    chatRoomService.completeChatRoom(chatRoom.getId(), user.getId());
+    return ResponseEntity.ok().build();
   }
 }

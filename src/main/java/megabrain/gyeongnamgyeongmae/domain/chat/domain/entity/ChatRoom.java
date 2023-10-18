@@ -36,6 +36,7 @@ public class ChatRoom extends BaseTimeEntity {
     this.auction = auction;
   }
 
+  // TODO: 기존에 채팅방에 참여한 경우 재대입 시 불일치 문제 발생
   public void addParticipants(ChatParticipant user) {
     this.participants.add(user);
     if (user.getChatRoom() != this) user.setRoom(this);

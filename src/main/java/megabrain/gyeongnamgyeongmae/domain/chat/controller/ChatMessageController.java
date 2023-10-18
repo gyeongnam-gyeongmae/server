@@ -49,7 +49,7 @@ public class ChatMessageController {
     if (chatRoom == null) throw new ChatRoomNotFoundException();
 
     Boolean isParticipant =
-        chatRoomService.IsUserParticipantInChatRoom(
+        chatRoomService.isUserParticipantInChatRoom(
             authenticationService.getLoginUser().getId(), chatRoom);
     if (!isParticipant) throw new UserNotParticipantInChatRoomException();
 

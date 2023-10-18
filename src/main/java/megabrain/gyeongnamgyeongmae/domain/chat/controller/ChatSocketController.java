@@ -38,7 +38,8 @@ public class ChatSocketController {
 
     ChatRoom chatRoom = chatRoomService.getChatRoomById(id);
 
-    chatRoomService.IsUserParticipantInChatRoom(user.getId(), chatRoom);
+    if (!chatRoomService.isUserParticipantInChatRoom(user.getId(), chatRoom))
+      throw new RuntimeException("채팅방 참여자가 아닙니다.");
 
     ChatMessage chatMessage =
         chatMessageService.saveMessage(
