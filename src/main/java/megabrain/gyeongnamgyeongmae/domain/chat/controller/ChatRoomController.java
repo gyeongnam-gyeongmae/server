@@ -72,7 +72,6 @@ public class ChatRoomController {
     return ResponseEntity.ok(chatRoomsResponse);
   }
 
-  @LoginRequired
   @GetMapping("/{id}")
   @Operation(summary = "채팅방 열림 상태 구독", description = "채팅방 종료 여부를 반환하는 SSE를 구독합니다.")
   @ApiResponses(
@@ -82,11 +81,7 @@ public class ChatRoomController {
         @ApiResponse(responseCode = "404", description = "채팅방 조회 실패")
       })
   public SseEmitter subscribeAuctionPrice(@PathVariable Long id) {
-    User user = authenticationService.getLoginUser();
     ChatRoom chatRoom = chatRoomService.getChatRoomById(id);
-    if (!chatRoomService.isUserParticipantInChatRoom(user.getId(), chatRoom)) {
-      throw new RuntimeException("채팅방 참여자가 아닙니다.");
-    }
     return chatRoomService.subscribeChatRoomState(id);
   }
 
